@@ -1,45 +1,79 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import Image, { type StaticImageData } from "next/image";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
 import card1 from "@/assets/images/stats/card1.png";
 import card2 from "@/assets/images/stats/card2.png";
-import card3 from "@/assets/images/stats/card3.png";
+import illoCar from "@/assets/images/stats/illustration-car.webp";
 import illoMap from "@/assets/images/stats/map-illustration.webp";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { ROUTES } from "@/lib/routes";
 
-const cardImages = [card1, card2, card3, illoMap];
-
 // Conta o número principal (primeiro grupo de dígitos), preservando
-// prefixos/sufixos: "+3500", "34%", "24/7" → "/7" fica estático.
+// prefixos/sufixos: "+3700", "+400", "+11".
 const countValue = (value: string, progress: number) =>
   value.replace(/\d+/, (digits) =>
     String(Math.round(parseInt(digits, 10) * progress))
   );
 
-const stats = [
+type BoxArt = { width: number; height: number; right: number; top: number };
+
+type Stat = {
+  value: string;
+  label: ReactNode;
+  labelWidth: number;
+  image: StaticImageData;
+  // "contain" = ilustração ancorada à direita (padrão desta seção);
+  // "map" = mapa do Brasil, deslocado e ampliado;
+  // BoxArt = caixa absoluta exata do Figma, igual à seção "A estrutura que
+  // sustenta cada operação" (quem somos), ancorada pela direita.
+  art: "contain" | "map" | BoxArt;
+};
+
+const stats: Stat[] = [
   {
-    value: "+3500",
+    value: "+3700",
     label: "Empilhadeiras locadas operando ativamente em diversos segmentos",
     labelWidth: 178,
+    image: card1,
+    art: "contain",
   },
   {
-    value: "24/7",
-    label: "Atendimento com manutenção preventiva e corretiva",
-    labelWidth: 157,
-  },
-  {
-    value: "34%",
-    label: "Na redução do Imposto de Renda com modelo de locação",
-    labelWidth: 163,
-  },
-  {
-    value: "+11",
-    label: "Postos espalhados por 4 estados do Brasil",
+    value: "+670",
+    label: "Cidades atendidas",
     labelWidth: 165,
+    image: illoMap,
+    art: "map",
+  },
+  {
+    value: "+400",
+    label: (
+      <>
+        Mecânicos (as)
+        <br />
+        para manutenção
+        <br />
+        preventiva e corretiva
+      </>
+    ),
+    labelWidth: 157,
+    image: card2,
+    art: "contain",
+  },
+  {
+    value: "+360",
+    label: (
+      <>
+        Carros oficinas
+        <br />
+        em + 15 estados
+      </>
+    ),
+    labelWidth: 163,
+    image: illoCar,
+    art: { width: 236.4, height: 236.08, right: -42, top: -26 },
   },
 ];
 
@@ -118,7 +152,7 @@ export function ExperienceSection() {
             EXPERIÊNCIA
           </p>
           <h2 className="text-h2 font-normal text-neutral-800">
-            Mais de 86% do Brasil{" "}
+            Mais de 88% do Brasil{" "}
             <br className="hidden lg:inline" />
             já conta{" "}
             <span className="font-bold text-primary-500">
@@ -143,21 +177,43 @@ export function ExperienceSection() {
             className="group relative flex min-h-[160px] flex-1 flex-col gap-1 overflow-hidden rounded-3xl bg-[#f9f9f9] p-4 lg:h-[172px] lg:p-5"
           >
             {/* Ilustração à direita — zoom no hover (desktop) / no card ativo (mobile) */}
-            <Image
-              src={cardImages[i]}
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-              className={`pointer-events-none origin-right select-none object-contain object-right transition-transform duration-500 ease-out ${
-                i === 3
-                  ? `translate-x-[31%] lg:scale-[1.4] lg:group-hover:scale-[1.47] ${
-                      activeCard === i ? "scale-[1.47]" : "scale-[1.4]"
-                    }`
-                  : `lg:scale-100 lg:group-hover:scale-105 ${
-                      activeCard === i ? "scale-105" : "scale-100"
-                    }`
-              }`}
-            />
+            {typeof s.art === "object" ? (
+              <div
+                className={`pointer-events-none absolute select-none transition-transform duration-500 ease-out lg:scale-100 lg:group-hover:scale-105 ${
+                  activeCard === i ? "scale-105" : "scale-100"
+                }`}
+                style={{
+                  width: s.art.width,
+                  height: s.art.height,
+                  right: s.art.right,
+                  top: s.art.top,
+                }}
+              >
+                <Image
+                  src={s.image}
+                  alt=""
+                  fill
+                  sizes="320px"
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <Image
+                src={s.image}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                className={`pointer-events-none origin-right select-none object-contain object-right transition-transform duration-500 ease-out ${
+                  s.art === "map"
+                    ? `translate-x-[37%] lg:scale-[1.28] lg:group-hover:scale-[1.35] ${
+                        activeCard === i ? "scale-[1.35]" : "scale-[1.28]"
+                      }`
+                    : `lg:scale-100 lg:group-hover:scale-105 ${
+                        activeCard === i ? "scale-105" : "scale-100"
+                      }`
+                }`}
+              />
+            )}
 
             {/* Glow laranja radial no rodapé — hover (desktop) / card ativo (mobile) */}
             <div

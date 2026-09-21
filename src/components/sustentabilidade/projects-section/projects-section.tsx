@@ -6,7 +6,7 @@ export function ProjectsSection() {
   return (
     <Section className="flex flex-col gap-10 lg:gap-14">
       <div className="flex max-w-[720px] flex-col gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Apoio
         </p>
         <h2 className="text-h3 font-normal text-neutral-800">
@@ -39,13 +39,13 @@ export function ProjectsSection() {
 
             {/* Texto — categoria + título + descrição */}
             <div className="flex min-w-0 flex-1 flex-col justify-center gap-1 py-1">
-              <span className="text-sm font-semibold uppercase leading-[1.35] tracking-wide text-primary-500">
+              <span className="text-body font-semibold uppercase leading-[1.35] tracking-wide text-primary-500">
                 {project.category}
               </span>
               <h3 className="line-clamp-2 font-heading text-lg font-semibold leading-[1.3] text-neutral-800">
                 {project.title}
               </h3>
-              <p className="line-clamp-3 text-sm leading-[1.35] text-neutral-600">
+              <p className="line-clamp-3 text-body leading-[1.35] text-neutral-600">
                 {project.description}
               </p>
             </div>

@@ -38,7 +38,7 @@ const channels: Channel[] = [
       "Quero relatar discriminação",
     ],
     ctaLabel: "Acessar Canal da Transparência",
-    href: ROUTES.CANAL_TRANSPARENCIA,
+    href: ROUTES.OUVIDOR_DIGITAL,
     accent: "secondary",
   },
 ];

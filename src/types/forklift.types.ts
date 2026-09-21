@@ -29,4 +29,18 @@ export type Forklift = {
   location: string;
   /** Foto do produto. Placeholder still-E20 em todos por enquanto. */
   image: StaticImageData;
+  /**
+   * Modelo de fabricação nacional — exibe o selo da bandeira do Brasil sobre a
+   * foto, como a STILL sinaliza esses modelos no site oficial.
+   */
+  madeInBrazil?: boolean;
+  /** Ano de fabricação — só nos classificados de seminovas (PLACEHOLDER). */
+  year?: string;
+  /** Horas trabalhadas — só nos classificados de seminovas (PLACEHOLDER). */
+  workedHours?: string;
+  /**
+   * Fotos extras da galeria do detalhe. Quando ausente, a galeria mostra só
+   * `image`. Usado hoje pelos classificados de seminovas.
+   */
+  gallery?: StaticImageData[];
 };

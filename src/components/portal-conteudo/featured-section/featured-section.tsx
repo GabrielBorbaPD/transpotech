@@ -14,11 +14,11 @@ export function FeaturedSection() {
           (padding inferior da hero) e 48px abaixo até a tag da notícia. */}
       <div className="border-t border-neutral-200" />
 
-      <p className="mt-12 text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+      <p className="mt-12 text-body font-semibold uppercase tracking-wide text-secondary-600">
         Notícia em destaque
       </p>
 
-      <article className="mt-5 grid grid-cols-1 items-stretch gap-4 overflow-hidden rounded-2xl bg-white p-3 transition duration-300 hover:scale-[1.01] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)] lg:grid-cols-2 lg:gap-8">
+      <article className="mt-5 grid grid-cols-1 items-stretch gap-4 overflow-hidden rounded-2xl bg-white p-3 transition duration-300 hover:scale-[1.01] hover:z-10 hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)] lg:grid-cols-2 lg:gap-8">
         {/* Imagem com pequena borda do card ao redor (padding do article + cantos). */}
         <div className="relative h-[248px] w-full overflow-hidden rounded-xl bg-neutral-100 lg:h-full lg:min-h-[404px]">
           <Image
@@ -33,7 +33,7 @@ export function FeaturedSection() {
         <div className="flex h-full flex-col justify-between gap-6 p-3 pt-3 lg:py-7 lg:pl-4 lg:pr-7">
           {/* Bloco no topo: tag, título, descrição, data e tempo de leitura */}
           <div className="flex flex-col gap-4">
-            <span className="inline-flex w-fit items-center rounded-full bg-primary-50 px-3.5 py-1.5 text-body-sm font-semibold text-primary-600">
+            <span className="inline-flex w-fit items-center rounded-full bg-primary-50 px-3.5 py-1.5 text-body font-semibold text-primary-600">
               {article.type}
             </span>
 
@@ -45,7 +45,7 @@ export function FeaturedSection() {
               {article.excerpt}
             </p>
 
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-body-sm text-neutral-500">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-body text-neutral-500">
               <span>{article.date}</span>
               <span aria-hidden>·</span>
               <span className="inline-flex items-center gap-1">

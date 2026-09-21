@@ -33,8 +33,8 @@ const hotspots: Hotspot[] = [
   {
     label: "Venda de retrovisores",
     href: ROUTES.PECAS,
-    u: 0.489,
-    v: 0.535,
+    u: 0.602,
+    v: 0.517,
     side: "right",
   },
   { label: "Venda de mastros", href: ROUTES.PECAS, u: 0.655, v: 0.605 },
@@ -42,8 +42,10 @@ const hotspots: Hotspot[] = [
   { label: "Venda de pneus", href: ROUTES.PNEUS, u: 0.552, v: 0.864 },
 ];
 
-// Geometria da imagem/hero (hero-section.tsx): foto 4096×2155 dentro do wrapper
-// left-[-14%] top-[-46%] w-[146%] h-[154%], com object-cover object-bottom.
+// Quadro de referência dos u/v: foto 4096×2155 num wrapper left-[-14%]
+// top-[-46%] w-[146%] h-[154%], com object-cover object-bottom. A arte atual
+// (home-hero-image.webp, 4332×3480) é posicionada em hero-section.tsx para
+// reproduzir exatamente esse quadro — por isso estes valores não mudam com ela.
 const IMG_W = 4096;
 const IMG_H = 2155;
 const WRAP_LEFT = -0.14;
@@ -158,7 +160,7 @@ export function HeroHotspots() {
                 onMouseEnter={() => engage(i)}
                 onFocus={() => engage(i)}
                 onClick={() => engage(i)}
-                className="group/hotspot relative flex size-9 items-center justify-center rounded-full outline-none"
+                className="group/hotspot relative flex size-11 items-center justify-center rounded-full outline-none"
               >
                 {/* Wrapper das bolinhas — pulsa sempre (piscar). O atraso por
                     índice desencontra o pulso. Esmaece quando outra está ativa. */}
@@ -171,12 +173,12 @@ export function HeroHotspots() {
                   {/* Bolinha maior e transparente atrás — cresce no hover */}
                   <span
                     aria-hidden
-                    className="absolute size-[26px] rounded-full bg-white/25 transition-all duration-300 group-hover/hotspot:size-[32px]"
+                    className="absolute size-[34px] rounded-full bg-white/25 transition-all duration-300 group-hover/hotspot:size-[42px]"
                   />
                   {/* Bolinha branca */}
                   <span
                     aria-hidden
-                    className="relative size-[14px] rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]"
+                    className="relative size-[18px] rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]"
                   />
                 </span>
               </Link>
@@ -188,10 +190,10 @@ export function HeroHotspots() {
                 tabIndex={-1}
                 onMouseEnter={() => engage(i)}
                 onClick={() => engage(i)}
-                className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border border-white/15 bg-neutral-900/80 px-3 py-1.5 text-[14px] font-semibold text-white backdrop-blur-sm transition-all duration-300 ${
+                className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border border-white/15 bg-neutral-900/80 px-3 py-1.5 text-body font-semibold text-white backdrop-blur-sm transition-all duration-300 ${
                   openRight
-                    ? "left-[calc(50%+10px)] origin-left"
-                    : "right-[calc(50%+10px)] origin-right"
+                    ? "left-[calc(50%+14px)] origin-left"
+                    : "right-[calc(50%+14px)] origin-right"
                 } ${
                   isActive
                     ? "pointer-events-auto translate-x-0 scale-100 opacity-100"

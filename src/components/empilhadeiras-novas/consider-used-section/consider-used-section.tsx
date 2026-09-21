@@ -47,7 +47,7 @@ export function ConsiderUsedSection() {
         <Button
           variant="primary"
           size="lg"
-          href={ROUTES.EMPILHADEIRAS_SEMINOVAS}
+          href={`${ROUTES.EMPILHADEIRAS_SEMINOVAS}#disponiveis-agora`}
           className="self-start"
         >
           Ver catálogo de seminovas

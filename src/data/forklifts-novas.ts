@@ -51,6 +51,7 @@ export const forkliftsNovas: Forklift[] = [
     availability: "Sob consulta",
     location: "Curitiba - PR",
     image: egvNg,
+    madeInBrazil: true,
   },
   {
     id: "still-egv-16-sf",
@@ -66,6 +67,7 @@ export const forkliftsNovas: Forklift[] = [
     availability: "Pronta entrega",
     location: "São Paulo - SP",
     image: egvSf,
+    madeInBrazil: true,
   },
   {
     id: "still-rce-25-litio-ion",
@@ -81,6 +83,7 @@ export const forkliftsNovas: Forklift[] = [
     availability: "Pronta entrega",
     location: "Curitiba - PR",
     image: rce,
+    madeInBrazil: true,
   },
   {
     id: "still-rc-44-25-c",
@@ -96,6 +99,7 @@ export const forkliftsNovas: Forklift[] = [
     availability: "Sob consulta",
     location: "Joinville - SC",
     image: rc40,
+    madeInBrazil: true,
   },
   {
     id: "still-exh-sf-16c-20c",
@@ -111,6 +115,7 @@ export const forkliftsNovas: Forklift[] = [
     availability: "Sob consulta",
     location: "Joinville - SC",
     image: exhSf,
+    madeInBrazil: true,
   },
   {
     id: "still-exh-sf-25",
@@ -141,6 +146,7 @@ export const forkliftsNovas: Forklift[] = [
     availability: "Sob consulta",
     location: "São Paulo - SP",
     image: erx,
+    madeInBrazil: true,
   },
   {
     id: "still-fm-x-17-20",
@@ -156,6 +162,7 @@ export const forkliftsNovas: Forklift[] = [
     availability: "Pronta entrega",
     location: "Curitiba - PR",
     image: fmx,
+    madeInBrazil: true,
   },
   {
     id: "still-rx20-20p",

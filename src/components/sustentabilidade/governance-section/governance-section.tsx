@@ -34,7 +34,7 @@ export function GovernanceSection() {
   return (
     <Section className="flex flex-col gap-10 lg:gap-14">
       <div className="flex max-w-[720px] flex-col gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Governança
         </p>
         <h2 className="text-h3 font-normal text-neutral-800">
@@ -51,7 +51,7 @@ export function GovernanceSection() {
         {channels.map((channel) => (
           <div
             key={channel.title}
-            className="flex flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)]"
+            className="flex flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)]"
           >
             <div className="flex flex-1 flex-col gap-8 rounded-xl bg-[#fbfbfb] p-6 lg:p-8">
               <div className="flex size-10 items-center justify-center rounded-full bg-primary-500 lg:size-12">

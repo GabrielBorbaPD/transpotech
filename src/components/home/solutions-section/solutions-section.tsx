@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, type CSSProperties } from "react";
 import { gsap } from "@/lib/gsap";
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowRight,
   Forklift,
@@ -17,12 +18,15 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import gearRing from "@/assets/images/solutions-gear.svg";
+import { ROUTES } from "@/lib/routes";
 
 type Solution = {
   title: string;
   icon: LucideIcon;
   description: string;
   cta: string;
+  /** Destino do CTA no centro da engrenagem. */
+  href: string;
 };
 
 const solutions: Solution[] = [
@@ -32,6 +36,7 @@ const solutions: Solution[] = [
     description:
       "STILL, Linde e Baoli com frota pronta para operação imediata e custo previsível.",
     cta: "Ver locação",
+    href: ROUTES.LOCACAO,
   },
   {
     title: "Venda de empilhadeiras novas",
@@ -39,6 +44,9 @@ const solutions: Solution[] = [
     description:
       "Linde, Still e Baoli zero-km com orientação técnica para a escolha certa.",
     cta: "Ver novas",
+    // /produtos/empilhadeiras (índice) ainda está em construção — o destino
+    // útil é direto o catálogo de novas.
+    href: ROUTES.EMPILHADEIRAS_NOVAS,
   },
   {
     title: "Empilhadeiras seminovas",
@@ -46,6 +54,7 @@ const solutions: Solution[] = [
     description:
       "Seminovas revisadas, com garantia e o melhor custo-benefício para sua operação.",
     cta: "Ver seminovas",
+    href: ROUTES.EMPILHADEIRAS_SEMINOVAS,
   },
   {
     title: "Assistência multimarcas",
@@ -53,6 +62,9 @@ const solutions: Solution[] = [
     description:
       "Manutenção preventiva, corretiva e multimarcas com 380+ técnicos especializados e peças em estoque.",
     cta: "Ver serviços",
+    // /servicos/assistencia-multimarcas seria o destino literal, mas está em
+    // construção — /servicos cobre preventiva, corretiva e multimarcas.
+    href: ROUTES.SERVICOS,
   },
   {
     title: "Automação intralogística",
@@ -60,6 +72,7 @@ const solutions: Solution[] = [
     description:
       "Menos gargalos, mais produtividade. Automação por etapas adaptada à maturidade da operação.",
     cta: "Conhecer automação",
+    href: ROUTES.AUTOMACAO,
   },
   {
     title: "Transporte",
@@ -67,6 +80,9 @@ const solutions: Solution[] = [
     description:
       "Movimentação e logística de cargas com equipe especializada e cobertura nacional.",
     cta: "Falar sobre transporte",
+    // Não há página de transporte no site; o CTA já é de conversa, então vai
+    // para o contato.
+    href: ROUTES.CONTATO,
   },
   {
     title: "Baterias e carregadores",
@@ -74,6 +90,7 @@ const solutions: Solution[] = [
     description:
       "Baterias, carregadores e infraestrutura de energia para operações elétricas eficientes.",
     cta: "Ver baterias",
+    href: ROUTES.BATERIAS,
   },
   {
     title: "Peças e componentes",
@@ -81,6 +98,7 @@ const solutions: Solution[] = [
     description:
       "Peças originais e compatíveis com estoque amplo para reduzir tempo de parada.",
     cta: "Ver peças",
+    href: ROUTES.PECAS,
   },
   {
     title: "Pneus",
@@ -88,6 +106,7 @@ const solutions: Solution[] = [
     description:
       "Pneus para empilhadeiras de todos os portes e aplicações, com troca no local.",
     cta: "Ver pneus",
+    href: ROUTES.PNEUS,
   },
 ];
 
@@ -261,7 +280,7 @@ export function SolutionsSection() {
                 type="button"
                 onClick={() => handleSelect(i)}
                 aria-pressed={act}
-                className={`shrink-0 cursor-pointer whitespace-nowrap rounded-full border px-3 py-1.5 text-[12px] transition-all duration-300 ${
+                className={`shrink-0 cursor-pointer whitespace-nowrap rounded-full border px-3 py-1.5 text-body transition-all duration-300 ${
                   act
                     ? "border-primary-400 bg-white/10 font-semibold text-white backdrop-blur-sm"
                     : "border-white/10 font-medium text-white/60"
@@ -339,7 +358,7 @@ export function SolutionsSection() {
                   top: `${(lbl.y / VB) * 100}%`,
                   transform: `translate(${tx}, -50%)`,
                 }}
-                className={`absolute hidden cursor-pointer whitespace-nowrap rounded-full border px-3 py-1.5 text-[14px] transition-all duration-300 lg:block ${
+                className={`absolute hidden cursor-pointer whitespace-nowrap rounded-full border px-3 py-1.5 text-body transition-all duration-300 lg:block ${
                   act
                     ? "border-primary-400 bg-white/10 font-semibold text-white backdrop-blur-sm"
                     : "border-transparent font-medium text-white/60"
@@ -370,13 +389,20 @@ export function SolutionsSection() {
                 {sol.description}
               </p>
             </div>
-            <button className="group/cta inline-flex items-center gap-2 rounded-full bg-primary-500/15 px-5 py-2.5 text-sm font-semibold text-primary-300 transition-colors hover:bg-primary-500/25">
+            {/* CTA da solução ativa — leva à página correspondente. O
+                aria-label repete o título porque "Ver novas" sozinho não diz
+                do que se trata fora do contexto visual do círculo. */}
+            <Link
+              href={sol.href}
+              aria-label={`${sol.cta} — ${sol.title}`}
+              className="group/cta inline-flex items-center gap-2 rounded-full bg-primary-500/15 px-5 py-2.5 text-body font-semibold text-primary-300 transition-colors hover:bg-primary-500/25"
+            >
               <span>{sol.cta}</span>
               <ArrowRight
                 className="size-4 transition-transform group-hover/cta:translate-x-0.5"
                 aria-hidden
               />
-            </button>
+            </Link>
           </div>
 
           {/* Áreas de clique transparentes sobre cada bolinha */}

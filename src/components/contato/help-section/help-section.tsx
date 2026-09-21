@@ -24,7 +24,7 @@ const cards: HelpCard[] = [
     description:
       "Empilhadeiras novas e seminovas para diferentes aplicações, capacidades e ambientes operacionais.",
     ctaLabel: "Solicitar orçamento",
-    href: ROUTES.ORCAMENTO,
+    href: "#solicitacao",
     Icon: Forklift,
   },
   {
@@ -48,7 +48,7 @@ const cards: HelpCard[] = [
     description:
       "Envie sua necessidade, modelo do equipamento ou uma foto para receber orientação e cotação.",
     ctaLabel: "Solicitar cotação",
-    href: ROUTES.ORCAMENTO,
+    href: "#solicitacao",
     Icon: Package,
   },
   {
@@ -65,7 +65,7 @@ export function HelpSection() {
   return (
     <Section className="flex flex-col gap-10 lg:gap-14">
       <div className="flex max-w-[560px] flex-col gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Atendimento
         </p>
         <h2 className="text-h3 font-normal text-neutral-800">
@@ -83,7 +83,7 @@ export function HelpSection() {
         {cards.map((card) => (
           <div
             key={card.title}
-            className="flex w-full flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)] sm:w-[calc((100%_-_1rem)/2)] lg:w-[calc((100%_-_2rem)/3)]"
+            className="flex w-full flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)] sm:w-[calc((100%_-_1rem)/2)] lg:w-[calc((100%_-_2rem)/3)]"
           >
             <div className="flex flex-1 flex-col gap-8 rounded-xl bg-[#fbfbfb] p-6">
               <div className="flex size-10 items-center justify-center rounded-full bg-primary-500 lg:size-12">

@@ -91,7 +91,7 @@ export function BenefitsSection() {
   return (
     <Section data-header-dark className="flex flex-col gap-12 lg:gap-16">
       <div className="flex max-w-[640px] flex-col gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-primary-400">
+        <p className="text-body font-semibold uppercase tracking-wide text-primary-400">
           Benefícios
         </p>
         <h2 className="text-h2 font-normal text-neutral-50">

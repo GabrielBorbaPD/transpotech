@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
-import { ROUTES } from "@/lib/routes";
 import heroImage from "@/assets/images/hero-automacao.webp";
 import heroImageMobile from "@/assets/images/hero-automacao-mobile.webp";
 
@@ -67,7 +66,7 @@ export function AutomacaoHeroSection() {
           <Button
             variant="primary"
             size="lg"
-            href={ROUTES.ORCAMENTO}
+            href="#avaliar-automacao"
             className="w-full lg:w-auto"
           >
             Avaliar minha operação

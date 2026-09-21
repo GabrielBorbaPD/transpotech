@@ -8,6 +8,8 @@ type ServiceCard = {
   title: string;
   description: string;
   cta: string;
+  /** Destino do CTA — âncoras da página de serviços (manutenção). */
+  href: string;
 };
 
 const cards: ServiceCard[] = [
@@ -17,6 +19,7 @@ const cards: ServiceCard[] = [
     description:
       "Cronograma de visitas técnicas para identificar falhas antes que parem sua frota.",
     cta: "Solicitar plano preventivo",
+    href: `${ROUTES.SERVICOS}#solicitar-servico`,
   },
   {
     icon: Wrench,
@@ -24,6 +27,7 @@ const cards: ServiceCard[] = [
     description:
       "Técnicas em campo com peças em estoque para retornar sua operação o quanto antes.",
     cta: "Solicitar atendimento urgente",
+    href: `${ROUTES.SERVICOS}#solicitar-servico`,
   },
   {
     icon: LayoutDashboard,
@@ -31,6 +35,7 @@ const cards: ServiceCard[] = [
     description:
       "Linde, Still, Baoli e outras marcas - um único contato para toda a frota.",
     cta: "Ver cobertura multimarcas",
+    href: `${ROUTES.SERVICOS}#multimarcas`,
   },
 ];
 
@@ -59,7 +64,7 @@ export function ServicesSection() {
         {cards.map((card) => (
           <div
             key={card.title}
-            className="flex flex-1 flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)]"
+            className="flex flex-1 flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)]"
           >
             <div className="flex flex-1 flex-col gap-8 rounded-xl bg-[#fbfbfb] p-6">
               <div className="flex size-10 items-center justify-center rounded-full bg-primary-500 lg:size-12">
@@ -80,7 +85,7 @@ export function ServicesSection() {
               </div>
             </div>
             <TextLink
-              href={ROUTES.SERVICOS}
+              href={card.href}
               className="w-full px-6 py-4 text-left"
             >
               {card.cta}

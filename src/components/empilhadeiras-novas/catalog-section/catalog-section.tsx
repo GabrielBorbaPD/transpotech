@@ -1,16 +1,7 @@
-import Image from "next/image";
 import { Section } from "@/components/ui/section";
 import { Catalog } from "@/components/catalog/catalog";
 import { forkliftsNovas } from "@/data/forklifts-novas";
-import still from "@/assets/Logos/Logo still.svg";
-import linde from "@/assets/Logos/Logo Linde.svg";
-import baoli from "@/assets/Logos/Logo Baoli.svg";
-
-const brandLogos = [
-  { src: still, alt: "STILL" },
-  { src: linde, alt: "Linde" },
-  { src: baoli, alt: "Baoli" },
-];
+import { BrandLogoFilters } from "./brand-logo-filters";
 
 export function CatalogSection() {
   return (
@@ -28,16 +19,9 @@ export function CatalogSection() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-5 sm:gap-x-12 lg:gap-16">
-          {brandLogos.map((logo) => (
-            <Image
-              key={logo.alt}
-              src={logo.src}
-              alt={logo.alt}
-              className="h-10 w-auto [filter:brightness(0)_invert(0.35)] sm:h-12"
-            />
-          ))}
-        </div>
+        {/* Logos clicáveis: filtram o catálogo pela marca (Client Component;
+            esta seção segue no servidor, com forkliftsNovas fora do bundle). */}
+        <BrandLogoFilters />
       </div>
 
       <Catalog forklifts={forkliftsNovas} />

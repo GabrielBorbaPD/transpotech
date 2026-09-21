@@ -1,6 +1,5 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
-import { ROUTES } from "@/lib/routes";
 
 type InfoTopic = { title: string; items: string[] };
 
@@ -69,7 +68,7 @@ export function InfoCardsSection() {
         </ul>
       </div>
 
-      <Button variant="primary" size="lg" href={ROUTES.ORCAMENTO}>
+      <Button variant="primary" size="lg" href="#solicitar-pecas">
         Enviar informações para cotação
       </Button>
     </Section>

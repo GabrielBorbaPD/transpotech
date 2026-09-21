@@ -1,9 +1,4 @@
-export type FacetKey =
-  | "brand"
-  | "equipmentType"
-  | "energyTag"
-  | "application"
-  | "location";
+export type FacetKey = "brand" | "equipmentType" | "energyTag";
 
 export type FacetGroup = {
   key: FacetKey;

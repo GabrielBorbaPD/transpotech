@@ -57,7 +57,7 @@ export function CareersSection() {
           reaparece depois dos cards. */}
       <div className="flex flex-col gap-10 lg:w-[400px] lg:shrink-0 lg:gap-16">
         <div className="flex flex-col gap-4">
-          <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+          <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
             Trabalhe conosco
           </p>
           <h2 className="text-h3 font-normal text-neutral-800">
@@ -80,7 +80,7 @@ export function CareersSection() {
         {perks.map((perk) => (
           <div
             key={perk.title}
-            className="flex min-h-[180px] flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#F7F6F6] p-6 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)]"
+            className="flex min-h-[180px] flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#F7F6F6] p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)]"
           >
             <perk.Icon
               aria-hidden
@@ -90,7 +90,7 @@ export function CareersSection() {
               <h3 className="font-heading text-h6 font-semibold text-neutral-800">
                 {perk.title}
               </h3>
-              <p className="text-body-sm leading-[1.35] text-neutral-600">
+              <p className="text-body leading-[1.35] text-neutral-600">
                 {perk.description}
               </p>
             </div>

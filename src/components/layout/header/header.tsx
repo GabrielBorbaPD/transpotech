@@ -238,7 +238,7 @@ export function Header() {
               <Button
                 variant="gray"
                 size="lg"
-                href={ROUTES.ORCAMENTO}
+                href={ROUTES.SIMULADOR}
                 className={
                   darkPill ? "!bg-white/15 !text-neutral-50 hover:!bg-white/25" : ""
                 }
@@ -314,7 +314,7 @@ export function Header() {
                                   key={col.title}
                                   className="flex flex-col gap-1"
                                 >
-                                  <p className="px-2 text-sm font-semibold leading-6 text-neutral-400">
+                                  <p className="px-2 text-body font-semibold leading-6 text-neutral-400">
                                     {col.title}
                                   </p>
                                   {col.items.map((sub) => {
@@ -340,7 +340,7 @@ export function Header() {
                                         <span className="text-body font-medium leading-tight text-neutral-800">
                                           {sub.title}
                                         </span>
-                                        <span className="text-sm leading-snug text-neutral-500">
+                                        <span className="text-body leading-snug text-neutral-500">
                                           {sub.subtitle}
                                         </span>
                                       </span>
@@ -370,7 +370,7 @@ export function Header() {
               <Button
                 variant="gray"
                 size="lg"
-                href={ROUTES.ORCAMENTO}
+                href={ROUTES.SIMULADOR}
                 onClick={closeMobileMenu}
                 className="w-full"
               >

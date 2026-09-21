@@ -29,6 +29,13 @@ export function CtaSection({
   secondaryLabel,
   secondaryHref,
 }: CtaSectionProps = {}) {
+  // Link para fora do site abre em nova aba (mesmo padrão do header e footer).
+  const isExternal = (href?: string) => href?.startsWith("http") ?? false;
+  const externalProps = (href?: string) =>
+    isExternal(href)
+      ? { target: "_blank" as const, rel: "noopener noreferrer" }
+      : {};
+
   return (
     <section className="relative overflow-hidden bg-[#fdfdfd]">
       {/* Background — cobre a tela toda (full-bleed), atrás do conteúdo */}
@@ -59,11 +66,21 @@ export function CtaSection({
           </p>
         </div>
         <div className="relative flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
-          <Button variant="primary" size="lg" href={ctaHref}>
+          <Button
+            variant="primary"
+            size="lg"
+            href={ctaHref}
+            {...externalProps(ctaHref)}
+          >
             {ctaLabel}
           </Button>
           {secondaryLabel && (
-            <Button variant="gray" size="lg" href={secondaryHref}>
+            <Button
+              variant="gray"
+              size="lg"
+              href={secondaryHref}
+              {...externalProps(secondaryHref)}
+            >
               {secondaryLabel}
             </Button>
           )}

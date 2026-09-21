@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ParallaxFrame } from "@/components/layout/parallax-frame";
 import team from "@/assets/images/esg-team.png";
+import gptw from "@/assets/images/gptw-badge.webp";
 import { ROUTES } from "@/lib/routes";
 import { gsap } from "@/lib/gsap";
 
@@ -88,23 +89,36 @@ export function EsgSection() {
       data-reveal-skip
       className="relative isolate mx-auto flex w-full max-w-[1440px] flex-col items-start gap-10 overflow-hidden px-5 py-12 sm:px-6 lg:gap-[67px] lg:px-16 lg:py-20"
     >
-      {/* Cabeçalho */}
-      <div className="flex w-[641px] max-w-full flex-col gap-6">
-        <div className="flex w-[613px] max-w-full flex-col gap-4">
-          <p className="text-body font-semibold leading-[1.35] text-secondary-600">
-            ESG E GOVERNANÇA
+      {/* Cabeçalho — selo GPTW à direita acompanha a altura do bloco de texto
+          (proporção 500x639: a largura reservada define o teto de altura) */}
+      <div className="flex w-full flex-col items-start gap-8 sm:flex-row sm:items-stretch sm:justify-between sm:gap-10 lg:gap-12">
+        <div className="flex w-[641px] max-w-full flex-col gap-6">
+          <div className="flex w-[613px] max-w-full flex-col gap-4">
+            <p className="text-body font-semibold leading-[1.35] text-secondary-600">
+              ESG E GOVERNANÇA
+            </p>
+            <h2 className="text-h2 text-neutral-800">
+              <span className="font-bold">ESG na prática,</span>{" "}
+              <span className="font-normal">
+                para uma intralogística mais responsável
+              </span>
+            </h2>
+          </div>
+          <p className="text-body leading-[1.35] text-neutral-600">
+            Compromissos claros em Ambiental, Social e Governança com iniciativas
+            alinhadas aos ODS da ONU e canais formais de transparência.
           </p>
-          <h2 className="text-h2 text-neutral-800">
-            <span className="font-bold">ESG na prática,</span>{" "}
-            <span className="font-normal">
-              para uma intralogística mais responsável
-            </span>
-          </h2>
         </div>
-        <p className="text-body leading-[1.35] text-neutral-600">
-          Compromissos claros em Ambiental, Social e Governança com iniciativas
-          alinhadas aos ODS da ONU e canais formais de transparência.
-        </p>
+
+        <div className="relative h-[90px] w-[71px] shrink-0 self-start sm:h-auto sm:w-[110px] sm:self-stretch md:w-[135px] lg:w-[163px]">
+          <Image
+            src={gptw}
+            alt="Great Place To Work Certificada — 4 anos consecutivos"
+            fill
+            sizes="163px"
+            className="object-contain object-right"
+          />
+        </div>
       </div>
 
       {/* Conteúdo */}

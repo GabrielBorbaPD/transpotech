@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
-import { ROUTES } from "@/lib/routes";
 import forklift from "@/assets/images/hero-image-empilhadeiras-seminovas.webp";
 import forkliftMobile from "@/assets/images/hero-image-empilhadeiras-seminovas-mobile.webp";
 
@@ -77,10 +76,11 @@ export function SeminovasHeroSection() {
             </p>
           </div>
 
+          {/* Leva à lista de classificados, na própria página. */}
           <Button
             variant="primary"
             size="lg"
-            href={ROUTES.ORCAMENTO}
+            href="#disponiveis-agora"
             className="w-full lg:w-auto"
           >
             Solicitar cotação

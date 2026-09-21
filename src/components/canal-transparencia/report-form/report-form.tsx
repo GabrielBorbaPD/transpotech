@@ -16,7 +16,7 @@ import {
   type ReportFormValues,
 } from "@/lib/report.schema";
 
-const labelBase = "text-body-sm font-semibold text-neutral-700";
+const labelBase = "text-body font-semibold text-neutral-700";
 
 function generateProtocol(): string {
   const now = new Date();
@@ -86,7 +86,7 @@ export function ReportForm() {
         <form
           noValidate
           onSubmit={handleSubmit(onSubmit)}
-          className="flex w-full flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-6 lg:p-8"
+          className="flex w-full flex-col gap-6 rounded-2xl border-2 border-neutral-100 bg-white p-6 lg:p-8"
         >
           {/* Identificação */}
           <fieldset className="flex flex-col gap-3">
@@ -113,7 +113,7 @@ export function ReportForm() {
               ))}
             </div>
             {identify === "anonimo" && (
-              <p className="text-body-sm text-neutral-500">
+              <p className="text-body text-neutral-500">
                 Ao optar pelo anonimato, evite incluir informações que possam te
                 identificar indiretamente.
               </p>
@@ -142,7 +142,7 @@ export function ReportForm() {
                 )}
               />
               {errors.relation && (
-                <p className="text-body-sm text-error">
+                <p className="text-body text-error">
                   {errors.relation.message}
                 </p>
               )}
@@ -168,7 +168,7 @@ export function ReportForm() {
                 )}
               />
               {errors.type && (
-                <p className="text-body-sm text-error">{errors.type.message}</p>
+                <p className="text-body text-error">{errors.type.message}</p>
               )}
             </div>
           </div>
@@ -221,7 +221,7 @@ export function ReportForm() {
               className="min-h-[140px]"
             />
             {errors.description && (
-              <p className="text-body-sm text-error">
+              <p className="text-body text-error">
                 {errors.description.message}
               </p>
             )}
@@ -240,7 +240,7 @@ export function ReportForm() {
               Escolher arquivos
             </label>
             <input id="rf-files" type="file" multiple className="sr-only" />
-            <p className="text-body-sm text-neutral-500">
+            <p className="text-body text-neutral-500">
               O envio de arquivos é simulado nesta versão.
             </p>
           </div>
@@ -255,7 +255,7 @@ export function ReportForm() {
             >
               Enviar relato
             </Button>
-            <p className="text-body-sm text-neutral-500">
+            <p className="text-body text-neutral-500">
               Após o envio, exibimos um número de protocolo (placeholder até
               integração com o sistema de tratamento).
             </p>

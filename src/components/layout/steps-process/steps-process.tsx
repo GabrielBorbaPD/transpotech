@@ -213,7 +213,7 @@ export function StepsProcess({
                 <h3 className="font-heading text-h6 font-semibold text-neutral-50">
                   {step.title}
                 </h3>
-                <p className="text-body-sm leading-[1.4] text-neutral-400">
+                <p className="text-body leading-[1.4] text-neutral-400">
                   {step.description}
                 </p>
               </li>

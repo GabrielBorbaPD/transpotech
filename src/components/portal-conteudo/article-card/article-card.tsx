@@ -22,20 +22,20 @@ export function ArticleCard({ article }: { article: Article }) {
         </div>
 
         <div className="flex flex-1 flex-col gap-3 p-4">
-          <span className="text-body-sm font-semibold uppercase tracking-wide text-primary-600">
+          <span className="text-body font-semibold uppercase tracking-wide text-primary-600">
             {article.category}
           </span>
 
           <h3 className="font-heading text-h6 font-semibold leading-[1.3] text-neutral-800">
             {article.title}
           </h3>
-          <p className="flex-1 text-body-sm leading-[1.35] text-neutral-600">
+          <p className="flex-1 text-body leading-[1.35] text-neutral-600">
             {article.excerpt}
           </p>
 
           {/* Linha fina divisória acima da data */}
           <div className="border-t border-neutral-200" />
-          <span className="text-body-sm text-neutral-500">{article.date}</span>
+          <span className="text-body text-neutral-500">{article.date}</span>
         </div>
       </article>
     </Link>

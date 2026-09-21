@@ -216,7 +216,7 @@ export function CityAutocomplete({
                 optionTones[tone].base
               } ${activeIndex === 0 ? optionTones[tone].active : ""}`}
             >
-              <span className={`text-body-sm ${hintTones[tone]}`}>
+              <span className={`text-body ${hintTones[tone]}`}>
                 Usar cidade recente
               </span>
               <span className="font-medium">{remembered}</span>
@@ -248,7 +248,7 @@ export function CityAutocomplete({
                       )
                     )}
                   </span>
-                  <span className={`shrink-0 text-body-sm ${ufTones[tone]}`}>
+                  <span className={`shrink-0 text-body ${ufTones[tone]}`}>
                     {match.city.uf}
                   </span>
                 </li>

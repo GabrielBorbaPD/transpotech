@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { SlidersHorizontal, SearchX, X } from "lucide-react";
 import type { Forklift, ForkliftBrand } from "@/types/forklift.types";
@@ -9,6 +9,12 @@ import { ProductCard } from "./product-card/product-card";
 import { QuoteModal } from "./quote-modal/quote-modal";
 import { CatalogToolbar } from "./catalog-toolbar/catalog-toolbar";
 import { CatalogFilters } from "./catalog-filters/catalog-filters";
+import {
+  EMPTY_BRANDS,
+  readBrands,
+  subscribeBrands,
+  writeBrands,
+} from "./brand-filter";
 import type {
   FacetGroup,
   FacetKey,
@@ -49,26 +55,6 @@ const FACET_GROUPS: { key: FacetKey; label: string; options: string[] }[] = [
     label: "Energia",
     options: ["Elétrica", "Diesel", "GLP", "Li-ion", "Chumbo-ácida", "Não sei"],
   },
-  {
-    key: "application",
-    label: "Aplicação",
-    options: [
-      "Operação interna",
-      "Operação externa",
-      "Centro de distribuição",
-      "Supermercado / atacado",
-      "Indústria",
-      "Galpão logístico",
-      "Carga e descarga",
-      "Corredores estreitos",
-      "Armazenagem vertical",
-    ],
-  },
-  {
-    key: "location",
-    label: "Localização",
-    options: ["SC", "PR", "RS", "SP", "GO", "Outros estados"],
-  },
 ];
 
 const facetKeys: FacetKey[] = FACET_GROUPS.map((g) => g.key);
@@ -77,11 +63,7 @@ const emptySelection: SelectedFacets = {
   brand: [],
   equipmentType: [],
   energyTag: [],
-  application: [],
-  location: [],
 };
-
-const KNOWN_UFS = ["SC", "PR", "RS", "SP", "GO"];
 
 // ── Parsing numérico dos specs ──────────────────────────────────────────────
 /** "1,6 t" → 1.6 (toneladas). */
@@ -97,23 +79,6 @@ const formatTons = (tons: number) =>
 
 const formatMeters = (mm: number) =>
   `${(mm / 1000).toLocaleString("pt-BR", { maximumFractionDigits: 1 })} m`;
-
-const applicationMatch = (application: string): string[] => {
-  const a = application.toLowerCase();
-  const result: string[] = [];
-  if (/intern[oa]/.test(a)) result.push("Operação interna");
-  if (/extern[oa]/.test(a)) result.push("Operação externa");
-  if (a.includes("distribui")) result.push("Centro de distribuição");
-  if (a.includes("supermercado") || a.includes("atacado"))
-    result.push("Supermercado / atacado");
-  if (a.includes("indústr") || a.includes("industr")) result.push("Indústria");
-  if (a.includes("galpão") || a.includes("galpao")) result.push("Galpão logístico");
-  if (a.includes("descarga") || a.includes("carga e descarga"))
-    result.push("Carga e descarga");
-  if (a.includes("estreito")) result.push("Corredores estreitos");
-  if (a.includes("armazenagem vertical")) result.push("Armazenagem vertical");
-  return result;
-};
 
 // Para cada faceta, os valores (da taxonomia fixa) que um produto satisfaz.
 const facetMatch: Record<FacetKey, (f: Forklift) => string[]> = {
@@ -131,11 +96,6 @@ const facetMatch: Record<FacetKey, (f: Forklift) => string[]> = {
     if (f.energy === "Diesel/GLP") return ["Diesel", "GLP"];
     if (f.energy === "Elétrica") return ["Elétrica"];
     return [f.energy];
-  },
-  application: (f) => applicationMatch(f.application),
-  location: (f) => {
-    const uf = f.location.split(" - ")[1]?.trim() ?? "";
-    return [KNOWN_UFS.includes(uf) ? uf : "Outros estados"];
   },
 };
 
@@ -160,6 +120,23 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
     setQuoteForId(forklift.id);
     setQuoteOpen(true);
   };
+
+  // A marca mora na URL (?marca=still) e só lá — é a mesma fonte que os logos
+  // do cabeçalho escrevem, então logo, checkbox e link nunca divergem.
+  // useSyncExternalStore em vez de efeito com setState: a página é
+  // pré-renderizada, e o snapshot do servidor (vazio) mantém a primeira
+  // renderização do cliente igual ao HTML; o valor real entra logo depois,
+  // sem divergência de hidratação.
+  const brandSelection = useSyncExternalStore(
+    subscribeBrands,
+    readBrands,
+    () => EMPTY_BRANDS
+  );
+
+  const effectiveSelected = useMemo<SelectedFacets>(
+    () => ({ ...selected, brand: brandSelection }),
+    [selected, brandSelection]
+  );
 
   // Grupos de checkbox com contadores (total de produtos do site por opção).
   const groups: FacetGroup[] = useMemo(
@@ -245,10 +222,20 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
 
   const hasActiveFilters =
     search.trim() !== "" ||
-    facetKeys.some((key) => selected[key].length > 0) ||
+    facetKeys.some((key) => effectiveSelected[key].length > 0) ||
     rangeGroups.some((r) => currentRanges[r.key] !== neutralRanges[r.key]);
 
   const toggleFacet = (key: FacetKey, value: string) => {
+    // Marca não entra no estado local: vai para a URL, de onde é lida de volta.
+    if (key === "brand") {
+      const brand = value as ForkliftBrand;
+      writeBrands(
+        brandSelection.includes(brand)
+          ? brandSelection.filter((b) => b !== brand)
+          : [...brandSelection, brand]
+      );
+      return;
+    }
     setSelected((prev) => {
       const current = prev[key];
       const next = current.includes(value)
@@ -263,6 +250,7 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
   };
 
   const clearFilters = () => {
+    writeBrands([]);
     setSelected(emptySelection);
     setRanges(null);
     setSearch("");
@@ -277,7 +265,7 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
         if (!haystack.includes(query)) return false;
       }
       const facetsOk = facetKeys.every((key) => {
-        const sel = selected[key];
+        const sel = effectiveSelected[key];
         if (sel.length === 0) return true;
         const matches = facetMatch[key](f);
         return sel.some((value) => matches.includes(value));
@@ -305,7 +293,15 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
       );
     }
     return sorted;
-  }, [forklifts, search, selected, sort, rangeGroups, currentRanges, neutralRanges]);
+  }, [
+    forklifts,
+    search,
+    effectiveSelected,
+    sort,
+    rangeGroups,
+    currentRanges,
+    neutralRanges,
+  ]);
 
   const grouped = brandOrder
     .map((brand) => ({
@@ -342,7 +338,7 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
             rangeGroups={rangeGroups}
             ranges={currentRanges}
             onRangeChange={setRange}
-            selected={selected}
+            selected={effectiveSelected}
             onToggle={toggleFacet}
             onClear={clearFilters}
             hasActiveFilters={hasActiveFilters}
@@ -424,7 +420,7 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
                   rangeGroups={rangeGroups}
                   ranges={currentRanges}
                   onRangeChange={setRange}
-                  selected={selected}
+                  selected={effectiveSelected}
                   onToggle={toggleFacet}
                   onClear={clearFilters}
                   hasActiveFilters={hasActiveFilters}

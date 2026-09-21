@@ -8,6 +8,12 @@
    afetar o desktop. */
 @custom-variant hero-short (@media (max-height: 820px) and (max-width: 1023px));
 
+/* Navegação por âncora: o header é fixo, então o destino precisa parar abaixo
+   dele — senão o topo da seção fica coberto. */
+html {
+  scroll-padding-top: 96px;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -69,6 +75,35 @@ select:focus-visible,
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
+}
+
+/* Faixa de fundo das seções de formulário (#f7f6f6). Dentro dos grupos claros
+   (#fdfdfd) uma cor chapada desenha uma linha reta no topo e na base da faixa;
+   aqui as pontas desvanecem para transparente ao longo de 120px, deixando o
+   tom do grupo aparecer por baixo, e a passagem de uma seção para a outra fica
+   contínua. O alfa é escrito em rgba do próprio #f7f6f6 (e não `transparent`)
+   para o degradê nunca passar por cinza em navegador antigo. */
+.form-band {
+  background-image: linear-gradient(
+    to bottom,
+    var(--form-band-alpha-0) 0px,
+    var(--form-band) 120px,
+    var(--form-band) calc(100% - 120px),
+    var(--form-band-alpha-0) 100%
+  );
+}
+
+/* Variante da classe acima para a faixa que ABRE a página — caso da hero do
+   Contato, que já traz o formulário. O topo fica chapado (não há seção antes
+   dele) e só a base desvanece. O mecanismo é o mesmo da `.form-band`: quem
+   aparece no lugar é o fundo do grupo claro em volta, então não existem duas
+   superfícies pintadas se encontrando e nenhuma emenda é possível. */
+.form-band-top {
+  background-image: linear-gradient(
+    to bottom,
+    var(--form-band) calc(100% - 120px),
+    var(--form-band-alpha-0) 100%
+  );
 }
 
 /* Pulso sutil das bolinhas da hero (piscar antes da interação). */

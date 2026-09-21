@@ -122,12 +122,16 @@ export function MultibrandSection() {
   }, []);
 
   return (
-    <Section data-reveal-skip className="flex flex-col gap-10 lg:gap-12">
+    <Section
+      id="multimarcas"
+      data-reveal-skip
+      className="flex flex-col gap-10 lg:gap-12"
+    >
       <div
         ref={headerRef}
         className="mx-auto flex max-w-[640px] flex-col items-center gap-4 text-center"
       >
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Assistência multimarcas
         </p>
         <h2 className="text-h3 font-normal text-neutral-800">
@@ -184,7 +188,7 @@ export function MultibrandSection() {
         </div>
         <p
           ref={footerRef}
-          className="text-center text-body-sm leading-[1.35] text-neutral-500"
+          className="text-center text-body leading-[1.35] text-neutral-500"
         >
           Também atendemos equipamentos importados e chineses, todas as marcas e
           modelos, elétricos e a combustão.

@@ -3,7 +3,7 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { Breadcrumb } from "@/components/ui/breadcrumb/breadcrumb";
 import { ProductGallery } from "@/components/catalog/product-gallery/product-gallery";
-import { ProductQuoteButton } from "./product-quote-button";
+import { ProductQuoteButton } from "@/components/catalog/product-quote-button/product-quote-button";
 import { ROUTES } from "@/lib/routes";
 import { forkliftsNovas, stateFromLocation } from "@/data/forklifts-novas";
 import type { Forklift } from "@/types/forklift.types";
@@ -31,7 +31,11 @@ export function ProductDetailSection({ forklift }: { forklift: Forklift }) {
       <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
         {/* Galeria */}
         <div className="lg:w-[56%]">
-          <ProductGallery images={galleryImages} alt={forklift.name} />
+          <ProductGallery
+            images={galleryImages}
+            alt={forklift.name}
+            madeInBrazil={forklift.madeInBrazil}
+          />
         </div>
 
         {/* Informações */}
@@ -82,7 +86,7 @@ export function ProductDetailSection({ forklift }: { forklift: Forklift }) {
             <Button
               variant="gray"
               size="lg"
-              href={ROUTES.ORCAMENTO}
+              href={ROUTES.SIMULADOR}
               className="justify-center"
             >
               Falar com especialista

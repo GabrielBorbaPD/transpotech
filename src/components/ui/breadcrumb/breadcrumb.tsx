@@ -9,7 +9,7 @@ export type BreadcrumbItem = {
 export function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
   return (
     <nav aria-label="Trilha de navegação">
-      <ol className="flex flex-wrap items-center gap-1.5 text-body-sm text-neutral-500">
+      <ol className="flex flex-wrap items-center gap-1.5 text-body text-neutral-500">
         {items.map((item, i) => {
           const isLast = i === items.length - 1;
           return (

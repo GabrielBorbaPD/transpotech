@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
-import { ROUTES } from "@/lib/routes";
 import heroImage from "@/assets/images/hero-image-baterias.webp";
 
 export function BateriasHeroSection() {
@@ -54,7 +53,7 @@ export function BateriasHeroSection() {
           <Button
             variant="primary"
             size="lg"
-            href={ROUTES.ORCAMENTO}
+            href="#solicitar-baterias"
             className="w-full lg:w-auto"
           >
             Solicitar cotação

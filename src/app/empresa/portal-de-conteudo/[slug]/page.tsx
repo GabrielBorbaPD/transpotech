@@ -97,7 +97,7 @@ export default async function ArtigoPage({ params }: ArticlePageProps) {
           <aside className="flex flex-col gap-6 lg:sticky lg:top-28 lg:w-[300px] lg:shrink-0">
             {/* Caixinha de compartilhar */}
             <div className="flex items-center justify-between gap-3 rounded-xl border border-neutral-200 p-4">
-              <span className="text-body-sm font-semibold text-neutral-800">
+              <span className="text-body font-semibold text-neutral-800">
                 Compartilhar
               </span>
               <ArticleShare title={article.title} />

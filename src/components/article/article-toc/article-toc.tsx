@@ -7,7 +7,7 @@ export function ArticleToc() {
       aria-label="Sumário do artigo"
       className="flex flex-col gap-3 rounded-xl border border-neutral-200 p-4"
     >
-      <span className="text-body-sm font-semibold text-neutral-800">
+      <span className="text-body font-semibold text-neutral-800">
         Neste artigo
       </span>
       <ul className="flex flex-col gap-2">
@@ -15,7 +15,7 @@ export function ArticleToc() {
           <li key={section.id}>
             <a
               href={`#${section.id}`}
-              className="text-body-sm leading-[1.35] text-neutral-600 transition-colors hover:text-primary-500"
+              className="text-body leading-[1.35] text-neutral-600 transition-colors hover:text-primary-500"
             >
               {section.title}
             </a>

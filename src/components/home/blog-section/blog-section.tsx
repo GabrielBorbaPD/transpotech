@@ -49,7 +49,7 @@ export function BlogSection() {
         {/* Artigo em destaque */}
         <Link
           href={articleHref(featured.id)}
-          className="group/card relative flex min-h-[360px] flex-col justify-end overflow-hidden rounded-2xl bg-neutral-900 transition duration-300 hover:scale-[1.01] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)] lg:min-h-[560px] lg:flex-[1.35]"
+          className="group/card relative flex min-h-[360px] flex-col justify-end overflow-hidden rounded-2xl bg-neutral-900 transition duration-300 hover:z-10 hover:scale-[1.01] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)] lg:min-h-[560px] lg:flex-[1.35]"
         >
           <Image
             src={featured.image}
@@ -97,7 +97,7 @@ export function BlogSection() {
             <Link
               key={article.id}
               href={articleHref(article.id)}
-              className="group/card flex min-h-[140px] flex-1 gap-4 overflow-hidden rounded-xl bg-white p-3 transition duration-300 hover:scale-[1.02] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)]"
+              className="group/card relative flex min-h-[140px] flex-1 gap-4 overflow-hidden rounded-xl bg-white p-3 transition duration-300 hover:z-10 hover:scale-[1.02] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)]"
             >
               {/* Thumbnail */}
               <div className="relative aspect-[4/3] w-28 shrink-0 overflow-hidden rounded-lg sm:w-36 lg:h-full lg:w-auto">
@@ -114,7 +114,7 @@ export function BlogSection() {
               <div className="flex min-w-0 flex-1 flex-col justify-between py-1">
                 {/* Topo esquerdo */}
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm font-semibold uppercase tracking-wide leading-[1.35] text-primary-500">
+                  <span className="text-body font-semibold uppercase tracking-wide leading-[1.35] text-primary-500">
                     {article.category}
                   </span>
                   <h3 className="line-clamp-2 font-heading text-lg font-semibold leading-[1.3] text-neutral-800">
@@ -124,13 +124,13 @@ export function BlogSection() {
 
                 {/* Rodapé: ler conteúdo (esquerda) · tempo (direita) */}
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5 text-sm font-semibold leading-[1.35] text-neutral-500 transition-colors group-hover/card:text-neutral-700">
+                  <span className="flex items-center gap-1.5 text-body font-semibold leading-[1.35] text-neutral-500 transition-colors group-hover/card:text-neutral-700">
                     Ler conteúdo
                     <ArrowRight className="size-4" aria-hidden />
                   </span>
                   <div className="flex items-center gap-1.5 text-neutral-400">
                     <Clock className="size-4" aria-hidden />
-                    <span className="text-sm leading-[1.35]">
+                    <span className="text-body leading-[1.35]">
                       {article.readTime}
                     </span>
                   </div>

@@ -111,7 +111,7 @@ const segments: Segment[] = [
 
 function SegmentCard({ title, description, art }: Segment) {
   return (
-    <div className="group relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-[#222221] p-6 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.35)] lg:min-h-[299px]">
+    <div className="group relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-[#222221] p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.35)] lg:min-h-[299px]">
       <CardImageIcon
         src={art.src}
         width={art.width}
@@ -141,7 +141,7 @@ export function SegmentsSection() {
     <Section className="flex flex-col gap-12 lg:gap-16">
       {/* Cabeçalho */}
       <div className="flex w-full max-w-[560px] flex-col gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-primary-500">
+        <p className="text-body font-semibold uppercase tracking-wide text-primary-500">
           Segmentos
         </p>
         <h2 className="text-h2 font-normal text-neutral-50">

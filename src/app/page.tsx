@@ -50,7 +50,7 @@ export default function HomePage() {
       {/* Grupo claro 2 — Comparativo + ESG + Serviços + Automação + Segmentos */}
       <div className="relative isolate bg-[#fdfdfd]">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
-        <CompareSection ctaLabel="Simular economia" ctaHref={ROUTES.ORCAMENTO} />
+        <CompareSection ctaLabel="Simular economia" ctaHref={ROUTES.SIMULADOR} />
         <EsgSection />
         <ServicesSection />
         <AutomationSection />

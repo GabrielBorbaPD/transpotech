@@ -31,7 +31,7 @@ export function NextStepSection({ category }: { category: ArticleCategory }) {
   return (
     <Section className="flex flex-col gap-6 rounded-2xl bg-neutral-50 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex max-w-[560px] flex-col gap-3">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Próximo passo
         </p>
         <h2 className="text-h4 font-bold text-neutral-800">Pronto pra avançar?</h2>

@@ -149,7 +149,7 @@ function RangeFilterGroup({
             // transforma o próprio input na trilha).
             className="h-1 w-full appearance-none rounded-full bg-neutral-200 outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 [&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-primary-500 [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary-500 [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110"
           />
-          <div className="flex items-center justify-between text-body-sm text-neutral-400">
+          <div className="flex items-center justify-between text-body text-neutral-400">
             <span>{range.format(range.min)}</span>
             {isActive && (
               <span className="font-semibold text-primary-500">

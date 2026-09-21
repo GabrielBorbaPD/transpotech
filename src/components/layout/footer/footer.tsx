@@ -70,6 +70,7 @@ const socials = [Facebook, Instagram, Linkedin, Youtube];
 export function Footer() {
   return (
     <footer
+      id="rodape"
       data-header-dark
       data-reveal-skip
       className="relative -mt-6 overflow-hidden rounded-t-2xl bg-neutral-800 text-body"
@@ -159,7 +160,7 @@ export function Footer() {
               {units.map((unit) => (
                 <div
                   key={`${unit.city}${unit.note ?? ""}`}
-                  className="flex flex-col gap-[5px] text-body-sm"
+                  className="flex flex-col gap-[5px] text-body"
                 >
                   <p className="leading-[1.35] text-neutral-300">
                     <span className="font-semibold">{unit.city}</span>
@@ -178,7 +179,7 @@ export function Footer() {
 
           {/* Base */}
           <div className="flex items-center justify-between">
-            <p className="text-body-sm leading-[1.35] text-neutral-100">
+            <p className="text-body leading-[1.35] text-neutral-100">
               © 2026 TranspoTech todos os direitos reservados.
             </p>
             <Link
@@ -187,6 +188,8 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex items-center gap-2.5 text-neutral-300 transition-colors hover:text-neutral-50"
             >
+              {/* Única exceção ao piso de 16px do site: microcrédito de
+                  assinatura, dimensionado para não competir com o logo. */}
               <span className="text-[8px] font-medium uppercase tracking-[0.1em]">
                 Criado por
               </span>

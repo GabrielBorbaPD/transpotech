@@ -216,13 +216,13 @@ export function HistorySection() {
                   i > 0 ? "lg:border-l lg:border-white/10" : ""
                 }`}
               >
-                <span className="inline-flex w-fit rounded-md bg-primary-500 px-3 py-1 text-body-sm font-semibold uppercase tracking-wide text-neutral-50">
+                <span className="inline-flex w-fit rounded-md bg-primary-500 px-3 py-1 text-body font-semibold uppercase tracking-wide text-neutral-50">
                   {milestone.badge}
                 </span>
                 <h3 className="font-heading text-h6 font-semibold text-neutral-50">
                   {milestone.title}
                 </h3>
-                <p className="text-body-sm leading-[1.4] text-neutral-400">
+                <p className="text-body leading-[1.4] text-neutral-400">
                   {milestone.description}
                 </p>
               </li>

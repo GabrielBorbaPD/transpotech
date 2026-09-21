@@ -95,7 +95,16 @@
   --text-body-lg--line-height: 1.35;
   --text-body: 1rem; /* 16 */
   --text-body--line-height: 1.35;
-  --text-body-sm: 0.875rem; /* 14 */
+
+  /* Piso de 16px — o site não usa tipografia abaixo de 1rem. Os tamanhos
+     pequenos do Tailwind e o antigo --text-body-sm (14px) ficam fixados em
+     16px para que um `text-sm`/`text-xs`/`text-body-sm` acidental não
+     reintroduza texto miúdo. */
+  --text-body-sm: 1rem;
   --text-body-sm--line-height: 1.35;
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.35;
+  --text-xs: 1rem;
+  --text-xs--line-height: 1.35;
 
 }

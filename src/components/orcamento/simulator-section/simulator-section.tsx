@@ -98,7 +98,7 @@ export function SimulatorSection() {
         <h2 className="font-heading text-body-lg font-semibold text-neutral-800">
           Ajuste os valores
         </h2>
-        <p className="text-body-sm leading-[1.4] text-neutral-600">
+        <p className="text-body leading-[1.4] text-neutral-600">
           Partem de médias de referência no Brasil.
           <br />
           Arraste para a sua operação.
@@ -112,7 +112,7 @@ export function SimulatorSection() {
             key={f.key}
             className="flex flex-col gap-2 border-t border-neutral-200 pt-5 [&:not(:first-child)]:mt-5"
           >
-            <span className="text-body-sm font-semibold text-neutral-700">
+            <span className="text-body font-semibold text-neutral-700">
               {f.label}
             </span>
             <input
@@ -126,7 +126,7 @@ export function SimulatorSection() {
               aria-valuetext={f.format(inputs[f.key])}
               className={sliderClass}
             />
-            <div className="flex items-center justify-between text-[12px] text-neutral-400">
+            <div className="flex items-center justify-between text-body text-neutral-400">
               <span>{f.format(f.min)}</span>
               <span className="font-semibold text-primary-500">
                 {f.format(inputs[f.key])}
@@ -170,7 +170,7 @@ export function SimulatorSection() {
       </div>
 
       {/* Nota de rodapé — mesma ressalva da planilha comercial */}
-      <p className="max-w-[820px] text-body-sm leading-[1.5] text-neutral-500">
+      <p className="max-w-[820px] text-body leading-[1.5] text-neutral-500">
         <strong className="font-semibold text-neutral-600">Importante:</strong>{" "}
         o retorno do investimento (pay-back) considera apenas a economia
         energética. Não entram no cálculo fatores que ampliam ainda mais a
@@ -328,7 +328,7 @@ function ComparisonTable({ colunas }: { colunas: ResultadoEquipamento[] }) {
                     <span className="text-body font-bold text-neutral-800">
                       {c.nomeCurto}
                     </span>
-                    <span className="text-[12px] font-normal leading-tight text-neutral-500">
+                    <span className="text-body font-normal leading-tight text-neutral-500">
                       {c.motor}
                     </span>
                   </span>
@@ -344,7 +344,7 @@ function ComparisonTable({ colunas }: { colunas: ResultadoEquipamento[] }) {
               <tr key={row.label}>
                 <th
                   scope="row"
-                  className={`sticky left-0 z-20 border-t border-neutral-200 bg-neutral-50 py-4 pl-4 pr-4 align-middle text-body-sm ${
+                  className={`sticky left-0 z-20 border-t border-neutral-200 bg-neutral-50 py-4 pl-4 pr-4 align-middle text-body ${
                     last ? "font-bold text-neutral-800" : "font-medium text-neutral-600"
                   }`}
                 >

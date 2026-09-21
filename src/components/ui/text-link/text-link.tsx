@@ -39,8 +39,15 @@ export function TextLink({
   );
 
   if (href) {
+    // Link para fora do site abre em nova aba (mesmo padrão do header e footer).
+    const external = href.startsWith("http");
     return (
-      <Link href={href} className={classes}>
+      <Link
+        href={href}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
+        className={classes}
+      >
         {content}
       </Link>
     );

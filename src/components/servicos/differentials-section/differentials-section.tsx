@@ -2,7 +2,6 @@ import { type StaticImageData } from "next/image";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { CardImageIcon } from "@/components/ui/card-image-icon";
-import { ROUTES } from "@/lib/routes";
 import iconPessoa from "@/assets/images/stats/card-person.webp";
 import iconEscudo from "@/assets/images/stats/card-shield.webp";
 import iconRaio from "@/assets/images/stats/serv-icon-raio.webp";
@@ -101,7 +100,7 @@ export function DifferentialsSection() {
   return (
     <Section className="flex flex-col items-start gap-10 lg:gap-14">
       <div className="flex flex-col gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Diferenciais
         </p>
         <h2 className="text-h3 font-normal text-neutral-800">
@@ -116,7 +115,7 @@ export function DifferentialsSection() {
         {cards.map((card) => (
           <div
             key={card.title}
-            className="group relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-neutral-50 p-6 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)] lg:min-h-[280px]"
+            className="group relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-neutral-50 p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)] lg:min-h-[280px]"
           >
             <CardImageIcon
               src={card.art.src}
@@ -142,7 +141,7 @@ export function DifferentialsSection() {
         ))}
       </div>
 
-      <Button variant="primary" size="lg" href={ROUTES.ORCAMENTO}>
+      <Button variant="primary" size="lg" href="#solicitar-servico">
         Avaliar minha frota
       </Button>
     </Section>

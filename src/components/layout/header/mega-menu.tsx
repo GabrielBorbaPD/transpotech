@@ -212,7 +212,7 @@ export function MegaMenu({
               <h3 className="font-heading text-[20px] font-bold leading-[1.2] text-neutral-50">
                 {featured.title}
               </h3>
-              <p className="text-sm leading-[1.4] text-neutral-200">
+              <p className="text-body leading-[1.4] text-neutral-200">
                 {featured.description}
               </p>
             </div>
@@ -228,7 +228,7 @@ export function MegaMenu({
             >
               {columns.map((col) => (
                 <div key={col.title} className="flex flex-col gap-1">
-                  <p className="px-3 text-sm font-semibold leading-6 text-neutral-400">
+                  <p className="px-3 text-body font-semibold leading-6 text-neutral-400">
                     {col.title}
                   </p>
                   <ul role="list" className="flex flex-col">
@@ -243,14 +243,14 @@ export function MegaMenu({
                           rel={external ? "noopener noreferrer" : undefined}
                           className="group/item flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-neutral-50"
                         >
-                          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-neutral-50 text-neutral-700 shadow-[0_1px_3px_rgba(0,0,0,0.08)] transition-colors group-hover/item:bg-white group-hover/item:text-primary-500">
+                          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-neutral-50 text-neutral-700 shadow-[0_1px_3px_rgba(0,0,0,0.08)] transition-colors group-hover/item:bg-primary-500 group-hover/item:text-white">
                             <item.Icon className="size-5" aria-hidden />
                           </span>
                           <span className="flex flex-col">
                             <span className="text-body font-semibold leading-tight text-neutral-800">
                               {item.title}
                             </span>
-                            <span className="text-sm leading-snug text-neutral-500">
+                            <span className="text-body leading-snug text-neutral-500">
                               {item.subtitle}
                             </span>
                           </span>

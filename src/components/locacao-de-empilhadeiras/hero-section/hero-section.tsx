@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
-import { ROUTES } from "@/lib/routes";
 import forklift from "@/assets/images/hero-image-locacao-de-empilhadeiras.webp";
 import forkliftMobile from "@/assets/images/hero-image-locacao-de-empilhadeiras-mobile.webp";
 
@@ -65,10 +64,11 @@ export function LocacaoHeroSection() {
             </p>
           </div>
 
+          {/* Leva ao formulário de lead logo abaixo, na própria página. */}
           <Button
             variant="primary"
             size="lg"
-            href={ROUTES.ORCAMENTO}
+            href="#solicitar-locacao"
             className="w-full lg:w-auto"
           >
             Locar empilhadeira

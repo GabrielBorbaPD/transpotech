@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
-import { ROUTES } from "@/lib/routes";
 import heroImage from "@/assets/images/hero-servicos.webp";
 import heroImageMobile from "@/assets/images/hero-servicos-mobile.webp";
 
@@ -69,7 +68,7 @@ export function ServicosHeroSection() {
           <Button
             variant="primary"
             size="lg"
-            href={ROUTES.ORCAMENTO}
+            href="#solicitar-servico"
             className="w-full lg:w-auto"
           >
             Solicitar assistência técnica

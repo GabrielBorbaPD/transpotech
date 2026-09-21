@@ -16,7 +16,7 @@ import {
   type ContactRequestValues,
 } from "@/lib/contact-request.schema";
 
-const labelBase = "text-body-sm font-semibold text-neutral-700";
+const labelBase = "text-body font-semibold text-neutral-700";
 
 export function ContatoHeroSection() {
   const [sent, setSent] = useState(false);
@@ -47,7 +47,7 @@ export function ContatoHeroSection() {
     >
       {/* Esquerda — texto */}
       <div className="flex flex-col gap-4 lg:pt-2">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-primary-500">
+        <p className="text-body font-semibold uppercase tracking-wide text-primary-500">
           Contato
         </p>
         <BlurRevealTitle
@@ -69,7 +69,7 @@ export function ContatoHeroSection() {
         noValidate
         onSubmit={handleSubmit(onSubmit)}
         onChange={() => sent && setSent(false)}
-        className="flex flex-col gap-5 rounded-2xl border border-neutral-200 bg-white p-6 lg:p-8"
+        className="flex flex-col gap-5 rounded-2xl border-2 border-neutral-100 bg-white p-6 lg:p-8"
       >
         <div className="flex flex-col gap-1.5">
           <label htmlFor="ct-name" className={labelBase}>
@@ -84,7 +84,7 @@ export function ContatoHeroSection() {
             {...register("name")}
           />
           {errors.name && (
-            <p className="text-body-sm text-error">{errors.name.message}</p>
+            <p className="text-body text-error">{errors.name.message}</p>
           )}
         </div>
 
@@ -101,7 +101,7 @@ export function ContatoHeroSection() {
             {...register("company")}
           />
           {errors.company && (
-            <p className="text-body-sm text-error">{errors.company.message}</p>
+            <p className="text-body text-error">{errors.company.message}</p>
           )}
         </div>
 
@@ -119,7 +119,7 @@ export function ContatoHeroSection() {
               {...register("phone")}
             />
             {errors.phone && (
-              <p className="text-body-sm text-error">{errors.phone.message}</p>
+              <p className="text-body text-error">{errors.phone.message}</p>
             )}
           </div>
           <div className="flex flex-col gap-1.5">
@@ -135,7 +135,7 @@ export function ContatoHeroSection() {
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-body-sm text-error">{errors.email.message}</p>
+              <p className="text-body text-error">{errors.email.message}</p>
             )}
           </div>
         </div>
@@ -159,7 +159,7 @@ export function ContatoHeroSection() {
             )}
           />
           {errors.cityUf && (
-            <p className="text-body-sm text-error">{errors.cityUf.message}</p>
+            <p className="text-body text-error">{errors.cityUf.message}</p>
           )}
         </div>
 
@@ -175,7 +175,7 @@ export function ContatoHeroSection() {
             {...register("message")}
           />
           {errors.message && (
-            <p className="text-body-sm text-error">{errors.message.message}</p>
+            <p className="text-body text-error">{errors.message.message}</p>
           )}
         </div>
 
@@ -185,13 +185,13 @@ export function ContatoHeroSection() {
             {...register("consent")}
             className="mt-1"
           />
-          <span className="text-body-sm leading-[1.35] text-neutral-600">
+          <span className="text-body leading-[1.35] text-neutral-600">
             Concordo com o tratamento dos meus dados conforme a Política de
             Privacidade da TranspoTech (LGPD).
           </span>
         </label>
         {errors.consent && (
-          <p className="-mt-3 text-body-sm text-error">
+          <p className="-mt-3 text-body text-error">
             {errors.consent.message}
           </p>
         )}
@@ -209,7 +209,7 @@ export function ContatoHeroSection() {
           {sent && (
             <p
               role="status"
-              className="inline-flex items-start gap-2 text-body-sm font-semibold text-success"
+              className="inline-flex items-start gap-2 text-body font-semibold text-success"
             >
               <CircleCheck aria-hidden className="mt-0.5 size-5 shrink-0" />
               Sua solicitação foi enviada! Em breve retornaremos com sua

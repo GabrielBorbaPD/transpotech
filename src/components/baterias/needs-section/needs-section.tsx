@@ -8,7 +8,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { ROUTES } from "@/lib/routes";
 
 type Need = {
   title: string;
@@ -66,7 +65,7 @@ export function NeedsSection() {
         {needs.map((need) => (
           <div
             key={need.title}
-            className="flex w-full flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)]"
+            className="flex w-full flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)]"
           >
             <div className="flex flex-1 flex-col gap-8 rounded-xl bg-[#fbfbfb] p-6">
               <div className="flex size-10 items-center justify-center rounded-full bg-primary-500 lg:size-12">
@@ -82,7 +81,7 @@ export function NeedsSection() {
               </div>
             </div>
             <TextLink
-              href={ROUTES.ORCAMENTO}
+              href="#solicitar-baterias"
               className="w-full px-6 py-4 text-left"
             >
               {need.cta}

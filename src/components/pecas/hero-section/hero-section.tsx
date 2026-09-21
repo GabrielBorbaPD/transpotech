@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
-import { ROUTES } from "@/lib/routes";
 import heroImage from "@/assets/images/hero-image-pecas.webp";
 
 export function PecasHeroSection() {
@@ -52,7 +51,7 @@ export function PecasHeroSection() {
           <Button
             variant="primary"
             size="lg"
-            href={ROUTES.ORCAMENTO}
+            href="#solicitar-pecas"
             className="w-full lg:w-auto"
           >
             Solicitar cotação de peças

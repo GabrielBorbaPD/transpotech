@@ -15,7 +15,7 @@ export function OrcamentoHeroSection() {
       />
 
       <Section className="flex flex-col items-center gap-4 pb-[36px] pt-[168px] text-center lg:pb-[48px] lg:pt-[196px]">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-primary-500">
+        <p className="text-body font-semibold uppercase tracking-wide text-primary-500">
           Simulador de economia
         </p>
         <BlurRevealTitle

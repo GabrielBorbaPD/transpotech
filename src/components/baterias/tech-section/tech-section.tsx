@@ -188,7 +188,7 @@ export function TechSection() {
     <Section className="flex flex-col gap-12 lg:gap-16">
       {/* Cabeçalho */}
       <div className="flex max-w-[720px] flex-col gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Tecnologia
         </p>
         <h2 className="text-h2 font-normal text-neutral-800">

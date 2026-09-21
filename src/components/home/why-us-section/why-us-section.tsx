@@ -78,7 +78,7 @@ const cards: WhyUsCard[] = [
       maskY: 7.819,
       img: "fill",
     },
-    title: "90% de presença nacional",
+    title: "+88% de presença nacional",
     description:
       "11 unidades em PR, SC, RS, SP e GO para resposta próxima e suporte técnico local.",
   },
@@ -171,7 +171,7 @@ export function WhyUsSection() {
         {cards.map((card) => (
           <div
             key={card.title}
-            className="relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-[#222221] p-6 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.35)] lg:min-h-[299px]"
+            className="relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-[#222221] p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.35)] lg:min-h-[299px]"
           >
             <CardIcon icon={card.icon} />
             <div className="relative mt-[124px] lg:mt-[140px] flex flex-col gap-4">

@@ -13,12 +13,13 @@ import { CityAutocomplete } from "@/components/ui/city-autocomplete";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
+import { HoverMesh } from "@/components/layout/hover-mesh";
 import {
   contactRequestSchema,
   type ContactRequestValues,
 } from "@/lib/contact-request.schema";
 
-const labelBase = "text-body-sm font-semibold text-neutral-700";
+const labelBase = "text-body font-semibold text-neutral-700";
 
 // Opções de período de locação (1 a 60 meses) — campo com busca na locação.
 const rentalPeriodOptions = Array.from({ length: 60 }, (_, i) => {
@@ -139,251 +140,265 @@ export function LeadFormSection({
   }, [showBanner]);
 
   return (
-    <Section
-      as="section"
-      ref={sectionRef}
-      id={id}
-      className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-start lg:gap-16"
-    >
-      {/* Título / CTA — esquerda no desktop, primeiro no mobile */}
-      <div className="flex flex-col gap-4 lg:pt-2">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-primary-500">
-          Falar com especialista
-        </p>
-        <BlurRevealTitle
-          className="text-balance text-h2 text-neutral-800 lg:text-wrap"
-          segments={[
-            { text: titleTop, className: "font-normal", br: true },
-            { text: titleBottom, className: "font-bold text-primary-500" },
-          ]}
-        />
-        <p className="max-w-[520px] text-body leading-[1.5] text-neutral-600">
-          {description}
-        </p>
-      </div>
-
-      {/* Formulário — esquerda no desktop */}
-      <form
-        noValidate
-        onSubmit={handleSubmit(onSubmit)}
-        // Marca "começou a preencher" no primeiro input real (digitação/seleção
-        // humana borbulha até aqui). É o gatilho do banner.
-        onInput={() => setEngaged(true)}
-        onChange={() => sent && setSent(false)}
-        className="flex flex-col gap-5 rounded-2xl border border-neutral-200 bg-white p-6 lg:p-8"
+    // Fundo próprio da faixa (mesmo tom do catálogo de empilhadeiras novas) —
+    // o Section tem max-w e centraliza, então a cor precisa vir de um wrapper
+    // full-bleed para valer de ponta a ponta em telas largas. `.form-band`
+    // (globals.css) desvanece as pontas para o tom do grupo claro em volta,
+    // sem linha de corte no encontro com a seção de cima e a de baixo.
+    //
+    // Malha própria: o fundo desta faixa é opaco e cobriria a HoverMesh do
+    // grupo claro em volta (que fica em -z-10 no pai), deixando a faixa como o
+    // único trecho sem a interação do cursor. `isolate` é obrigatório — sem o
+    // contexto de empilhamento próprio, o -z-10 da malha cai atrás do fundo
+    // desta faixa e ela some.
+    <div className="form-band relative isolate">
+      <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
+      <Section
+        as="section"
+        ref={sectionRef}
+        id={id}
+        className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-start lg:gap-16"
       >
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${uid}-name`} className={labelBase}>
-            Nome *
-          </label>
-          <Input
-            id={`${uid}-name`}
-            type="text"
-            autoComplete="name"
-            placeholder="Digite seu nome completo."
-            invalid={!!errors.name}
-            {...register("name")}
+        {/* Título / CTA — esquerda no desktop, primeiro no mobile */}
+        <div className="flex flex-col gap-4 lg:pt-2">
+          <p className="text-body font-semibold uppercase tracking-wide text-primary-500">
+            Falar com especialista
+          </p>
+          <BlurRevealTitle
+            className="text-balance text-h2 text-neutral-800 lg:text-wrap"
+            segments={[
+              { text: titleTop, className: "font-normal", br: true },
+              { text: titleBottom, className: "font-bold text-primary-500" },
+            ]}
           />
-          {errors.name && (
-            <p className="text-body-sm text-error">{errors.name.message}</p>
-          )}
+          <p className="max-w-[520px] text-body leading-[1.5] text-neutral-600">
+            {description}
+          </p>
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${uid}-company`} className={labelBase}>
-            Empresa *
-          </label>
-          <Input
-            id={`${uid}-company`}
-            type="text"
-            autoComplete="organization"
-            placeholder="Informe o nome da empresa."
-            invalid={!!errors.company}
-            {...register("company")}
-          />
-          {errors.company && (
-            <p className="text-body-sm text-error">{errors.company.message}</p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        {/* Formulário — esquerda no desktop */}
+        <form
+          noValidate
+          onSubmit={handleSubmit(onSubmit)}
+          // Marca "começou a preencher" no primeiro input real (digitação/seleção
+          // humana borbulha até aqui). É o gatilho do banner.
+          onInput={() => setEngaged(true)}
+          onChange={() => sent && setSent(false)}
+          className="flex flex-col gap-5 rounded-2xl border-2 border-neutral-100 bg-white p-6 lg:p-8"
+        >
           <div className="flex flex-col gap-1.5">
-            <label htmlFor={`${uid}-phone`} className={labelBase}>
-              Telefone *
+            <label htmlFor={`${uid}-name`} className={labelBase}>
+              Nome *
             </label>
             <Input
-              id={`${uid}-phone`}
-              type="tel"
-              autoComplete="tel"
-              placeholder="Telefone ou WhatsApp."
-              invalid={!!errors.phone}
-              {...register("phone")}
+              id={`${uid}-name`}
+              type="text"
+              autoComplete="name"
+              placeholder="Digite seu nome completo."
+              invalid={!!errors.name}
+              {...register("name")}
             />
-            {errors.phone && (
-              <p className="text-body-sm text-error">{errors.phone.message}</p>
+            {errors.name && (
+              <p className="text-body text-error">{errors.name.message}</p>
             )}
           </div>
+
           <div className="flex flex-col gap-1.5">
-            <label htmlFor={`${uid}-email`} className={labelBase}>
-              E-mail *
+            <label htmlFor={`${uid}-company`} className={labelBase}>
+              Empresa *
             </label>
             <Input
-              id={`${uid}-email`}
-              type="email"
-              autoComplete="email"
-              placeholder="nome@empresa.com.br"
-              invalid={!!errors.email}
-              {...register("email")}
+              id={`${uid}-company`}
+              type="text"
+              autoComplete="organization"
+              placeholder="Informe o nome da empresa."
+              invalid={!!errors.company}
+              {...register("company")}
             />
-            {errors.email && (
-              <p className="text-body-sm text-error">{errors.email.message}</p>
+            {errors.company && (
+              <p className="text-body text-error">{errors.company.message}</p>
             )}
           </div>
-        </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${uid}-city`} className={labelBase}>
-            Cidade/UF *
-          </label>
-          <Controller
-            control={control}
-            name="cityUf"
-            render={({ field }) => (
-              <CityAutocomplete
-                id={`${uid}-city`}
-                name={field.name}
-                value={field.value ?? ""}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                invalid={!!errors.cityUf}
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor={`${uid}-phone`} className={labelBase}>
+                Telefone *
+              </label>
+              <Input
+                id={`${uid}-phone`}
+                type="tel"
+                autoComplete="tel"
+                placeholder="Telefone ou WhatsApp."
+                invalid={!!errors.phone}
+                {...register("phone")}
               />
-            )}
-          />
-          {errors.cityUf && (
-            <p className="text-body-sm text-error">{errors.cityUf.message}</p>
-          )}
-        </div>
+              {errors.phone && (
+                <p className="text-body text-error">{errors.phone.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor={`${uid}-email`} className={labelBase}>
+                E-mail *
+              </label>
+              <Input
+                id={`${uid}-email`}
+                type="email"
+                autoComplete="email"
+                placeholder="nome@empresa.com.br"
+                invalid={!!errors.email}
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-body text-error">{errors.email.message}</p>
+              )}
+            </div>
+          </div>
 
-        {withRentalPeriod && (
           <div className="flex flex-col gap-1.5">
-            <label htmlFor={`${uid}-period`} className={labelBase}>
-              Período de locação (meses)
+            <label htmlFor={`${uid}-city`} className={labelBase}>
+              Cidade/UF *
             </label>
             <Controller
               control={control}
-              name="periodMonths"
+              name="cityUf"
               render={({ field }) => (
-                <Select
-                  id={`${uid}-period`}
-                  options={rentalPeriodOptions}
+                <CityAutocomplete
+                  id={`${uid}-city`}
+                  name={field.name}
                   value={field.value ?? ""}
-                  onChange={(v) => {
-                    field.onChange(v);
-                    setEngaged(true);
-                  }}
+                  onChange={field.onChange}
                   onBlur={field.onBlur}
-                  placeholder="Selecione o período"
-                  searchable
-                  searchPlaceholder="Buscar meses…"
+                  invalid={!!errors.cityUf}
                 />
               )}
             />
+            {errors.cityUf && (
+              <p className="text-body text-error">{errors.cityUf.message}</p>
+            )}
           </div>
-        )}
 
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor={`${uid}-message`} className={labelBase}>
-            Mensagem *
-          </label>
-          <Textarea
-            id={`${uid}-message`}
-            rows={3}
-            placeholder={messagePlaceholder}
-            invalid={!!errors.message}
-            {...register("message")}
-          />
-          {errors.message && (
-            <p className="text-body-sm text-error">{errors.message.message}</p>
+          {withRentalPeriod && (
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor={`${uid}-period`} className={labelBase}>
+                Período de locação (meses)
+              </label>
+              <Controller
+                control={control}
+                name="periodMonths"
+                render={({ field }) => (
+                  <Select
+                    id={`${uid}-period`}
+                    options={rentalPeriodOptions}
+                    value={field.value ?? ""}
+                    onChange={(v) => {
+                      field.onChange(v);
+                      setEngaged(true);
+                    }}
+                    onBlur={field.onBlur}
+                    placeholder="Selecione o período"
+                    searchable
+                    searchPlaceholder="Buscar meses…"
+                  />
+                )}
+              />
+            </div>
           )}
-        </div>
 
-        <label className="flex cursor-pointer items-start gap-3">
-          <Checkbox
-            invalid={!!errors.consent}
-            {...register("consent")}
-            className="mt-1"
-          />
-          <span className="text-body-sm leading-[1.35] text-neutral-600">
-            Concordo com o tratamento dos meus dados conforme a Política de
-            Privacidade da TranspoTech (LGPD).
-          </span>
-        </label>
-        {errors.consent && (
-          <p className="-mt-3 text-body-sm text-error">
-            {errors.consent.message}
-          </p>
-        )}
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor={`${uid}-message`} className={labelBase}>
+              Mensagem *
+            </label>
+            <Textarea
+              id={`${uid}-message`}
+              rows={3}
+              placeholder={messagePlaceholder}
+              invalid={!!errors.message}
+              {...register("message")}
+            />
+            {errors.message && (
+              <p className="text-body text-error">{errors.message.message}</p>
+            )}
+          </div>
 
-        <div className="flex flex-col gap-3">
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            disabled={isSubmitting}
-            className="w-full self-start lg:w-auto"
-          >
-            {submitLabel}
-          </Button>
-          {sent && (
-            <p
-              role="status"
-              className="inline-flex items-start gap-2 text-body-sm font-semibold text-success"
-            >
-              <CircleCheck aria-hidden className="mt-0.5 size-5 shrink-0" />
-              Sua solicitação foi enviada! Em breve retornaremos.
+          <label className="flex cursor-pointer items-start gap-3">
+            <Checkbox
+              invalid={!!errors.consent}
+              {...register("consent")}
+              className="mt-1"
+            />
+            <span className="text-body leading-[1.35] text-neutral-600">
+              Concordo com o tratamento dos meus dados conforme a Política de
+              Privacidade da TranspoTech (LGPD).
+            </span>
+          </label>
+          {errors.consent && (
+            <p className="-mt-3 text-body text-error">
+              {errors.consent.message}
             </p>
           )}
-        </div>
-      </form>
 
-      {/* Banner full-width no topo — retomar a solicitação iniciada. Fundo
+          <div className="flex flex-col gap-3">
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              disabled={isSubmitting}
+              className="w-full self-start lg:w-auto"
+            >
+              {submitLabel}
+            </Button>
+            {sent && (
+              <p
+                role="status"
+                className="inline-flex items-start gap-2 text-body font-semibold text-success"
+              >
+                <CircleCheck aria-hidden className="mt-0.5 size-5 shrink-0" />
+                Sua solicitação foi enviada! Em breve retornaremos.
+              </p>
+            )}
+          </div>
+        </form>
+
+        {/* Banner full-width no topo — retomar a solicitação iniciada. Fundo
           branco, texto preto, ação sublinhada. Empurra o conteúdo para baixo
           (não sobrepõe hero nem header). */}
-      {showBanner &&
-        createPortal(
-          <div
-            ref={bannerRef}
-            role="region"
-            aria-label="Solicitação iniciada"
-            className="lead-banner-in fixed inset-x-0 top-0 z-[300] border-b border-neutral-200 bg-white"
-          >
-            <div className="relative mx-auto flex min-h-[52px] w-full max-w-[1440px] items-center justify-center gap-2 px-12 py-2.5 text-center">
-              <PencilLine
-                aria-hidden
-                className="size-5 shrink-0 text-primary-500"
-              />
-              <p className="text-body-sm text-neutral-900">
-                Você começou uma solicitação.{" "}
+        {showBanner &&
+          createPortal(
+            <div
+              ref={bannerRef}
+              role="region"
+              aria-label="Solicitação iniciada"
+              className="lead-banner-in fixed inset-x-0 top-0 z-[300] border-b border-neutral-200 bg-white"
+            >
+              <div className="relative mx-auto flex min-h-[52px] w-full max-w-[1440px] items-center justify-center gap-2 px-12 py-2.5 text-center">
+                <PencilLine
+                  aria-hidden
+                  className="size-5 shrink-0 text-primary-500"
+                />
+                <p className="text-body text-neutral-900">
+                  Você começou uma solicitação.{" "}
+                  <button
+                    type="button"
+                    onClick={scrollToForm}
+                    className="font-semibold text-primary-500 underline underline-offset-2 transition-colors hover:text-primary-600"
+                  >
+                    Voltar e finalizar
+                  </button>
+                </p>
                 <button
                   type="button"
-                  onClick={scrollToForm}
-                  className="font-semibold text-primary-500 underline underline-offset-2 transition-colors hover:text-primary-600"
+                  onClick={() => setDismissed(true)}
+                  aria-label="Fechar aviso"
+                  className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-800"
                 >
-                  Voltar e finalizar
+                  <X className="size-5" aria-hidden />
                 </button>
-              </p>
-              <button
-                type="button"
-                onClick={() => setDismissed(true)}
-                aria-label="Fechar aviso"
-                className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-800"
-              >
-                <X className="size-5" aria-hidden />
-              </button>
-            </div>
-          </div>,
-          document.body
-        )}
-    </Section>
+              </div>
+            </div>,
+            document.body,
+          )}
+      </Section>
+    </div>
   );
 }

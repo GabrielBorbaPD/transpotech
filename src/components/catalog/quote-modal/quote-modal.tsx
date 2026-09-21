@@ -21,7 +21,7 @@ import {
 } from "@/lib/contact-request.schema";
 import type { Forklift } from "@/types/forklift.types";
 
-const labelBase = "text-body-sm font-semibold text-neutral-700";
+const labelBase = "text-body font-semibold text-neutral-700";
 
 type QuoteModalProps = {
   onClose: () => void;
@@ -86,6 +86,10 @@ export function QuoteModal({
     [forklifts, selectedIds]
   );
 
+  // O orçamento precisa de pelo menos um equipamento — com só um selecionado,
+  // a miniatura não oferece o "x".
+  const canRemove = selectedForklifts.length > 1;
+
   const toggle = (id: string) =>
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -117,10 +121,15 @@ export function QuoteModal({
       ) : (
       <div className="relative z-10 flex max-h-[92svh] w-full min-w-0 max-w-[560px] flex-col overflow-hidden rounded-t-2xl bg-white shadow-[0_24px_48px_-12px_rgba(0,0,0,0.35)] sm:rounded-2xl">
         {/* Cabeçalho */}
-        <div className="flex items-center justify-between gap-4 border-b border-neutral-200 p-5 lg:p-6">
-          <h2 className="font-heading text-h6 font-semibold text-neutral-800">
-            Solicitar orçamento
-          </h2>
+        <div className="flex items-start justify-between gap-4 border-b border-neutral-200 p-5 lg:p-6">
+          <div className="flex flex-col gap-1">
+            <h2 className="font-heading text-h5 font-semibold text-neutral-800">
+              Solicitar orçamento
+            </h2>
+            <p className="text-body leading-[1.4] text-neutral-600">
+              Preencha seus dados e retornaremos com a proposta.
+            </p>
+          </div>
           <button
             type="button"
             onClick={onClose}
@@ -137,20 +146,13 @@ export function QuoteModal({
             id="quote-form"
             noValidate
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-5"
+            className="flex flex-col gap-4"
           >
-            <div className="flex flex-col gap-1">
-              <h3 className="font-heading text-h6 font-semibold text-neutral-800">
-                Seus dados
-              </h3>
-              <p className="text-body-sm leading-[1.4] text-neutral-600">
-                Preencha seus dados e retornaremos com a proposta.
-              </p>
-            </div>
-
-            {/* Resumo dos equipamentos — imagens + botão "+" para incluir outros */}
-            <div className="flex flex-col gap-3 rounded-xl bg-neutral-50 p-3">
-              <span className="text-body-sm font-semibold text-neutral-700">
+            {/* Equipamentos — mesma anatomia dos demais campos (rótulo +
+                controle), sem caixa de fundo: as miniaturas e o "+" herdam a
+                borda/raio dos inputs. */}
+            <div className="flex flex-col gap-1.5">
+              <span className={labelBase}>
                 {selectedForklifts.length}{" "}
                 {selectedForklifts.length === 1
                   ? "equipamento selecionado"
@@ -161,15 +163,28 @@ export function QuoteModal({
                   <span
                     key={f.id}
                     title={f.name}
-                    className="relative size-14 shrink-0 overflow-hidden rounded-lg bg-white"
+                    className="group/thumb relative size-12 shrink-0 overflow-hidden rounded-xl border border-neutral-200 bg-transparent"
                   >
                     <Image
                       src={f.image}
                       alt={f.name}
                       fill
-                      sizes="56px"
-                      className="object-contain"
+                      sizes="48px"
+                      className="object-contain p-1"
                     />
+                    {/* Remover — só faz sentido com mais de um equipamento, já
+                        que o orçamento precisa de pelo menos um. Aparece no
+                        hover/foco no desktop; no toque fica sempre visível. */}
+                    {canRemove && (
+                      <button
+                        type="button"
+                        onClick={() => toggle(f.id)}
+                        aria-label={`Remover ${f.name} do orçamento`}
+                        className="absolute right-0.5 top-0.5 flex size-5 items-center justify-center rounded-full bg-neutral-900/70 text-white opacity-100 transition-opacity hover:bg-neutral-900 focus-visible:opacity-100 sm:opacity-0 sm:group-hover/thumb:opacity-100"
+                      >
+                        <X className="size-3" aria-hidden />
+                      </button>
+                    )}
                   </span>
                 ))}
 
@@ -180,18 +195,18 @@ export function QuoteModal({
                     onClick={() => setAddOpen((o) => !o)}
                     aria-expanded={addOpen}
                     aria-label="Incluir outro equipamento"
-                    className={`flex size-14 shrink-0 items-center justify-center rounded-lg border-2 border-dashed transition-colors ${
+                    className={`flex size-12 shrink-0 items-center justify-center rounded-xl border border-dashed transition-colors ${
                       addOpen
-                        ? "border-primary-500 bg-primary-50/40 text-primary-500"
+                        ? "border-primary-500 text-primary-500"
                         : "border-neutral-300 text-neutral-500 hover:border-primary-500 hover:text-primary-500"
                     }`}
                   >
-                    <Plus className="size-6" aria-hidden />
+                    <Plus className="size-5" aria-hidden />
                   </button>
 
                   {addOpen && (
                     <div className="absolute left-0 top-full z-20 mt-2 w-72 max-w-[calc(100vw-3rem)] overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-[0_16px_32px_-8px_rgba(0,0,0,0.24)]">
-                      <p className="border-b border-neutral-100 px-3 py-2 text-body-sm font-semibold text-neutral-700">
+                      <p className="border-b border-neutral-100 px-3 py-2 text-body font-semibold text-neutral-700">
                         Incluir equipamentos
                       </p>
                       {/* Altura p/ ~5 itens visíveis (cada linha ~64px) antes de rolar. */}
@@ -231,10 +246,10 @@ export function QuoteModal({
                                   />
                                 </span>
                                 <span className="flex min-w-0 flex-col">
-                                  <span className="truncate text-body-sm font-semibold text-neutral-800">
+                                  <span className="truncate text-body font-semibold text-neutral-800">
                                     {f.name}
                                   </span>
-                                  <span className="truncate text-body-sm text-neutral-500">
+                                  <span className="truncate text-body text-neutral-500">
                                     {f.brand} · {f.capacity}
                                   </span>
                                 </span>
@@ -262,7 +277,7 @@ export function QuoteModal({
                 {...register("name")}
               />
               {errors.name && (
-                <p className="text-body-sm text-error">{errors.name.message}</p>
+                <p className="text-body text-error">{errors.name.message}</p>
               )}
             </div>
 
@@ -279,13 +294,13 @@ export function QuoteModal({
                 {...register("company")}
               />
               {errors.company && (
-                <p className="text-body-sm text-error">
+                <p className="text-body text-error">
                   {errors.company.message}
                 </p>
               )}
             </div>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="q-phone" className={labelBase}>
                   Telefone *
@@ -299,7 +314,7 @@ export function QuoteModal({
                   {...register("phone")}
                 />
                 {errors.phone && (
-                  <p className="text-body-sm text-error">
+                  <p className="text-body text-error">
                     {errors.phone.message}
                   </p>
                 )}
@@ -317,7 +332,7 @@ export function QuoteModal({
                   {...register("email")}
                 />
                 {errors.email && (
-                  <p className="text-body-sm text-error">
+                  <p className="text-body text-error">
                     {errors.email.message}
                   </p>
                 )}
@@ -343,7 +358,7 @@ export function QuoteModal({
                 )}
               />
               {errors.cityUf && (
-                <p className="text-body-sm text-error">
+                <p className="text-body text-error">
                   {errors.cityUf.message}
                 </p>
               )}
@@ -355,13 +370,13 @@ export function QuoteModal({
               </label>
               <Textarea
                 id="q-message"
-                rows={3}
+                rows={2}
                 placeholder="Volume, prazo, aplicação ou o que precisar detalhar."
                 invalid={!!errors.message}
                 {...register("message")}
               />
               {errors.message && (
-                <p className="text-body-sm text-error">
+                <p className="text-body text-error">
                   {errors.message.message}
                 </p>
               )}
@@ -373,13 +388,13 @@ export function QuoteModal({
                 {...register("consent")}
                 className="mt-1"
               />
-              <span className="text-body-sm leading-[1.35] text-neutral-600">
+              <span className="text-body leading-[1.35] text-neutral-600">
                 Concordo com o tratamento dos meus dados conforme a Política de
                 Privacidade da TranspoTech (LGPD).
               </span>
             </label>
             {errors.consent && (
-              <p className="-mt-3 text-body-sm text-error">
+              <p className="-mt-3 text-body text-error">
                 {errors.consent.message}
               </p>
             )}

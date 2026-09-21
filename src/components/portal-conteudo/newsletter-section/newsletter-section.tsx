@@ -92,12 +92,12 @@ export function NewsletterSection({ showGlow = true }: { showGlow?: boolean }) {
           </Button>
         </div>
           {errors.email && (
-            <p className="text-body-sm text-error">{errors.email.message}</p>
+            <p className="text-body text-error">{errors.email.message}</p>
           )}
           {sent && !errors.email && (
             <p
               role="status"
-              className="inline-flex items-start gap-2 text-body-sm font-semibold text-accent"
+              className="inline-flex items-start gap-2 text-body font-semibold text-accent"
             >
               <CircleCheck aria-hidden className="mt-0.5 size-5 shrink-0" />
               Inscrição confirmada! Em breve nossos conteúdos chegam ao seu

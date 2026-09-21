@@ -3,10 +3,12 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { Search, SearchX } from "lucide-react";
 import { Section } from "@/components/ui/section";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { articles as allArticles } from "@/data/articles";
 import { ArticleCard } from "../article-card/article-card";
 
+// Publicações exibidas por vez; "Carregar mais" acrescenta outro bloco.
 const PAGE_SIZE = 6;
 
 const unique = (values: string[]) => Array.from(new Set(values));
@@ -28,7 +30,7 @@ function TagFilter({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-full px-4 py-2 text-body-sm font-semibold transition-colors ${
+      className={`rounded-full px-4 py-2 text-body font-semibold transition-colors ${
         active
           ? "bg-primary-500 text-neutral-50"
           : "bg-white text-neutral-700 hover:text-primary-500"
@@ -42,7 +44,7 @@ function TagFilter({
 export function ArticleList() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [page, setPage] = useState(1);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -56,16 +58,19 @@ export function ArticleList() {
     });
   }, [search, category]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const pageItems = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = filtered.length > visible.length;
 
-  const selectCategory = (value: string) => {
+  // Busca e filtro reiniciam a listagem — senão um resultado curto herdaria a
+  // contagem já expandida da consulta anterior.
+  const changeSearch = (value: string) => {
+    setSearch(value);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const changeCategory = (value: string) => {
     setCategory(value);
-    setPage(1);
+    setVisibleCount(PAGE_SIZE);
   };
 
   return (
@@ -85,24 +90,21 @@ export function ArticleList() {
         <Input
           type="search"
           value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
+          onChange={(e) => changeSearch(e.target.value)}
           placeholder="Buscar por título, autor ou tema"
           aria-label="Buscar publicações"
           iconEnd={<Search className="size-5" />}
         />
 
         <div className="flex flex-wrap gap-2">
-          <TagFilter active={category === ""} onClick={() => selectCategory("")}>
+          <TagFilter active={category === ""} onClick={() => changeCategory("")}>
             Todos
           </TagFilter>
           {categories.map((cat) => (
             <TagFilter
               key={cat}
               active={category === cat}
-              onClick={() => selectCategory(cat)}
+              onClick={() => changeCategory(cat)}
             >
               {cat}
             </TagFilter>
@@ -111,7 +113,7 @@ export function ArticleList() {
       </div>
 
       {/* Grid / empty state */}
-      {pageItems.length === 0 ? (
+      {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center gap-4 rounded-2xl bg-white px-6 py-16 text-center">
           <SearchX aria-hidden className="size-10 text-neutral-400" />
           <p className="text-h6 font-semibold text-neutral-800">
@@ -123,34 +125,27 @@ export function ArticleList() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {pageItems.map((article) => (
+          {visible.map((article) => (
             <ArticleCard key={article.id} article={article} />
           ))}
         </div>
       )}
 
-      {/* Paginação (só quando há mais de 1 página) */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3">
-          <button
-            type="button"
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="h-10 rounded-full bg-neutral-800/10 px-5 text-body font-semibold text-neutral-700 transition-colors hover:bg-neutral-800/20 disabled:pointer-events-none disabled:opacity-50"
-          >
-            Anterior
-          </button>
-          <span className="text-body text-neutral-600">
-            Página {currentPage} de {totalPages}
-          </span>
-          <button
-            type="button"
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="h-10 rounded-full bg-neutral-800/10 px-5 text-body font-semibold text-neutral-700 transition-colors hover:bg-neutral-800/20 disabled:pointer-events-none disabled:opacity-50"
-          >
-            Próxima
-          </button>
+      {/* "Carregar mais" + contagem — só quando há mais do que um bloco */}
+      {filtered.length > PAGE_SIZE && (
+        <div className="flex flex-col items-center gap-3">
+          {hasMore && (
+            <Button
+              variant="gray"
+              size="lg"
+              onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+            >
+              Carregar mais
+            </Button>
+          )}
+          <p aria-live="polite" className="text-body text-neutral-500">
+            Mostrando {visible.length} de {filtered.length}
+          </p>
         </div>
       )}
     </Section>

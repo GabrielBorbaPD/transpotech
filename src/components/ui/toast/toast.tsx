@@ -63,7 +63,7 @@ export function AppToast({
           {title}
         </p>
         {description ? (
-          <p className="text-body-sm leading-[1.35] text-neutral-600">
+          <p className="text-body leading-[1.35] text-neutral-600">
             {description}
           </p>
         ) : null}

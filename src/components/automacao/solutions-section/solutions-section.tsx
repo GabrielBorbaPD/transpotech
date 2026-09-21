@@ -202,7 +202,7 @@ export function SolutionsSection() {
       className="flex scroll-mt-24 flex-col gap-10 lg:gap-12"
     >
       <div className="mx-auto flex max-w-[640px] flex-col items-center gap-4 text-center">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Soluções em automação
         </p>
         <h2 className="text-h3 font-normal text-neutral-800">
@@ -268,7 +268,7 @@ export function SolutionsSection() {
                 {item.title}
               </span>
             </div>
-            <p className="text-body-sm leading-[1.4] text-neutral-500">
+            <p className="text-body leading-[1.4] text-neutral-500">
               {item.description}
             </p>
           </li>

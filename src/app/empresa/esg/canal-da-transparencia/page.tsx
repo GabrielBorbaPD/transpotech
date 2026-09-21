@@ -64,8 +64,6 @@ export default function CanalTransparenciaPage() {
         description="Use a Ouvidoria Digital para reclamações, sugestões, elogios, dúvidas ou solicitações gerais."
         ctaLabel="Acessar Ouvidoria"
         ctaHref={ROUTES.OUVIDORIA}
-        secondaryLabel="Voltar para Sustentabilidade"
-        secondaryHref={ROUTES.SUSTENTABILIDADE}
       />
     </main>
   );

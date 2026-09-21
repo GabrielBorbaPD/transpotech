@@ -29,10 +29,11 @@ export const ROUTES = {
 
   // Conversão
   CONTATO: "/contato",
-  ORCAMENTO: "/simular-economia",
+  SIMULADOR: "/simular-economia",
 
   // Externos
   GUPY: "https://transpotech.gupy.io/",
+  OUVIDOR_DIGITAL: "https://canal.ouvidordigital.com.br/transpotech",
 } as const;
 
 export const NAV_PRODUTOS = [

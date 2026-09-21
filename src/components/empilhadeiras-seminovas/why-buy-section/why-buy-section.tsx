@@ -163,7 +163,7 @@ export function WhyBuySection() {
         {cards.map((card) => (
           <div
             key={card.title.join(" ")}
-            className="group relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-neutral-50 p-6 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)] lg:min-h-[280px]"
+            className="group relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-neutral-50 p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)] lg:min-h-[280px]"
           >
             <CardImageIcon
               src={card.art.src}
@@ -195,7 +195,7 @@ export function WhyBuySection() {
         ))}
       </div>
 
-      <Button variant="primary" size="lg" href={ROUTES.ORCAMENTO}>
+      <Button variant="primary" size="lg" href={ROUTES.SIMULADOR}>
         Consultar equipamentos
       </Button>
     </Section>

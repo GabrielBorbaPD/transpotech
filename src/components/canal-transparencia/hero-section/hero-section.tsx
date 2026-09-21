@@ -1,6 +1,7 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
+import { ROUTES } from "@/lib/routes";
 
 // Hero centralizada (mesmo padrão de Ouvidoria / Quem Somos) — label, título
 // grande e parágrafo no centro; a malha animada (DriftMesh) fica no wrapper da
@@ -12,7 +13,7 @@ export function CanalHeroSection() {
       className="flex min-h-svh flex-col items-center justify-center gap-6 pt-[128px] text-center lg:pt-[152px]"
     >
       <div className="flex flex-col items-center gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Ética e integridade
         </p>
         <BlurRevealTitle
@@ -33,7 +34,9 @@ export function CanalHeroSection() {
       <Button
         variant="primary"
         size="lg"
-        href="#processo"
+        href={ROUTES.OUVIDOR_DIGITAL}
+        target="_blank"
+        rel="noopener noreferrer"
         className="mt-4 w-full lg:mt-0 lg:w-auto"
       >
         Fazer um relato

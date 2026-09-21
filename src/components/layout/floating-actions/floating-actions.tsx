@@ -4,10 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { MapPin, Phone, Plus } from "lucide-react";
 import { gsap } from "@/lib/gsap";
+import { ROUTES } from "@/lib/routes";
 
+// "Nossas unidades" leva à seção de unidades da página de contato; "Contatos"
+// ao rodapé, que traz os canais de atendimento e existe em todas as páginas.
 const options = [
-  { label: "Nossas unidades", href: "#unidades", Icon: MapPin },
-  { label: "Contatos", href: "#contato", Icon: Phone },
+  {
+    label: "Nossas unidades",
+    href: `${ROUTES.CONTATO}#unidades`,
+    Icon: MapPin,
+  },
+  { label: "Contatos", href: "#rodape", Icon: Phone },
 ];
 
 const chip = "rounded-full bg-neutral-50 shadow-[0_2px_5px_rgba(0,0,0,0.15)]";

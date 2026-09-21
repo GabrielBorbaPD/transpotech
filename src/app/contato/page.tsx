@@ -22,20 +22,28 @@ export const metadata: Metadata = {
 export default function ContatoPage() {
   return (
     <main>
-      {/* Hero clara com a malha que "anda" sozinha (DriftMesh), em versão mais
-          sutil (opacity reduzida). pt no próprio hero cobre a clareira do header. */}
-      <div className="relative isolate bg-[#fdfdfd]">
-        <DriftMesh className="pointer-events-none absolute inset-0 -z-10 opacity-50" />
-        <ContatoHeroSection />
-      </div>
-
-      {/* Grupo claro — ajuda, unidades e FAQ (malha só até as unidades) */}
+      {/* Página inteira num só grupo claro — como nas demais páginas, a faixa do
+          formulário é FILHA deste fundo, e não uma seção irmã. Assim não há duas
+          superfícies pintadas se encontrando: a faixa simplesmente desvanece e o
+          #fdfdfd do grupo aparece no lugar. */}
       <div className="relative isolate bg-[#fdfdfd] pb-6">
+        {/* Hero com o formulário — faixa no tom de captação (topo chapado, base
+            desvanecendo) e a malha que "anda" sozinha (DriftMesh) em versão mais
+            sutil, cobrindo a hero inteira. pt no próprio hero cobre a clareira
+            do header. `isolate` é obrigatório: sem o contexto de empilhamento
+            próprio, o -z-10 da malha cai atrás do fundo desta faixa e ela some. */}
+        <div className="form-band-top relative isolate">
+          <DriftMesh className="pointer-events-none absolute inset-0 -z-10 opacity-50" />
+          <ContatoHeroSection />
+        </div>
+
+        {/* Ajuda e unidades (malha do cursor só até aqui; o FAQ fica sem) */}
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
           <HelpSection />
           <UnitsSection />
         </div>
+
         <FaqSection
           titleRegular="Perguntas "
           titleAccent="frequentes"

@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { QuoteModal } from "@/components/catalog/quote-modal/quote-modal";
 import type { Forklift } from "@/types/forklift.types";
 
-// Botão "Solicitar orçamento deste modelo" do detalhe: abre o modal de
-// orçamento com este equipamento já selecionado (e a lista completa no "+").
+// Botão "Solicitar orçamento deste modelo" das páginas de detalhe (novas e
+// classificados de seminovas): abre o modal de orçamento com este equipamento
+// já selecionado (e a lista recebida em `forklifts` no "+").
 export function ProductQuoteButton({
   forklift,
   forklifts,

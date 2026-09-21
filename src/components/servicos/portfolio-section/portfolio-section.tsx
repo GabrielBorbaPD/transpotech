@@ -15,6 +15,8 @@ type ServiceCard = {
   title: string;
   description: string;
   cta: string;
+  /** Destino do CTA — âncora desta página ou da página do produto citado. */
+  href: string;
   Icon: LucideIcon;
 };
 
@@ -24,6 +26,7 @@ const services: ServiceCard[] = [
     description:
       "Atendimento para diagnóstico e correção de falhas em empilhadeiras e equipamentos de movimentação.",
     cta: "Solicitar corretiva",
+    href: "#solicitar-servico",
     Icon: Wrench,
   },
   {
@@ -31,6 +34,7 @@ const services: ServiceCard[] = [
     description:
       "Revisões planejadas para reduzir falhas, preservar componentes e aumentar a confiabilidade da frota.",
     cta: "Agendar preventiva",
+    href: "#solicitar-servico",
     Icon: CalendarCheck,
   },
   {
@@ -38,6 +42,7 @@ const services: ServiceCard[] = [
     description:
       "Atendimento técnico para diferentes marcas de empilhadeiras e equipamentos de movimentação.",
     cta: "Consultar atendimento",
+    href: "#multimarcas",
     Icon: RefreshCw,
   },
   {
@@ -45,6 +50,7 @@ const services: ServiceCard[] = [
     description:
       "Planos recorrentes para empresas que precisam de previsibilidade, acompanhamento técnico e suporte contínuo.",
     cta: "Conhecer contrato",
+    href: "#solicitar-servico",
     Icon: FileText,
   },
   {
@@ -52,6 +58,7 @@ const services: ServiceCard[] = [
     description:
       "Apoio com peças, pneus, baterias e carregadores para manter sua operação funcionando.",
     cta: "Solicitar peças",
+    href: `${ROUTES.PECAS}#solicitar-pecas`,
     Icon: Package,
   },
   {
@@ -59,6 +66,7 @@ const services: ServiceCard[] = [
     description:
       "Avaliação da frota para identificar riscos, priorizar manutenções e orientar decisões operacionais.",
     cta: "Avaliar equipamento",
+    href: "#solicitar-servico",
     Icon: Stethoscope,
   },
 ];
@@ -68,7 +76,7 @@ export function PortfolioSection() {
     <Section className="flex flex-col gap-10 lg:gap-14">
       <div className="flex w-full flex-col items-start justify-between gap-6 lg:flex-row lg:items-end lg:gap-4">
         <div className="flex max-w-[560px] flex-col gap-4">
-          <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+          <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
             Portfólio de serviços
           </p>
           <h2 className="text-h3 font-normal text-neutral-800">
@@ -81,7 +89,7 @@ export function PortfolioSection() {
             com eficiência.
           </p>
         </div>
-        <TextLink href={ROUTES.CONTATO} className="shrink-0">
+        <TextLink href="#solicitar-servico" className="shrink-0">
           Abrir um chamado
         </TextLink>
       </div>
@@ -90,7 +98,7 @@ export function PortfolioSection() {
         {services.map((service) => (
           <div
             key={service.title}
-            className="flex flex-1 flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)]"
+            className="flex flex-1 flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)]"
           >
             <div className="flex flex-1 flex-col gap-8 rounded-xl bg-[#fbfbfb] p-6">
               <div className="flex size-10 items-center justify-center rounded-full bg-primary-500 lg:size-12">
@@ -106,7 +114,7 @@ export function PortfolioSection() {
               </div>
             </div>
             <TextLink
-              href={ROUTES.ORCAMENTO}
+              href={service.href}
               className="w-full px-6 py-4 text-left"
             >
               {service.cta}

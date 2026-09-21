@@ -64,7 +64,7 @@ export default function EmpilhadeirasNovasPage() {
         titleAccent="segurança técnica?"
         description="Fale com a TranspoTech e receba uma recomendação conforme carga, altura, ambiente, prazo e orçamento."
         ctaLabel="Falar com especialista"
-        ctaHref={ROUTES.ORCAMENTO}
+        ctaHref={ROUTES.SIMULADOR}
       />
     </main>
   );

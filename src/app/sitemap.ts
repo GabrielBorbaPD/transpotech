@@ -35,6 +35,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // Conversão
     { url: url(ROUTES.CONTATO), lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: url(ROUTES.ORCAMENTO), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    { url: url(ROUTES.SIMULADOR), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
   ];
 }

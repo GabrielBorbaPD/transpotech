@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { QuemSomosHeroSection } from "@/components/quem-somos/hero-section/hero-section";
 import { StatsSection } from "@/components/quem-somos/stats-section/stats-section";
+import { UnitsGallerySection } from "@/components/quem-somos/units-gallery-section/units-gallery-section";
 import { AboutSection } from "@/components/quem-somos/about-section/about-section";
 import { StructureSection } from "@/components/quem-somos/structure-section/structure-section";
 import { HistorySection } from "@/components/quem-somos/history-section/history-section";
@@ -31,10 +32,11 @@ export default function QuemSomosPage() {
       {/* Hero com foto (padrão dos produtos/serviços) */}
       <QuemSomosHeroSection />
 
-      {/* Grupo claro — números */}
+      {/* Grupo claro — números e galeria das unidades */}
       <div className="relative isolate bg-[#fdfdfd]">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <StatsSection />
+        <UnitsGallerySection />
       </div>
 
       {/* Bloco dark contínuo — institucional, estrutura e história.
@@ -64,7 +66,7 @@ export default function QuemSomosPage() {
         ctaLabel="Falar com especialista"
         ctaHref={ROUTES.CONTATO}
         secondaryLabel="Solicitar orçamento"
-        secondaryHref={ROUTES.ORCAMENTO}
+        secondaryHref={`${ROUTES.CONTATO}#solicitacao`}
       />
     </main>
   );

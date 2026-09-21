@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Image, { type StaticImageData } from "next/image";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
-import { ROUTES } from "@/lib/routes";
 import { ScrollTrigger } from "@/lib/gsap";
 import illoDocument from "@/assets/images/stats/illustration-document.webp";
 import illoLamp from "@/assets/images/stats/illustration-lamp.webp";
@@ -165,7 +164,7 @@ export function ProcessSection() {
     <Section className="flex flex-col items-center gap-12 lg:gap-16">
       {/* Cabeçalho centralizado */}
       <div className="flex max-w-[560px] flex-col items-center gap-4 text-center">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Como entregamos
         </p>
         <h2 className="text-h2 text-neutral-800">
@@ -272,7 +271,7 @@ export function ProcessSection() {
         </ol>
       </div>
 
-      <Button variant="primary" size="lg" href={ROUTES.ORCAMENTO}>
+      <Button variant="primary" size="lg" href="#avaliar-automacao">
         Avaliar minha operação
       </Button>
     </Section>

@@ -10,6 +10,7 @@ import { ProcessSection } from "@/components/locacao-de-empilhadeiras/process-se
 import { StructureSection } from "@/components/locacao-de-empilhadeiras/structure-section/structure-section";
 import { SegmentsSection } from "@/components/locacao-de-empilhadeiras/segments-section/segments-section";
 import { RentVsBuySection } from "@/components/locacao-de-empilhadeiras/rent-vs-buy-section/rent-vs-buy-section";
+import { FleetManagerSection } from "@/components/locacao-de-empilhadeiras/fleet-manager-section/fleet-manager-section";
 import { CompareSection } from "@/components/layout/compare-section/compare-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { faqEmpilhadeiras } from "@/data/faq-empilhadeiras";
@@ -82,11 +83,13 @@ export default function LocacaoPage() {
         <SegmentsSection />
       </div>
 
-      {/* Grupo claro 3 — Locar vs. comprar + FAQ (malha só no Locar vs. comprar) */}
+      {/* Grupo claro 3 — Locar vs. comprar + FleetManager + FAQ. Uma única
+          malha cobre as duas primeiras seções, sem cortes; o FAQ fica de fora. */}
       <div className="relative isolate bg-[#fdfdfd]">
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
           <RentVsBuySection />
+          <FleetManagerSection />
         </div>
         <FaqSection
           titleRegular="Perguntas frequentes sobre "

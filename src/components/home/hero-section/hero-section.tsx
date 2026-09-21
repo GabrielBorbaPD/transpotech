@@ -3,8 +3,48 @@ import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
 import { HeroHotspots } from "./hero-hotspots";
 import { ROUTES } from "@/lib/routes";
-import forklift from "@/assets/images/hero-image.webp";
-import forkliftMobile from "@/assets/images/hero-image-mobile.webp";
+import forklift from "@/assets/images/home-hero-image.webp";
+
+// Arte da hero no enquadramento do antigo recorte mobile (1334x1550). Esse
+// recorte mostrava ~25 linhas de chão abaixo e ~13 colunas à direita além do
+// que existe na arte atual; cópias espelhadas nessas bordas continuam o degradê
+// sem costura. Mesmo arquivo e `sizes` → mesma URL, sem download extra.
+//
+// O arquivo tem defeitos de exportação nas bordas (linha quase preta + 2 brancas
+// na base; 3 colunas claras à direita) que o redimensionamento do srcset espalha
+// pelas vizinhas. Por isso o espelho reflete com folga — 30 linhas (3450/3480) e
+// 24 colunas (4308/4332) antes da borda: o wrapper recorta na linha de reflexo e
+// a cópia invertida é deslocada pela mesma folga. O chão ali é degradê suave.
+function MobileHeroArt({ priority = false }: { priority?: boolean }) {
+  const art = (loading?: "eager") => (
+    <Image
+      src={forklift}
+      alt=""
+      fill
+      sizes="121vw"
+      priority={priority && !loading}
+      loading={loading}
+      className="object-cover"
+    />
+  );
+  return (
+    <>
+      {art()}
+      {/* eager: as cópias ficam recortadas pelo overflow e o lazy-load nunca as
+          veria entrando na viewport */}
+      <div className="absolute inset-y-0 left-[99.4460%] w-full overflow-hidden">
+        <div className="absolute inset-y-0 -left-[0.5540%] w-full -scale-x-100">
+          {art("eager")}
+        </div>
+      </div>
+      <div className="absolute inset-x-0 top-[99.1379%] h-full overflow-hidden">
+        <div className="absolute inset-x-0 -top-[0.8621%] h-full -scale-y-100">
+          {art("eager")}
+        </div>
+      </div>
+    </>
+  );
+}
 
 export function HeroSection() {
   return (
@@ -12,40 +52,44 @@ export function HeroSection() {
       data-header-hero
       className="relative h-[100svh] w-full overflow-hidden hero-short:flex hero-short:flex-col"
     >
-      {/* Desktop: empilhadeira full-bleed atrás do conteúdo. Wrapper escalado
-          proporcionalmente mantém a empilhadeira a ~66% em qualquer largura;
-          `object-bottom` recorta só o topo (céu), nunca a base. */}
+      {/* Desktop: empilhadeira full-bleed atrás do conteúdo. A arte (4332x3480)
+          é mais alta que a anterior (4096x2155), então o `object-cover` num
+          wrapper fixo mudaria o tamanho da empilhadeira conforme a proporção da
+          tela. O wrapper reproduz a geometria antiga: altura = max(escala pela
+          altura, escala pela largura) — o mesmo "cover" de antes, via unidades
+          de container —, base ancorada em 108% da hero e centro horizontal em
+          59% (o -49.25% compensa o deslocamento da empilhadeira na arte). */}
       <div
         aria-hidden
-        className="absolute inset-0 hidden overflow-hidden lg:block"
+        className="absolute inset-0 hidden overflow-hidden [container-type:size] lg:block"
       >
-        <div className="absolute left-[-14%] top-[-46%] h-[154%] w-[146%]">
+        <div className="absolute bottom-[-8%] left-[59%] aspect-[4332/3480] h-[max(227.22cqh,113.33cqw)] -translate-x-[49.25%]">
           <Image
             src={forklift}
             alt=""
             priority
             fill
             sizes="160vw"
-            className="object-cover object-bottom"
+            className="object-cover"
           />
         </div>
       </div>
 
       {/* Mobile (altura normal): empilhadeira full-bleed atrás do texto — layout
           original. Em telas curtas (hero-short) some, dando lugar à faixa no
-          rodapé, para os botões nunca ficarem sobre a empilhadeira. */}
+          rodapé, para os botões nunca ficarem sobre a empilhadeira.
+          Usa a mesma arte do desktop reproduzindo o enquadramento do antigo
+          recorte mobile (object-cover object-center): altura = max(escala pela
+          altura, pela largura) e os translates recentram a empilhadeira. O topo
+          do recorte antigo era só céu branco e fica além da arte — cai no fundo
+          da página, visualmente igual. */}
       <div
         aria-hidden
-        className="absolute inset-0 overflow-hidden hero-short:hidden lg:hidden"
+        className="absolute inset-0 overflow-hidden [container-type:size] hero-short:hidden lg:hidden"
       >
-        <Image
-          src={forkliftMobile}
-          alt=""
-          priority
-          fill
-          sizes="100vw"
-          className="object-cover object-center"
-        />
+        <div className="absolute left-1/2 top-1/2 aspect-[4332/3480] h-[max(83.32cqh,96.82cqw)] -translate-x-[59.31%] -translate-y-[41.90%]">
+          <MobileHeroArt priority />
+        </div>
       </div>
 
       {/* Bolinhas interativas sobre a empilhadeira (só desktop) */}
@@ -70,7 +114,7 @@ export function HeroSection() {
                 { text: "locação e manutenção", className: "font-normal" },
               ]}
             />
-            <p className="text-[16px] font-normal text-neutral-800 hero-short:text-[14px] hero-short:leading-[1.35] lg:max-w-[440px] lg:text-[16px] 2xl:text-[18px]">
+            <p className="text-[16px] font-normal text-neutral-800 hero-short:leading-[1.35] lg:max-w-[440px] lg:text-[16px] 2xl:text-[18px]">
               Dealer autorizado Linde, STILL e Baoli no Sul do Brasil. Frota
               funcionando, custo previsível e atendimento técnico 24h, tudo em um
               único parceiro.
@@ -106,14 +150,12 @@ export function HeroSection() {
         aria-hidden
         className="relative mt-6 hidden w-full flex-1 overflow-hidden hero-short:block lg:hidden"
       >
-        <div className="absolute inset-x-0 bottom-0 h-[275%]">
-          <Image
-            src={forkliftMobile}
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-cover object-[center_88%]"
-          />
+        <div className="absolute inset-x-0 bottom-0 h-[275%] [container-type:size]">
+          {/* Mesmo enquadramento do antigo recorte mobile com
+              object-[center_88%], agora com a arte do desktop. */}
+          <div className="absolute left-1/2 top-[88%] aspect-[4332/3480] h-[max(83.32cqh,96.82cqw)] -translate-x-[59.31%] -translate-y-[87.51%]">
+            <MobileHeroArt />
+          </div>
         </div>
       </div>
     </section>

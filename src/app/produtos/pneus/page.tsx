@@ -13,7 +13,8 @@ import { CtaSection } from "@/components/layout/cta/cta-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
 import michelin from "@/assets/Logos/logo-michelin.webp";
-import camso from "@/assets/Logos/logo-camso.webp";
+import trelleborg from "@/assets/Logos/logo trelleborg.webp";
+import continental from "@/assets/Logos/Logo Continental.webp";
 
 export const metadata: Metadata = {
   title: "Pneus para Empilhadeiras",
@@ -28,7 +29,15 @@ export const metadata: Metadata = {
 
 const partnerBrands = [
   { src: michelin, alt: "Michelin", mono: false },
-  { src: camso, alt: "Camso", mono: false, className: "scale-[0.85]" },
+  {
+    // Lettering muito largo (5.5:1): o max-h recalcula a largura pela
+    // proporção e evita que o logo domine a linha ao lado dos demais.
+    src: continental,
+    alt: "Continental",
+    mono: false,
+    className: "max-h-[22px] sm:max-h-[26px] lg:max-h-[44px]",
+  },
+  { src: trelleborg, alt: "Trelleborg", mono: false },
 ];
 
 export default function PneusPage() {

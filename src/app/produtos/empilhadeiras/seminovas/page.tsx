@@ -8,6 +8,7 @@ import { IncludedSection } from "@/components/empilhadeiras-seminovas/included-s
 import { ValueSection } from "@/components/empilhadeiras-seminovas/value-section/value-section";
 import { PurchaseStepsSection } from "@/components/empilhadeiras-seminovas/purchase-steps-section/purchase-steps-section";
 import { ConsiderNewSection } from "@/components/empilhadeiras-seminovas/consider-new-section/consider-new-section";
+import { ClassifiedsSection } from "@/components/empilhadeiras-seminovas/classifieds-section/classifieds-section";
 import { CompareSection } from "@/components/layout/compare-section/compare-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { faqSeminovas } from "@/data/faq-seminovas";
@@ -66,6 +67,13 @@ export default function EmpilhadeirasSeminovasPage() {
         <DarkAmbient />
         <PurchaseStepsSection />
         <ConsiderNewSection />
+      </div>
+
+      {/* Classificados — estoque de seminovas disponível, mesmo card e grid da
+          seção "Outras opções que podem servir" das páginas de detalhe. Fundo
+          #f7f6f6 (igual ao dos relacionados) para os cards brancos destacarem. */}
+      <div className="relative isolate bg-[#f7f6f6]">
+        <ClassifiedsSection id="disponiveis-agora" />
       </div>
 
       {/* Grupo claro 4 — FAQ (sem malha). pb-6 compensa o -mt-6 do footer (topo

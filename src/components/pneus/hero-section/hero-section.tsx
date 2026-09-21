@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
-import { ROUTES } from "@/lib/routes";
 import heroImage from "@/assets/images/hero-image-pneus.webp";
 
 export function PneusHeroSection() {
@@ -52,10 +51,11 @@ export function PneusHeroSection() {
             </p>
           </div>
 
+          {/* Leva ao formulário de lead logo abaixo, na própria página. */}
           <Button
             variant="primary"
             size="lg"
-            href={ROUTES.ORCAMENTO}
+            href="#solicitar-pneus"
             className="w-full lg:w-auto"
           >
             Solicitar cotação de pneus

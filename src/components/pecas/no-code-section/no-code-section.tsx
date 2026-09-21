@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
-import { ROUTES } from "@/lib/routes";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 type Step = { number: string; title: string; description: string };
@@ -115,7 +114,7 @@ export function NoCodeSection() {
               >
                 {step.title}
               </h3>
-              <p className="truncate text-body-sm leading-[1.35] text-neutral-400">
+              <p className="truncate text-body leading-[1.35] text-neutral-400">
                 {step.description}
               </p>
             </div>
@@ -134,7 +133,7 @@ export function NoCodeSection() {
         ))}
       </ol>
 
-      <Button variant="primary" size="lg" href={ROUTES.ORCAMENTO}>
+      <Button variant="primary" size="lg" href="#solicitar-pecas">
         Receber orientação
       </Button>
     </Section>

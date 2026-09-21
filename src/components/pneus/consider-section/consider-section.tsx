@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
-import { ROUTES } from "@/lib/routes";
 
 const checklist: { label: string; Icon: LucideIcon }[] = [
   { label: "Tipo de equipamento", Icon: Forklift },
@@ -49,7 +48,7 @@ export function ConsiderSection() {
 
         {/* Desktop: botão na coluna do texto */}
         <div className="hidden lg:block">
-          <Button variant="primary" size="lg" href={ROUTES.ORCAMENTO}>
+          <Button variant="primary" size="lg" href="#solicitar-pneus">
             Enviar informações para cotação
           </Button>
         </div>
@@ -69,7 +68,7 @@ export function ConsiderSection() {
 
       {/* Mobile: botão abaixo dos cards de tópicos */}
       <div className="lg:hidden">
-        <Button variant="primary" size="lg" href={ROUTES.ORCAMENTO}>
+        <Button variant="primary" size="lg" href="#solicitar-pneus">
           Enviar informações para cotação
         </Button>
       </div>

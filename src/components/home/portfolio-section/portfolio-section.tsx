@@ -96,7 +96,7 @@ const cards: PortfolioCard[] = [
     description:
       "Solução para operações que precisam de flexibilidade, previsibilidade de custo e resposta rápida à demanda.",
     cta: "Solicitar proposta",
-    href: ROUTES.LOCACAO,
+    href: ROUTES.CONTATO,
     image: linde,
   },
 ];

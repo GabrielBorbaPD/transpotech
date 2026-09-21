@@ -11,7 +11,7 @@ export function OuvidoriaHeroSection() {
       className="flex min-h-svh flex-col items-center justify-center gap-6 pt-[128px] text-center lg:pt-[152px]"
     >
       <div className="flex flex-col items-center gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Escuta e relacionamento
         </p>
         <BlurRevealTitle

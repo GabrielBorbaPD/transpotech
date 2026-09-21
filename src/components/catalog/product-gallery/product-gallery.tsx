@@ -2,15 +2,22 @@
 
 import { useState } from "react";
 import Image, { type StaticImageData } from "next/image";
+import { MadeInBrazilBadge } from "@/components/ui/made-in-brazil-badge";
 
 type ProductGalleryProps = {
   images: StaticImageData[];
   alt: string;
+  /** Exibe o selo de fabricação nacional sobre a imagem principal. */
+  madeInBrazil?: boolean;
 };
 
 const MAX_THUMBS = 4;
 
-export function ProductGallery({ images, alt }: ProductGalleryProps) {
+export function ProductGallery({
+  images,
+  alt,
+  madeInBrazil = false,
+}: ProductGalleryProps) {
   const [selected, setSelected] = useState(0);
   const thumbs = images.slice(0, MAX_THUMBS);
   const extraCount = images.length - MAX_THUMBS;
@@ -64,6 +71,9 @@ export function ProductGallery({ images, alt }: ProductGalleryProps) {
           sizes="(min-width: 1024px) 590px, 100vw"
           className="object-contain p-6"
         />
+        {madeInBrazil && (
+          <MadeInBrazilBadge width={72} className="absolute left-6 top-6" />
+        )}
       </div>
     </div>
   );

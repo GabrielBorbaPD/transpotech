@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Section } from "@/components/ui/section";
 import { TextLink } from "@/components/ui/text-link";
 import { ProductCard } from "@/components/catalog/product-card/product-card";
-import { QuoteModal } from "@/components/catalog/quote-modal/quote-modal";
 import { forkliftsNovas } from "@/data/forklifts-novas";
+import { QuoteModal } from "@/components/catalog/quote-modal/quote-modal";
 import { ROUTES } from "@/lib/routes";
 import type { Forklift } from "@/types/forklift.types";
 

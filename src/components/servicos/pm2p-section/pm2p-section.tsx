@@ -3,7 +3,6 @@ import { CircleCheck } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { ParallaxFrame } from "@/components/layout/parallax-frame";
 import { Button } from "@/components/ui/button";
-import { ROUTES } from "@/lib/routes";
 // PLACEHOLDER: trocar por imagem de checklist técnico / técnico em atendimento
 import pm2pImage from "@/assets/images/operacao-image.webp";
 
@@ -22,7 +21,7 @@ export function Pm2pSection() {
         <div className="flex flex-col gap-10 lg:flex-[1.35] lg:gap-14">
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-4">
-              <p className="text-body-sm font-semibold uppercase tracking-wide text-primary-500">
+              <p className="text-body font-semibold uppercase tracking-wide text-primary-500">
                 Programa
               </p>
               <h2 className="text-h2 text-neutral-50">
@@ -59,7 +58,7 @@ export function Pm2pSection() {
           <Button
             variant="primary"
             size="lg"
-            href={ROUTES.ORCAMENTO}
+            href="#solicitar-servico"
             className="self-start"
           >
             Conhecer PM2P

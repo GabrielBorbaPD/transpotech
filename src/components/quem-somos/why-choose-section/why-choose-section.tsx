@@ -49,7 +49,22 @@ const cards: Card[] = [
     title: "Portfólio completo",
     description:
       "Venda, locação, peças, pneus, serviços, baterias, carregadores e soluções intralogísticas.",
-    art: { ...STD, src: iconRevisao, flip: false },
+    // A prancheta é a única arte em retrato (208×268): na caixa padrão, que é
+    // paisagem, o object-cover a amplia e corta topo e base. Caixa retrato
+    // própria — os mesmos valores usados no card "Revisão técnica completa"
+    // da página de seminovas, onde essa arte já aparece.
+    art: {
+      src: iconRevisao,
+      width: 105,
+      height: 140,
+      left: -5,
+      top: -6,
+      maskX: 0,
+      maskY: 0,
+      maskW: 105,
+      maskH: 140,
+      flip: false,
+    },
   },
   {
     title: "Marcas reconhecidas",
@@ -101,7 +116,7 @@ export function WhyChooseSection() {
         {cards.map((card) => (
           <div
             key={card.title}
-            className="group relative flex min-h-[220px] flex-col justify-end overflow-hidden rounded-xl bg-neutral-50 p-6 transition-shadow duration-300 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)] lg:min-h-[260px]"
+            className="group relative flex min-h-[220px] flex-col justify-end overflow-hidden rounded-xl bg-neutral-50 p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)] lg:min-h-[260px]"
           >
             <CardImageIcon
               src={card.art.src}

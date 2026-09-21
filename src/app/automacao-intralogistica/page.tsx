@@ -7,7 +7,8 @@ import { BenefitsSection } from "@/components/automacao/benefits-section/benefit
 import { SolutionsSection } from "@/components/automacao/solutions-section/solutions-section";
 import { ProcessSection } from "@/components/automacao/process-section/process-section";
 import { SegmentsSection } from "@/components/automacao/segments-section/segments-section";
-import { CasesSection } from "@/components/automacao/cases-section/cases-section";
+// Seção "O que nossos clientes dizem" temporariamente oculta a pedido do cliente.
+// import { CasesSection } from "@/components/automacao/cases-section/cases-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { faqAutomacao } from "@/data/faq-automacao";
 import { CtaSection } from "@/components/layout/cta/cta-section";
@@ -52,19 +53,19 @@ export default function AutomacaoPage() {
         <BenefitsSection />
       </div>
 
-      {/* Grupo claro 2 — Soluções/Sistemas/AGV + Processo */}
+      {/* Grupo claro 2 — Soluções/Sistemas/AGV + Processo + Segmentos.
+          Uma única malha cobre as três, sem cortes. */}
       <div className="relative isolate bg-[#fdfdfd]">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <SolutionsSection />
         <ProcessSection />
+        <SegmentsSection />
       </div>
 
-      {/* Bloco dark — Segmentos + Cases (em continuidade) */}
-      <div className="relative isolate bg-[#181616]">
-        <DarkAmbient />
-        <SegmentsSection />
-        <CasesSection />
-      </div>
+      {/* CasesSection segue oculta. Ela é dark (data-header-dark + cards com
+          glow), então ao voltar precisa do próprio bloco #181616 com
+          DarkAmbient — não cabe neste grupo claro. */}
+      {/* <CasesSection /> */}
 
       {/* Grupo claro 4 — FAQ (sem malha) */}
       <div className="bg-[#fdfdfd]">

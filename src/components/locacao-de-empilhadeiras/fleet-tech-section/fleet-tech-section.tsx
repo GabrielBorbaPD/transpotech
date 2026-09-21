@@ -64,7 +64,7 @@ export function FleetTechSection() {
     <Section className="flex flex-col gap-10 lg:gap-12">
       {/* Cabeçalho */}
       <div className="flex w-full max-w-[560px] flex-col gap-4">
-        <p className="text-body-sm font-semibold uppercase tracking-wide text-secondary-600">
+        <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
           Frota e tecnologia
         </p>
         <h2 className="text-h2 text-neutral-800">

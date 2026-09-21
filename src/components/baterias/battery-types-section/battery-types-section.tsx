@@ -47,7 +47,7 @@ const types: BatteryType[] = [
 ];
 
 function BatteryCard({ title, description, fits, cta }: BatteryType) {
-  const href = cta === "Falar com especialista" ? ROUTES.CONTATO : ROUTES.ORCAMENTO;
+  const href = cta === "Falar com especialista" ? ROUTES.CONTATO : ROUTES.SIMULADOR;
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-3xl">
@@ -118,7 +118,7 @@ export function BatteryTypesSection() {
         <Button
           variant="primary"
           size="lg"
-          href={ROUTES.ORCAMENTO}
+          href={ROUTES.SIMULADOR}
           className="shrink-0"
         >
           Avaliar tecnologia ideal
