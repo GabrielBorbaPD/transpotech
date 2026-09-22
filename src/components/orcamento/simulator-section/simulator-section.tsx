@@ -44,7 +44,7 @@ const fields: {
   {
     key: "kwh",
     label: "Valor do kWh",
-    min: 0.3,
+    min: 0,
     max: 1.2,
     step: 0.01,
     format: (v) => formatBRL(v),
