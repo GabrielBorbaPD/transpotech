@@ -6,30 +6,22 @@ import {
   fieldBase,
   fieldIconTones,
   fieldTones,
+  optionTones,
+  panelTones,
   type FieldTone,
 } from "@/components/ui/input";
 import type { SelectOption, SelectProps } from "./select.types";
-
-// Dropdown custom no lugar do <select> nativo: gatilho no padrão dos campos
-// (borda arredondada, foco laranja) + painel flutuante estilizado. O foco
-// permanece no gatilho (padrão APG "select-only combobox"); as opções são
-// navegadas por aria-activedescendant. Com `searchable`, o painel ganha um
-// campo de busca que filtra as opções (o foco vai para a busca ao abrir).
-const panelTones: Record<FieldTone, string> = {
-  light: "border-neutral-200 bg-white shadow-lg",
-  dark: "border-white/10 bg-[#181616] shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)]",
-};
-
-const optionTones: Record<FieldTone, { base: string; active: string }> = {
-  light: { base: "text-neutral-800", active: "bg-neutral-100" },
-  dark: { base: "text-neutral-50", active: "bg-white/10" },
-};
 
 const placeholderTones: Record<FieldTone, string> = {
   light: "text-neutral-400",
   dark: "text-neutral-500",
 };
 
+// Dropdown custom no lugar do <select> nativo: gatilho no padrão dos campos
+// (borda arredondada, foco laranja) + painel flutuante estilizado. O foco
+// permanece no gatilho (padrão APG "select-only combobox"); as opções são
+// navegadas por aria-activedescendant. Com `searchable`, o painel ganha um
+// campo de busca que filtra as opções (o foco vai para a busca ao abrir).
 export function Select({
   tone = "light",
   invalid,
@@ -48,6 +40,7 @@ export function Select({
   const [activeIndex, setActiveIndex] = useState(0);
   const [query, setQuery] = useState("");
   const rootRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
@@ -113,12 +106,23 @@ export function Select({
     });
   }, [open, activeIndex]);
 
+  // No modo searchable o foco está na busca, que desmonta ao fechar: sem
+  // devolver o foco ao gatilho, ele cairia no <body>.
+  const refocusTrigger = () => {
+    if (searchable) buttonRef.current?.focus();
+  };
+
   // Navegação por teclado — compartilhada pelo gatilho e pela busca.
   const handleNavKey = (e: React.KeyboardEvent) => {
+    if (e.key === "Tab") {
+      if (open) close();
+      return;
+    }
     if (e.key === "Escape") {
       if (open) {
         e.preventDefault();
         close();
+        refocusTrigger();
       }
       return;
     }
@@ -143,6 +147,7 @@ export function Select({
       if (shown[activeIndex]) {
         e.preventDefault();
         selectOption(shown[activeIndex]);
+        refocusTrigger();
       }
     }
   };
@@ -164,6 +169,7 @@ export function Select({
   return (
     <div ref={rootRef} className="relative w-full">
       <button
+        ref={buttonRef}
         type="button"
         id={id}
         disabled={disabled}
@@ -214,8 +220,13 @@ export function Select({
                 onKeyDown={handleNavKey}
                 placeholder={searchPlaceholder}
                 aria-label="Buscar opção"
+                role="combobox"
+                aria-expanded={open}
+                aria-autocomplete="list"
                 aria-controls={listboxId}
-                aria-activedescendant={`${listboxId}-${activeIndex}`}
+                aria-activedescendant={
+                  shown.length > 0 ? `${listboxId}-${activeIndex}` : undefined
+                }
                 className={`h-9 w-full rounded-lg bg-transparent pl-8 pr-2 text-body outline-none ${optionTones[tone].base} placeholder:${placeholderTones[tone]}`}
               />
             </div>

@@ -117,7 +117,6 @@ export function StateMesh({
 
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
-      if (!active) return;
 
       ctx.lineWidth = 1;
       for (const [a, b] of edges) {
@@ -145,31 +144,53 @@ export function StateMesh({
       }
     };
 
+    // A posição do canvas só muda com scroll ou mudança de layout: esses
+    // eventos marcam a medida como velha e o mousemove relê uma vez, em vez de
+    // forçar layout com getBoundingClientRect a cada movimento do mouse.
+    let rectStale = false;
+    const markStale = () => { rectStale = true; };
+
     const onMove = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      canvasLeft = rect.left;
-      canvasTop = rect.top;
+      if (rectStale) {
+        const rect = canvas.getBoundingClientRect();
+        canvasLeft = rect.left;
+        canvasTop = rect.top;
+        rectStale = false;
+      }
 
       vMx = event.clientX;
       vMy = event.clientY;
 
+      const wasActive = active;
       active =
         vMx >= canvasLeft - RADIUS &&
         vMx <= canvasLeft + width + RADIUS &&
         vMy >= canvasTop - RADIUS &&
         vMy <= canvasTop + height + RADIUS;
+
+      // O draw só roda no ticker enquanto o cursor está no raio; ao sair,
+      // limpa o último frame e sai do ticker.
+      if (active && !wasActive) gsap.ticker.add(draw);
+      if (!active && wasActive) {
+        gsap.ticker.remove(draw);
+        ctx.clearRect(0, 0, width, height);
+      }
     };
 
     const onResize = () => { build(); };
 
     build();
-    gsap.ticker.add(draw);
+    const layoutObserver = new ResizeObserver(markStale);
+    layoutObserver.observe(document.documentElement);
     window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("scroll", markStale, { passive: true });
     window.addEventListener("resize", onResize);
 
     return () => {
       gsap.ticker.remove(draw);
+      layoutObserver.disconnect();
       window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("scroll", markStale);
       window.removeEventListener("resize", onResize);
     };
   }, [fill]);

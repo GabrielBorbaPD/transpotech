@@ -175,7 +175,7 @@ export function EsgSection() {
                     className="flex items-center gap-2 text-body font-semibold leading-[1.35] text-neutral-600 transition-colors hover:text-primary-500"
                   >
                     {item.link.label}
-                    <ArrowRight className="size-5" />
+                    <ArrowRight className="size-5" aria-hidden />
                   </Link>
                 )}
               </div>

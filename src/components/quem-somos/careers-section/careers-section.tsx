@@ -6,16 +6,14 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Section } from "@/components/ui/section";
-
-// PLACEHOLDER: confirmar a URL real do portal de carreiras (Gupy).
-const GUPY_URL = "https://transpotech.gupy.io";
+import { ROUTES } from "@/lib/routes";
 
 // Botão do portal de carreiras — renderizado no cabeçalho (desktop) e após os
 // cards (mobile), via `className` de visibilidade.
 function GupyButton({ className = "" }: { className?: string }) {
   return (
     <a
-      href={GUPY_URL}
+      href={ROUTES.GUPY}
       target="_blank"
       rel="noopener noreferrer"
       className={`h-12 w-fit items-center justify-center rounded-full bg-primary-500 px-6 py-3 text-body font-semibold text-neutral-50 transition-colors duration-200 hover:bg-primary-600 ${className}`}
@@ -80,7 +78,7 @@ export function CareersSection() {
         {perks.map((perk) => (
           <div
             key={perk.title}
-            className="flex min-h-[180px] flex-col justify-between gap-6 overflow-hidden rounded-xl bg-[#F7F6F6] p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)]"
+            className="flex min-h-[180px] flex-col justify-between gap-6 overflow-hidden rounded-xl bg-neutral-50 p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.18)]"
           >
             <perk.Icon
               aria-hidden

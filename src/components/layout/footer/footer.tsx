@@ -65,7 +65,13 @@ const units = [
   { city: "Aparecida de Goiânia - GO", phone: "(62) 3413-8334" },
 ];
 
-const socials = [Facebook, Instagram, Linkedin, Youtube];
+// href ainda "#": as URLs reais das redes não foram fornecidas.
+const socials = [
+  { name: "Facebook", Icon: Facebook },
+  { name: "Instagram", Icon: Instagram },
+  { name: "LinkedIn", Icon: Linkedin },
+  { name: "YouTube", Icon: Youtube },
+];
 
 export function Footer() {
   return (
@@ -92,13 +98,14 @@ export function Footer() {
           <div className="flex flex-col gap-9">
             <Image src={logoLight} alt="TranspoTech" className="h-8 w-[174px]" />
             <div className="flex items-center gap-5">
-              {socials.map((Social, i) => (
+              {socials.map(({ name, Icon }) => (
                 <Link
-                  key={i}
+                  key={name}
                   href="#"
+                  aria-label={`TranspoTech no ${name}`}
                   className="text-neutral-300 transition-colors hover:text-neutral-50"
                 >
-                  <Social className="size-5" />
+                  <Icon className="size-5" aria-hidden />
                 </Link>
               ))}
             </div>

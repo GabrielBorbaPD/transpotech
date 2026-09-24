@@ -78,7 +78,7 @@ export function HeroGlow() {
     >
       <div
         ref={glowRef}
-        className="absolute left-0 top-0 size-[400px] rounded-full bg-[#146b55] opacity-0 blur-[110px]"
+        className="absolute left-0 top-0 size-[400px] rounded-full bg-secondary-600 opacity-0 blur-[110px]"
       />
     </div>
   );

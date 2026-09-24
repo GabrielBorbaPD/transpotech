@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 import { notFound } from "next/navigation";
 
 import { Section } from "@/components/ui/section";
 import { Breadcrumb } from "@/components/ui/breadcrumb/breadcrumb";
-import { ArticleHeader } from "@/components/article/article-header/article-header";
-import { ArticleCover } from "@/components/article/article-cover/article-cover";
-import { ArticleBody } from "@/components/article/article-body/article-body";
-import { ArticleShare } from "@/components/article/article-share/article-share";
-import { ArticleToc } from "@/components/article/article-toc/article-toc";
-import { RelatedSection } from "@/components/article/related-section/related-section";
-import { NewsletterSection } from "@/components/portal-conteudo/newsletter-section/newsletter-section";
+import { ArticleHeader } from "@/components/portal-de-conteudo/article-header/article-header";
+import { ArticleCover } from "@/components/portal-de-conteudo/article-cover/article-cover";
+import { ArticleBody } from "@/components/portal-de-conteudo/article-body/article-body";
+import { ArticleShare } from "@/components/portal-de-conteudo/article-share/article-share";
+import { ArticleToc } from "@/components/portal-de-conteudo/article-toc/article-toc";
+import { RelatedSection } from "@/components/portal-de-conteudo/related-section/related-section";
+import { NewsletterSection } from "@/components/layout/newsletter-section/newsletter-section";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { DriftMesh } from "@/components/layout/drift-mesh";
 import {
@@ -45,6 +46,7 @@ export async function generateMetadata({
     description: article.excerpt,
     alternates: { canonical: `${ROUTES.PORTAL_CONTEUDO}/${article.id}` },
     openGraph: {
+      ...baseOpenGraph,
       title: `${article.title} | TranspoTech`,
       description: article.excerpt,
     },
@@ -67,7 +69,7 @@ export default async function ArtigoPage({ params }: ArticlePageProps) {
           flutuante (pt-96). data-header-hero fica só nesta região do topo. */}
       <div
         data-header-hero
-        className="relative isolate bg-[#fdfdfd] pt-[96px]"
+        className="relative isolate bg-background pt-[96px]"
       >
         <DriftMesh
           fade
@@ -90,7 +92,7 @@ export default async function ArtigoPage({ params }: ArticlePageProps) {
       </div>
 
       {/* Corpo do artigo — texto à esquerda, aside (compartilhar + sumário) à direita */}
-      <div className="bg-[#fdfdfd]">
+      <div className="bg-background">
         <Section className="flex flex-col gap-10 pt-2 lg:flex-row lg:items-start lg:justify-between lg:gap-12 lg:pt-4">
           <ArticleBody article={article} />
 
@@ -109,8 +111,8 @@ export default async function ArtigoPage({ params }: ArticlePageProps) {
         </Section>
       </div>
 
-      {/* Relacionados + Newsletter — mesmo tom do portal de conteúdo (#f7f6f6) */}
-      <div className="bg-[#f7f6f6]">
+      {/* Relacionados + Newsletter — mesmo tom do portal de conteúdo (neutral-50) */}
+      <div className="bg-neutral-50">
         <RelatedSection articles={related} />
         <NewsletterSection />
       </div>

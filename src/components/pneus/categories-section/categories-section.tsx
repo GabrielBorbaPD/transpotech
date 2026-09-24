@@ -231,7 +231,7 @@ export function CategoriesSection() {
               >
                 <div className="flex flex-1 flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 group-hover/card:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)]">
                   <div
-                    className="flex flex-1 flex-col justify-end gap-4 rounded-xl bg-[#fbfbfb] px-6 pb-6"
+                    className="flex flex-1 flex-col justify-end gap-4 rounded-xl bg-surface-subtle px-6 pb-6"
                     style={{ paddingTop: TEXT_TOP }}
                   >
                     <h3 className="font-heading text-h5 font-bold text-neutral-700">

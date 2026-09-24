@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 import { notFound } from "next/navigation";
 
 import { ProductDetailSection } from "@/components/empilhadeiras-novas/product-detail/product-detail-section";
@@ -43,6 +44,7 @@ export async function generateMetadata({
     description: `${forklift.name}: ${detail.tagline} ${forklift.application}. Solicite seu orçamento com a TranspoTech.`,
     alternates: { canonical: `${ROUTES.EMPILHADEIRAS_NOVAS}/${forklift.id}` },
     openGraph: {
+      ...baseOpenGraph,
       title: `${forklift.name} | TranspoTech`,
       description: `${forklift.name}: ${forklift.application}.`,
     },
@@ -69,7 +71,7 @@ export default async function EmpilhadeiraNovaDetalhePage({
           data-header-hero → header laranja sobre a hero (igual à home). */}
       <div
         data-header-hero
-        className="relative isolate bg-[#fdfdfd] pt-[96px]"
+        className="relative isolate bg-background pt-[96px]"
       >
         <DriftMesh
           fade
@@ -79,7 +81,7 @@ export default async function EmpilhadeiraNovaDetalhePage({
       </div>
 
       {/* Palco do modelo — imagem full-bleed com zoom (fundo claro) */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <ModelExperienceSection detail={detail} />
       </div>
 
@@ -88,7 +90,7 @@ export default async function EmpilhadeiraNovaDetalhePage({
       <ModelHighlightsSection detail={detail} />
 
       {/* Relacionados */}
-      <div className="relative isolate bg-[#f7f6f6]">
+      <div className="relative isolate bg-neutral-50">
         <RelatedProductsSection items={related} />
       </div>
 

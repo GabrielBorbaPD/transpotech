@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type MouseEventHandler } from "react";
+import { useRef, type ComponentProps, type MouseEventHandler } from "react";
 import Link from "next/link";
 import { gsap } from "@/lib/gsap";
 import type { ButtonProps, ButtonSize, ButtonVariant } from "./button.types";
@@ -72,8 +72,12 @@ export function Button({
   );
 
   if (href) {
+    // Os props vêm tipados para <button>; no <a> só os globais (aria-*, data-*,
+    // id, tabIndex) têm efeito.
+    const anchorProps = props as unknown as ComponentProps<"a">;
     return (
       <Link
+        {...anchorProps}
         href={href}
         target={target}
         rel={rel}

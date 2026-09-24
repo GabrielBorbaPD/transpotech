@@ -115,7 +115,7 @@ export function AutomationSection() {
             src={automacao}
             alt="Empilhadeira em operação"
             fill
-            sizes="50vw"
+            sizes="(min-width: 1024px) 50vw, 100vw"
             className="object-cover"
           />
         </ParallaxFrame>

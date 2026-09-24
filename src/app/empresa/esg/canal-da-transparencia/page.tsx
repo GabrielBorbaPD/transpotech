@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { CanalHeroSection } from "@/components/canal-transparencia/hero-section/hero-section";
 import { ScopeSection } from "@/components/canal-transparencia/scope-section/scope-section";
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
   description:
     "Canal da Transparência da TranspoTech: relate situações relacionadas à ética, integridade e conduta, com tratamento confidencial e possibilidade de anonimato.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Canal da Transparência | TranspoTech",
     description:
       "Relate situações de ética e conduta com confidencialidade e opção de anonimato.",
@@ -28,7 +30,7 @@ export default function CanalTransparenciaPage() {
   return (
     <main>
       {/* Grupo claro 1 */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         {/* Hero — malha grande que anda pelo fundo (sem cursor) */}
         <div className="relative">
           <DriftMesh className="pointer-events-none absolute inset-0 -z-10" />
@@ -49,7 +51,7 @@ export default function CanalTransparenciaPage() {
       </div>
 
       {/* Grupo claro 2 — FAQ (sem malha) */}
-      <div className="bg-[#fdfdfd]">
+      <div className="bg-background">
         <FaqSection
           titleRegular="Perguntas "
           titleAccent="frequentes"

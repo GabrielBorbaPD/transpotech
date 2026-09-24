@@ -58,10 +58,16 @@ export function DriftMesh({
       el.style.setProperty(`--by${i}`, `${b.y}%`);
     });
 
+    // Fora da viewport os tweens ficam pausados: animar as variáveis da mask
+    // repinta a área inteira a cada frame, e o footer monta uma instância em
+    // toda página. Pausado, o tween não completa e não sorteia o próximo.
+    let visible = true;
+
     // Cada blob vagueia para um alvo aleatório e re-sorteia ao chegar.
     BLOBS.forEach((_, i) => {
       const move = () => {
         gsap.to(el, {
+          paused: !visible,
           [`--bx${i}`]: `${gsap.utils.random(5, 95, 1)}%`,
           [`--by${i}`]: `${gsap.utils.random(8, 92, 1)}%`,
           duration: gsap.utils.random(3, 6) / speed,
@@ -72,7 +78,14 @@ export function DriftMesh({
       move();
     });
 
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      gsap.getTweensOf(el).forEach((t) => (visible ? t.resume() : t.pause()));
+    });
+    observer.observe(el);
+
     return () => {
+      observer.disconnect();
       gsap.killTweensOf(el);
     };
   }, [speed]);

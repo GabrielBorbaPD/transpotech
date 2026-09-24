@@ -1,9 +1,9 @@
 import { MapPin } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { Breadcrumb } from "@/components/ui/breadcrumb/breadcrumb";
-import { ProductGallery } from "@/components/catalog/product-gallery/product-gallery";
+import { ProductGallery } from "@/components/layout/product-gallery/product-gallery";
 import { forkliftsSeminovas } from "@/data/forklifts-seminovas";
-import { ProductQuoteButton } from "@/components/catalog/product-quote-button/product-quote-button";
+import { ProductQuoteButton } from "@/components/layout/product-quote-button/product-quote-button";
 import { ROUTES } from "@/lib/routes";
 import { stateFromLocation } from "@/data/forklifts-novas";
 import type { Forklift } from "@/types/forklift.types";

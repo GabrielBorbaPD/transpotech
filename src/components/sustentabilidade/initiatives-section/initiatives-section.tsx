@@ -62,7 +62,7 @@ export function InitiativesSection() {
           // Cards informativos, sem link: as iniciativas não têm página própria.
           <article
             key={initiative.title}
-            className="flex h-full flex-col rounded-xl bg-[#f7f6f6] p-2"
+            className="flex h-full flex-col rounded-xl bg-neutral-50 p-2"
           >
             {/* Imagem com pequena borda do card ao redor (padding do article + cantos). */}
             <div className="relative h-[196px] w-full overflow-hidden rounded-lg bg-neutral-100">

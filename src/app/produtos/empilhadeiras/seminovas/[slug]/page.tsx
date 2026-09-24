@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 import { notFound } from "next/navigation";
 
 import { SeminovaDetailSection } from "@/components/empilhadeiras-seminovas/detail-section/seminova-detail-section";
@@ -41,6 +42,7 @@ export async function generateMetadata({
       canonical: `${ROUTES.EMPILHADEIRAS_SEMINOVAS}/${forklift.id}`,
     },
     openGraph: {
+      ...baseOpenGraph,
       title: `${forklift.name} seminova | TranspoTech`,
       description,
     },
@@ -62,7 +64,7 @@ export default async function EmpilhadeiraSeminovaDetalhePage({
       {/* Grupo claro — galeria + informações (pt extra → clareira do header
           flutuante). Mesma malha animada da hero do detalhe de novas.
           data-header-hero → header laranja sobre a hero (igual à home). */}
-      <div data-header-hero className="relative isolate bg-[#fdfdfd] pt-[96px]">
+      <div data-header-hero className="relative isolate bg-background pt-[96px]">
         <DriftMesh
           fade
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-svh"
@@ -71,7 +73,7 @@ export default async function EmpilhadeiraSeminovaDetalhePage({
       </div>
 
       {/* Outros classificados — mesmo carrossel da página de seminovas */}
-      <div className="relative isolate bg-[#f7f6f6]">
+      <div className="relative isolate bg-neutral-50">
         <ClassifiedsSection
           items={others}
           eyebrow="Classificados"

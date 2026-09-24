@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { StateMesh } from "@/components/layout/state-mesh";
+import { ROUTES } from "@/lib/routes";
 
 type CtaSectionProps = {
   /** Primeira parte do título (peso normal). */
@@ -25,7 +26,7 @@ export function CtaSection({
   description = "Um especialista analisa seu cenário e apresenta a opção mais adequada, sem compromisso.",
   descriptionWidth = "420px",
   ctaLabel = "Falar com especialistas",
-  ctaHref,
+  ctaHref = ROUTES.CONTATO,
   secondaryLabel,
   secondaryHref,
 }: CtaSectionProps = {}) {
@@ -37,7 +38,7 @@ export function CtaSection({
       : {};
 
   return (
-    <section className="relative overflow-hidden bg-[#fdfdfd]">
+    <section className="relative overflow-hidden bg-background">
       {/* Background — cobre a tela toda (full-bleed), atrás do conteúdo */}
       <StateMesh className="pointer-events-none absolute inset-0 -z-10 h-full w-full" />
       {/* Blurs de ambiência: no mobile ficam menores e ancorados nos cantos —

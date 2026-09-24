@@ -1,6 +1,8 @@
-import { type StaticImageData } from "next/image";
 import { Section } from "@/components/ui/section";
-import { CardImageIcon } from "@/components/ui/card-image-icon";
+import {
+  DarkArtCard,
+  type DarkArtCardArt,
+} from "@/components/layout/dark-art-card";
 import iconBussola from "@/assets/images/stats/novas-icon-bussola.webp";
 import iconSelo from "@/assets/images/stats/card-selo.webp";
 import iconLoja from "@/assets/images/stats/card-loja.webp";
@@ -8,21 +10,13 @@ import iconChave from "@/assets/images/stats/novas-icon-chave.webp";
 import iconPin from "@/assets/images/stats/card-pin.webp";
 import iconEngrenagem from "@/assets/images/stats/card-engrenagem.webp";
 
-// Geometria por card conforme o Figma (node 3603:3397). Tons iguais à why-us
-// da home: cores originais + máscara exata do Figma (plateau=false) + blend
-// lighten. left/top alinham o objeto verticalmente ao texto.
-type Art = {
-  src: StaticImageData;
-  width: number;
-  height: number;
-  maskX: number;
-  maskY: number;
-  flip: boolean;
-  left: number;
-  top: number;
+// Geometria por card conforme o Figma (node 3603:3397). left/top alinham o
+// objeto verticalmente ao texto.
+type Reason = {
+  title: string;
+  description: string;
+  art: DarkArtCardArt;
 };
-
-type Reason = { title: string; description: string; art: Art };
 
 // Caixa padrão desta seção (204.438×153.328).
 const BIG = { width: 204.438, height: 153.328 };
@@ -96,31 +90,7 @@ export function WhyChooseSection() {
 
       <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {reasons.map((reason) => (
-          <div
-            key={reason.title}
-            className="group relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-[#222221] p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.35)] lg:min-h-[299px]"
-          >
-            <CardImageIcon
-              src={reason.art.src}
-              width={reason.art.width}
-              height={reason.art.height}
-              left={reason.art.left}
-              top={reason.art.top}
-              maskX={reason.art.maskX}
-              maskY={reason.art.maskY}
-              flip={reason.art.flip}
-              plateau={false}
-              blendMode="lighten"
-            />
-            <div className="relative mt-[124px] lg:mt-[140px] flex flex-col gap-4">
-              <h3 className="font-heading text-h6 font-semibold text-neutral-200">
-                {reason.title}
-              </h3>
-              <p className="text-body leading-[1.35] text-neutral-400">
-                {reason.description}
-              </p>
-            </div>
-          </div>
+          <DarkArtCard key={reason.title} {...reason} />
         ))}
       </div>
     </Section>

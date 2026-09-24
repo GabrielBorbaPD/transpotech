@@ -1,69 +1,29 @@
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
+import { PhotoHero } from "@/components/layout/photo-hero";
 import heroImage from "@/assets/images/hero-sustentabilidade.webp";
 
 export function SustentabilidadeHeroSection() {
   return (
-    <section data-header-hero className="relative w-full bg-[#fdfdfd] md:p-4">
-      {/* Card de imagem — full-bleed no mobile; de md em diante, 16px de padding em volta e bordas de 20px */}
-      <div className="relative flex h-svh md:h-[calc(100svh-2rem)] min-h-[560px] w-full overflow-hidden md:rounded-[20px]">
-        {/* Imagem de fundo — iniciativa ESG / equipe */}
-        <Image
-          src={heroImage}
-          alt=""
-          priority
-          fill
-          sizes="100vw"
-          className="object-cover object-center"
-        />
-
-        {/* Gradiente escuro da base para o topo — sobe além do título para
-            garantir a legibilidade sobre a imagem */}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to top, #01120E 0%, rgba(1,18,14,0.85) 40%, rgba(1,18,14,0) 94%)",
-          }}
-        />
-
-        {/* Conteúdo — parte inferior da hero (80px de padding inferior) */}
-        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-center justify-end gap-10 px-5 pb-20 text-center sm:px-6 lg:gap-8 lg:px-16">
-          <div className="flex max-w-[900px] flex-col gap-4">
-            {/* Duas linhas: quebra forçada antes de "responsabilidade..." */}
-            <BlurRevealTitle
-              tone="dark"
-              className="text-h2 text-neutral-50"
-              segments={[
-                {
-                  text: "Sustentabilidade, inclusão e",
-                  className: "font-normal",
-                  br: true,
-                },
-                {
-                  text: "responsabilidade na intralogística",
-                  className: "font-bold text-primary-500 lg:whitespace-nowrap",
-                },
-              ]}
-            />
-            <p className="mx-auto max-w-[480px] text-h6 font-normal leading-[1.3] text-neutral-50">
-              Iniciativas de sustentabilidade, inclusão, comunidade e governança
-              para um futuro mais responsável.
-            </p>
-          </div>
-
-          <Button
-            variant="primary"
-            size="lg"
-            href="#destaques"
-            className="w-full lg:w-auto"
-          >
-            Conhecer iniciativas ESG
-          </Button>
-        </div>
-      </div>
-    </section>
+    <PhotoHero
+      image={heroImage}
+      // Gradiente sobe além do título para garantir a legibilidade sobre a imagem
+      shadeStops={[40, 94]}
+      contentClassName="max-w-[900px]"
+      titleClassName="text-h2 text-neutral-50"
+      // Duas linhas: quebra forçada antes de "responsabilidade..."
+      titleSegments={[
+        {
+          text: "Sustentabilidade, inclusão e",
+          className: "font-normal",
+          br: true,
+        },
+        {
+          text: "responsabilidade na intralogística",
+          className: "font-bold text-primary-500 lg:whitespace-nowrap",
+        },
+      ]}
+      descriptionClassName="max-w-[480px]"
+      description="Iniciativas de sustentabilidade, inclusão, comunidade e governança para um futuro mais responsável."
+      cta={{ href: "#destaques", label: "Conhecer iniciativas ESG" }}
+    />
   );
 }

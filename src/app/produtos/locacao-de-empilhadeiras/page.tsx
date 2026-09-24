@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { LocacaoHeroSection } from "@/components/locacao-de-empilhadeiras/hero-section/hero-section";
 import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
@@ -14,7 +15,7 @@ import { FleetManagerSection } from "@/components/locacao-de-empilhadeiras/fleet
 import { CompareSection } from "@/components/layout/compare-section/compare-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { faqEmpilhadeiras } from "@/data/faq-empilhadeiras";
-import { BrandsSection } from "@/components/home/brands-section/brands-section";
+import { BrandsSection } from "@/components/layout/brands-section/brands-section";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
 import { HoverMesh } from "@/components/layout/hover-mesh";
@@ -27,6 +28,7 @@ export const metadata: Metadata = {
   description:
     "Locação de empilhadeiras industriais com manutenção preventiva incluída. STILL, Linde e Baoli. Atendimento em todo o Brasil com 11 unidades próprias.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Locação de Empilhadeiras | TranspoTech",
     description:
       "Locação de empilhadeiras industriais com manutenção preventiva incluída. STILL, Linde e Baoli.",
@@ -46,7 +48,7 @@ export default function LocacaoPage() {
 
       {/* Grupo claro 1 — Marcas (Dealer oficial) + Captação + Frota & Tecnologia.
           Uma única malha cobre tudo, sem cortes. */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <BrandsSection tone="light" eyebrow="Dealer oficial" brands={dealerBrands} />
         <LeadFormSection
@@ -71,7 +73,7 @@ export default function LocacaoPage() {
       </div>
 
       {/* Grupo claro 2 — Processo */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <ProcessSection />
       </div>
@@ -85,7 +87,7 @@ export default function LocacaoPage() {
 
       {/* Grupo claro 3 — Locar vs. comprar + FleetManager + FAQ. Uma única
           malha cobre as duas primeiras seções, sem cortes; o FAQ fica de fora. */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
           <RentVsBuySection />

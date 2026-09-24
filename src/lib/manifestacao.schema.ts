@@ -16,7 +16,16 @@ export const manifestacaoTypes = [
 
 export const manifestacaoSchema = z.object({
   name: z.string().min(2, "Informe seu nome"),
-  contact: z.string().min(5, "Informe um e-mail ou telefone para contato"),
+  contact: z
+    .string()
+    .trim()
+    .min(5, "Informe um e-mail ou telefone para contato")
+    .refine(
+      (value) =>
+        z.string().email().safeParse(value).success ||
+        /^\+?[\d\s()-]{10,}$/.test(value),
+      "Informe um e-mail ou telefone válido",
+    ),
   relation: z.enum(reportRelations, {
     message: "Selecione sua relação com a TranspoTech",
   }),

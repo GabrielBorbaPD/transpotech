@@ -15,15 +15,19 @@ import forklift from "@/assets/images/home-hero-image.webp";
 // pelas vizinhas. Por isso o espelho reflete com folga — 30 linhas (3450/3480) e
 // 24 colunas (4308/4332) antes da borda: o wrapper recorta na linha de reflexo e
 // a cópia invertida é deslocada pela mesma folga. O chão ali é degradê suave.
-function MobileHeroArt({ priority = false }: { priority?: boolean }) {
-  const art = (loading?: "eager") => (
+//
+// Só a arte do desktop leva `preload`: o <link> de preload não tem `media`, e
+// preload nas duas variantes (sizes diferentes → URLs diferentes) fazia as duas
+// disputarem banda em qualquer viewport. A mobile fica com fetchPriority alto.
+function MobileHeroArt({ highPriority = false }: { highPriority?: boolean }) {
+  const art = (mirror = false) => (
     <Image
       src={forklift}
       alt=""
       fill
       sizes="121vw"
-      priority={priority && !loading}
-      loading={loading}
+      loading={mirror || highPriority ? "eager" : undefined}
+      fetchPriority={highPriority && !mirror ? "high" : undefined}
       className="object-cover"
     />
   );
@@ -34,12 +38,12 @@ function MobileHeroArt({ priority = false }: { priority?: boolean }) {
           veria entrando na viewport */}
       <div className="absolute inset-y-0 left-[99.4460%] w-full overflow-hidden">
         <div className="absolute inset-y-0 -left-[0.5540%] w-full -scale-x-100">
-          {art("eager")}
+          {art(true)}
         </div>
       </div>
       <div className="absolute inset-x-0 top-[99.1379%] h-full overflow-hidden">
         <div className="absolute inset-x-0 -top-[0.8621%] h-full -scale-y-100">
-          {art("eager")}
+          {art(true)}
         </div>
       </div>
     </>
@@ -67,7 +71,7 @@ export function HeroSection() {
           <Image
             src={forklift}
             alt=""
-            priority
+            preload
             fill
             sizes="160vw"
             className="object-cover"
@@ -88,7 +92,7 @@ export function HeroSection() {
         className="absolute inset-0 overflow-hidden [container-type:size] hero-short:hidden lg:hidden"
       >
         <div className="absolute left-1/2 top-1/2 aspect-[4332/3480] h-[max(83.32cqh,96.82cqw)] -translate-x-[59.31%] -translate-y-[41.90%]">
-          <MobileHeroArt priority />
+          <MobileHeroArt highPriority />
         </div>
       </div>
 

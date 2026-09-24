@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 import { UnderConstruction } from "@/components/layout/under-construction/under-construction";
 
 export const metadata: Metadata = {
@@ -6,6 +7,7 @@ export const metadata: Metadata = {
   description:
     "Catálogo completo de empilhadeiras novas e seminovas. Representante oficial STILL, Linde e Baoli (grupo KION). Encontre o equipamento ideal para sua operação.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Venda de Empilhadeiras | TranspoTech",
     description:
       "Catálogo de empilhadeiras novas e seminovas. Representante oficial STILL, Linde e Baoli.",

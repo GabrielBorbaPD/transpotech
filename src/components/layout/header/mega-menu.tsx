@@ -181,6 +181,9 @@ export function MegaMenu({
       id={id}
       onMouseEnter={onPointerEnter}
       onMouseLeave={onPointerLeave}
+      // Fechado, o painel segue montado (só opacity-0): inert tira os links
+      // da ordem de tabulação e da árvore de acessibilidade.
+      inert={!open}
       className={[
         "absolute inset-x-0 top-full z-40 hidden pt-3 lg:block",
         "transition duration-200 ease-out",

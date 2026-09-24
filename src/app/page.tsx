@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { HeroSection } from "@/components/home/hero-section/hero-section";
 import { ExperienceSection } from "@/components/home/experience-section/experience-section";
 import { SolutionsSection } from "@/components/home/solutions-section/solutions-section";
 import { PortfolioSection } from "@/components/home/portfolio-section/portfolio-section";
-import { BrandsSection } from "@/components/home/brands-section/brands-section";
+import { BrandsSection } from "@/components/layout/brands-section/brands-section";
 import { EsgSection } from "@/components/home/esg-section/esg-section";
 import { ServicesSection } from "@/components/home/services-section/services-section";
 import { AutomationSection } from "@/components/home/automation-section/automation-section";
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
   description:
     "Dealer autorizado Linde, STILL e Baoli no Sul do Brasil. Frota funcionando, custo previsível e atendimento técnico 24h, tudo em um único parceiro.",
   openGraph: {
+    ...baseOpenGraph,
     title: "TranspoTech | Empilhadeiras, Locação e Manutenção",
     description:
       "Dealer autorizado Linde, STILL e Baoli no Sul do Brasil. Frota funcionando, custo previsível e atendimento técnico 24h.",
@@ -36,19 +38,19 @@ export default function HomePage() {
       <HeroSection />
       {/* Grupo claro 1 — Experiência. Malha livre cobrindo todo o fundo (sem
           silhueta): o hover revela a malha em qualquer área. */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <ExperienceSection />
       </div>
-      {/* Bloco dark 1 — fundo #181616 + ambiência (blurs que andam no scroll) */}
-      <div className="relative isolate bg-[#181616]">
+      {/* Bloco dark 1 — fundo neutral-900 + ambiência (blurs que andam no scroll) */}
+      <div className="relative isolate bg-neutral-900">
         <DarkAmbient />
         <SolutionsSection />
         <PortfolioSection />
         <BrandsSection />
       </div>
       {/* Grupo claro 2 — Comparativo + ESG + Serviços + Automação + Segmentos */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <CompareSection ctaLabel="Simular economia" ctaHref={ROUTES.SIMULADOR} />
         <EsgSection />
@@ -56,14 +58,14 @@ export default function HomePage() {
         <AutomationSection />
         <SegmentsSection />
       </div>
-      {/* Bloco dark 2 — fundo #181616 + ambiência (blurs que andam no scroll) */}
-      <div className="relative isolate bg-[#181616]">
+      {/* Bloco dark 2 — fundo neutral-900 + ambiência (blurs que andam no scroll) */}
+      <div className="relative isolate bg-neutral-900">
         <DarkAmbient />
         <TestimonialsSection />
         <WhyUsSection />
       </div>
-      {/* Grupo claro 3 — Blog (fundo branco mais escuro) */}
-      <div className="relative isolate bg-[#f7f6f6]">
+      {/* Grupo claro 3 — Blog (fundo neutral-50, branco mais escuro) */}
+      <div className="relative isolate bg-neutral-50">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <BlogSection />
       </div>

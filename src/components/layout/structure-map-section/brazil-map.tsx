@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { BRAZIL_STATES, type BrazilStateItem } from "./brazil-states";
 import { ACTIVE_UFS, UNIT_UFS } from "./coverage";
 import { STATE_UNITS } from "./state-units";
-import { StateUnitsLayer, UNIT_DOT_FILL } from "./state-units-layer";
+import { StateUnitsLayer, UNIT_DOT_CLASS } from "./state-units-layer";
 
 // Mapa do Brasil com os estados de atuação TranspoTech (interação baseada em
 // inputs/abrangencia-nacional- Transpotech.html): hover mostra tooltip, clique
@@ -283,25 +283,43 @@ export function BrazilMap({ className = "" }: { className?: string }) {
     const pad = 2 * u; // folga do contorno escuro do texto
     const rects: (Rect | null)[] = items.map(() => null);
 
+    // Mede cada rótulo uma vez por âncora, na origem: mudar x/y do <text> só
+    // translada a caixa, então a caixa de cada candidato sai por aritmética —
+    // sem setAttribute + getBBox (relayout forçado) por candidato e passada.
+    const anchors = ["start", "middle", "end"] as const;
+    const boxes = items.map(({ text }) => {
+      const byAnchor = {} as Record<(typeof anchors)[number], DOMRect>;
+      for (const anchor of anchors) {
+        text.setAttribute("x", "0");
+        text.setAttribute("y", "0");
+        text.setAttribute("text-anchor", anchor);
+        byAnchor[anchor] = text.getBBox();
+      }
+      return byAnchor;
+    });
+    const placed = items.map(() => LABEL_CANDIDATES[0]);
+
     // Primeira passada gulosa (menores rótulos primeiro, contra os já
     // colocados); as seguintes reposicionam cada rótulo contra TODOS os
     // outros, resolvendo conflitos criados pela ordem da primeira.
     for (let pass = 0; pass < LABEL_PASSES; pass++) {
-      items.forEach(({ text, pin }, i) => {
-        const toRect = (bb: DOMRect): Rect => ({
-          x0: pin.x + bb.x - pad,
-          x1: pin.x + bb.x + bb.width + pad,
-          y0: pin.y + bb.y - pad,
-          y1: pin.y + bb.y + bb.height + pad,
-        });
+      items.forEach(({ pin }, i) => {
+        const toRect = (c: (typeof LABEL_CANDIDATES)[number]): Rect => {
+          const bb = boxes[i][c.anchor];
+          const x = c.x * CANDIDATE_SCALE * u + bb.x;
+          const y = c.y * CANDIDATE_SCALE * u + bb.y;
+          return {
+            x0: pin.x + x - pad,
+            x1: pin.x + x + bb.width + pad,
+            y0: pin.y + y - pad,
+            y1: pin.y + y + bb.height + pad,
+          };
+        };
         const others = rects.filter((q, j): q is Rect => j !== i && !!q);
         let best = LABEL_CANDIDATES[0];
         let bestScore = Infinity;
         for (const c of LABEL_CANDIDATES) {
-          text.setAttribute("x", String(c.x * CANDIDATE_SCALE * u));
-          text.setAttribute("y", String(c.y * CANDIDATE_SCALE * u));
-          text.setAttribute("text-anchor", c.anchor);
-          const r = toRect(text.getBBox());
+          const r = toRect(c);
           let score = 0;
           others.forEach((q) => {
             if (hits(r, q)) score += PENALTY_LABEL;
@@ -332,12 +350,16 @@ export function BrazilMap({ className = "" }: { className?: string }) {
             best = c;
           }
         }
-        text.setAttribute("x", String(best.x * CANDIDATE_SCALE * u));
-        text.setAttribute("y", String(best.y * CANDIDATE_SCALE * u));
-        text.setAttribute("text-anchor", best.anchor);
-        rects[i] = toRect(text.getBBox());
+        rects[i] = toRect(best);
+        placed[i] = best;
       });
     }
+    items.forEach(({ text }, i) => {
+      const c = placed[i];
+      text.setAttribute("x", String(c.x * CANDIDATE_SCALE * u));
+      text.setAttribute("y", String(c.y * CANDIDATE_SCALE * u));
+      text.setAttribute("text-anchor", c.anchor);
+    });
 
     // Linha-guia do pino até o rótulo.
     items.forEach(({ text, leader }) => {
@@ -436,7 +458,7 @@ export function BrazilMap({ className = "" }: { className?: string }) {
               dx="0"
               dy="0"
               stdDeviation={px(3.5)}
-              floodColor="#f58220"
+              style={{ floodColor: "var(--color-primary-500)" }}
               floodOpacity="0.55"
             />
           </filter>
@@ -577,18 +599,16 @@ export function BrazilMap({ className = "" }: { className?: string }) {
               />
               <circle
                 r={pxBase(PIN_R)}
-                fill={UNIT_DOT_FILL}
                 filter={`url(#${glowId})`}
-                className="pointer-events-none transition-[fill] duration-200 group-hover/pin:fill-neutral-50"
+                className={`${UNIT_DOT_CLASS} pointer-events-none transition-[fill] duration-200 group-hover/pin:fill-neutral-50`}
               />
               {!isMobile && (
                 <>
                   <line
-                    stroke="#FDFDFD"
                     strokeOpacity={0.45}
                     strokeWidth={1}
                     vectorEffect="non-scaling-stroke"
-                    className="pointer-events-none"
+                    className="pointer-events-none stroke-background"
                   />
                   <text
                     fontSize={pxBase(PIN_FONT)}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { OuvidoriaHeroSection } from "@/components/ouvidoria-digital/hero-section/hero-section";
 import { ScopeSection } from "@/components/ouvidoria-digital/scope-section/scope-section";
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
   description:
     "Ouvidoria Digital da TranspoTech: registre reclamações, sugestões, elogios, dúvidas e manifestações gerais sobre sua experiência. Queremos ouvir você.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Ouvidoria Digital | TranspoTech",
     description:
       "Canal para reclamações, sugestões, elogios, dúvidas e manifestações gerais.",
@@ -27,7 +29,7 @@ export default function OuvidoriaPage() {
   return (
     <main>
       {/* Grupo claro 1 */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         {/* Hero — malha grande que anda pelo fundo (sem cursor) */}
         <div className="relative">
           <DriftMesh className="pointer-events-none absolute inset-0 -z-10" />
@@ -47,7 +49,7 @@ export default function OuvidoriaPage() {
       </div>
 
       {/* Grupo claro 2 (malha só até o redirecionamento comercial) */}
-      <div className="relative isolate bg-[#fdfdfd] pb-6">
+      <div className="relative isolate bg-background pb-6">
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
           <ManifestacaoForm />

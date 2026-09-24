@@ -74,7 +74,7 @@ export function ModelExperienceSection({
   return (
     <div
       ref={introRef}
-      className="relative flex items-center justify-center overflow-hidden bg-[#fdfdfd] px-5 py-12 sm:px-6 lg:h-[100svh] lg:py-0 lg:px-16"
+      className="relative flex items-center justify-center overflow-hidden bg-background px-5 py-12 sm:px-6 lg:h-[100svh] lg:py-0 lg:px-16"
     >
       {/* Card — no mobile é uma box estática; no desktop começa contido (1312px,
           radius 24px) e cresce até preencher a tela. Recortes (contain) ganham

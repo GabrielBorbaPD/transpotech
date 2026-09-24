@@ -13,7 +13,7 @@ import { gsap } from "@/lib/gsap";
 // rastro dela as cores finais aparecem. Com prefers-reduced-motion a
 // cobertura é removida sem animação.
 
-type Segment = {
+export type BlurRevealSegment = {
   text: string;
   /** Classes do trecho (peso/cor final — ex.: "font-bold text-primary-500"). */
   className?: string;
@@ -28,18 +28,23 @@ const UNLIT = { light: "#e9e7e4", dark: "#5a5652" } as const;
 
 // Degradê da cobertura (da esquerda para a direita): região já revelada
 // (transparente) → frente de brilho laranja → texto ainda "desligado".
+const GLOW = "color-mix(in srgb, var(--color-primary-500) 95%, transparent)";
+const GLOW_CLEAR = "color-mix(in srgb, var(--color-primary-500) 0%, transparent)";
 const coverFor = (unlit: string) =>
-  `linear-gradient(90deg, rgba(245,130,32,0) 0%, rgba(245,130,32,0) 40%, rgba(245,130,32,0.95) 50%, ${unlit} 60%, ${unlit} 100%)`;
+  `linear-gradient(90deg, ${GLOW_CLEAR} 0%, ${GLOW_CLEAR} 40%, ${GLOW} 50%, ${unlit} 60%, ${unlit} 100%)`;
 
 export function BlurRevealTitle({
   segments,
   className = "",
   tone = "light",
+  as: Tag = "h1",
 }: {
-  segments: Segment[];
+  segments: BlurRevealSegment[];
   className?: string;
   /** Tom do fundo da hero — define a cor do texto ainda não revelado. */
   tone?: keyof typeof UNLIT;
+  /** Nível do título; h2 quando a página já tem o h1 na hero. */
+  as?: "h1" | "h2";
 }) {
   const overlayRef = useRef<HTMLSpanElement>(null);
 
@@ -92,7 +97,7 @@ export function BlurRevealTitle({
     ));
 
   return (
-    <h1 className={`relative ${className}`}>
+    <Tag className={`relative ${className}`}>
       {/* Camada base — texto real, já nas cores finais (revelado pela varredura) */}
       {renderSegments(false)}
 
@@ -111,6 +116,6 @@ export function BlurRevealTitle({
       >
         {renderSegments(true)}
       </span>
-    </h1>
+    </Tag>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 import { Mukta_Vaani } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -34,9 +35,7 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://transpotech.com.br"
   ),
   openGraph: {
-    type: "website",
-    locale: "pt_BR",
-    siteName: "TranspoTech",
+    ...baseOpenGraph,
     title: "TranspoTech | Empilhadeiras Industriais",
     description:
       "Locação, assistência técnica e venda de empilhadeiras industriais. Representante oficial STILL, Linde e Baoli.",

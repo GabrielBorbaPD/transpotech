@@ -46,7 +46,7 @@ export function ElectricFleetSection() {
         {benefits.map((item) => (
           <li
             key={item.title}
-            className="flex items-center gap-3 rounded-xl bg-[#F7F6F6] px-4 py-3"
+            className="flex items-center gap-3 rounded-xl bg-neutral-50 px-4 py-3"
           >
             <item.Icon aria-hidden className="size-5 shrink-0 text-secondary-600" />
             <span className="whitespace-nowrap text-body text-neutral-800">

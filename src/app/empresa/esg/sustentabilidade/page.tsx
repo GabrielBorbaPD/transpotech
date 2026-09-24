@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { SustentabilidadeHeroSection } from "@/components/sustentabilidade/hero-section/hero-section";
 import { PillarsSection } from "@/components/sustentabilidade/pillars-section/pillars-section";
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   description:
     "Sustentabilidade, inclusão e responsabilidade na intralogística: pilares ESG, iniciativas apoiadas, ODS da ONU e canais de governança da TranspoTech.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Sustentabilidade | TranspoTech",
     description:
       "Práticas ESG, projetos apoiados e canais de transparência da TranspoTech.",
@@ -25,7 +27,7 @@ export default function SustentabilidadePage() {
       <SustentabilidadeHeroSection />
 
       {/* Grupo claro — demais seções ESG */}
-      <div className="relative isolate bg-[#fdfdfd] pb-6">
+      <div className="relative isolate bg-background pb-6">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <PillarsSection />
         <InitiativesSection />

@@ -70,6 +70,15 @@
   --color-neutral-800: #2b2728;
   --color-neutral-900: #181616;
 
+  /* ----- Superfícies fora da escala neutral (valores do Figma) ----- */
+  --color-surface-dark: #222221; /* cards escuros sobre foto */
+  --color-surface-muted: #f9f9f9;
+  --color-surface-subtle: #fbfbfb;
+  --color-image-placeholder: #d9d9d9; /* fundo de moldura de imagem */
+
+  /* Brilho verde (secondary-500) no hover dos cards escuros */
+  --shadow-glow-secondary: 0 16px 48px 0 rgba(33, 143, 115, 0.35);
+
   /* Cinza intrínseco do logo TranspoTech (vira neutral-50 sobre fundo escuro) */
   --color-logo-ink: #454a4f;
 

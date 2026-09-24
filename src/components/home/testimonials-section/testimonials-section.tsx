@@ -35,7 +35,7 @@ function CardGlow() {
           className="pointer-events-none absolute top-[-1px] flex h-[587.107px] w-[569.925px] items-center justify-center"
           style={{ left: s.left }}
         >
-          <div className="h-[400.031px] w-[446.974px] rotate-[-60deg] bg-[#f58220] opacity-[0.12] blur-[77.517px]" />
+          <div className="h-[400.031px] w-[446.974px] rotate-[-60deg] bg-primary-500 opacity-[0.12] blur-[77.517px]" />
         </div>
       ))}
     </>
@@ -94,7 +94,7 @@ export function TestimonialsSection() {
         >
           {/* Imagem — oculta em mobile, visível no desktop (mesma largura dos cards:
               flex sizing idêntico ao cardBase → 4 colunas iguais) */}
-          <div className="relative hidden min-h-[280px] overflow-hidden rounded-xl bg-[#d9d9d9] lg:block lg:h-[380px] lg:min-w-0 lg:flex-1 lg:shrink">
+          <div className="relative hidden min-h-[280px] overflow-hidden rounded-xl bg-image-placeholder lg:block lg:h-[380px] lg:min-w-0 lg:flex-1 lg:shrink">
             <Image
               src={warehouse}
               alt="Operação em armazém"

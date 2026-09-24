@@ -32,6 +32,7 @@ export const ROUTES = {
   SIMULADOR: "/simular-economia",
 
   // Externos
+  // PLACEHOLDER: confirmar a URL real do portal de carreiras (Gupy).
   GUPY: "https://transpotech.gupy.io/",
   OUVIDOR_DIGITAL: "https://canal.ouvidordigital.com.br/transpotech",
 } as const;

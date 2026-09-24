@@ -1,5 +1,5 @@
 import { Section } from "@/components/ui/section";
-import { Catalog } from "@/components/catalog/catalog";
+import { Catalog } from "@/components/empilhadeiras-novas/catalog-section/catalog/catalog";
 import { forkliftsNovas } from "@/data/forklifts-novas";
 import { BrandLogoFilters } from "./brand-logo-filters";
 

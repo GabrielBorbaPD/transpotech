@@ -34,7 +34,7 @@ function FleetCard({ title, description, image }: Card) {
   return (
     <div className="group relative flex h-[348px] w-full flex-col overflow-hidden rounded-[20px] lg:max-w-[314px]">
       {/* Parte do texto — 127px de altura; título + descrição centralizados */}
-      <div className="relative flex h-[127px] flex-col items-center gap-2 overflow-hidden bg-[#f7f6f6] px-6 pt-6 text-center">
+      <div className="relative flex h-[127px] flex-col items-center gap-2 overflow-hidden bg-neutral-50 px-6 pt-6 text-center">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-1/2 size-[174px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-500 opacity-[0.1] blur-[58px] transition-opacity duration-500 group-hover:opacity-[0.28]"
@@ -48,7 +48,7 @@ function FleetCard({ title, description, image }: Card) {
       </div>
 
       {/* Imagem centralizada na parte de baixo */}
-      <div className="relative flex flex-1 items-center justify-center bg-[#f7f6f6]/40">
+      <div className="relative flex flex-1 items-center justify-center bg-neutral-50/40">
         <Image
           src={image}
           alt=""

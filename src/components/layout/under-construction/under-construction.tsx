@@ -22,7 +22,7 @@ export function UnderConstruction({
   backHref = ROUTES.HOME,
 }: UnderConstructionProps) {
   return (
-    <section className="relative isolate flex min-h-[70vh] items-center bg-[#fdfdfd]">
+    <section className="relative isolate flex min-h-[70vh] items-center bg-background">
       <MeshBackground className="pointer-events-none absolute inset-0 -z-10" />
 
       {/* as="div": o <section> semântico é o wrapper acima — evita <section>

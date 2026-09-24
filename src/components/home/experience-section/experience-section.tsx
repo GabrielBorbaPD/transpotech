@@ -174,7 +174,7 @@ export function ExperienceSection() {
             ref={(node) => {
               cardElRefs.current[i] = node;
             }}
-            className="group relative flex min-h-[160px] flex-1 flex-col gap-1 overflow-hidden rounded-3xl bg-[#f9f9f9] p-4 lg:h-[172px] lg:p-5"
+            className="group relative flex min-h-[160px] flex-1 flex-col gap-1 overflow-hidden rounded-3xl bg-surface-muted p-4 lg:h-[172px] lg:p-5"
           >
             {/* Ilustração à direita — zoom no hover (desktop) / no card ativo (mobile) */}
             {typeof s.art === "object" ? (

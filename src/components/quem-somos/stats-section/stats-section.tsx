@@ -134,7 +134,7 @@ export function StatsSection() {
         {stats.map((stat, i) => (
           <div
             key={stat.value}
-            className="group relative flex min-h-[144px] flex-1 flex-col overflow-hidden rounded-3xl bg-[#f9f9f9] px-5 py-4 lg:h-[144px]"
+            className="group relative flex min-h-[144px] flex-1 flex-col overflow-hidden rounded-3xl bg-surface-muted px-5 py-4 lg:h-[144px]"
           >
             {/* Ilustração: card "home" usa object-contain à direita;
                 demais seguem a caixa absoluta exata do Figma */}

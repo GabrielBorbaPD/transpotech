@@ -1,26 +1,17 @@
-import { type StaticImageData } from "next/image";
 import { Section } from "@/components/ui/section";
-import { CardImageIcon } from "@/components/ui/card-image-icon";
+import {
+  DarkArtCard,
+  type DarkArtCardArt,
+} from "@/components/layout/dark-art-card";
 import iconGalpao from "@/assets/images/stats/card-galpao.webp";
 import iconCarrinho from "@/assets/images/stats/card-carrinho.webp";
 import iconFabrica from "@/assets/images/stats/card-fabrica.webp";
 import iconCaminhao from "@/assets/images/stats/card-caminhao.webp";
 import iconFloco from "@/assets/images/stats/loc-icon-floco.webp";
 
-// Geometria por card conforme o Figma (node 3603:3365). flip=false em todos.
-// Tons iguais à why-us da home: cores originais + máscara exata do Figma
-// (plateau=false) + blend lighten. left/top alinham o objeto ao texto.
-type Art = {
-  src: StaticImageData;
-  width: number;
-  height: number;
-  maskX: number;
-  maskY: number;
-  left: number;
-  top: number;
-};
-
-type Segment = { title: string; description: string; art: Art };
+// Geometria por card conforme o Figma (node 3603:3365). left/top alinham o
+// objeto ao texto.
+type Segment = { title: string; description: string; art: DarkArtCardArt };
 
 const segments: Segment[] = [
   {
@@ -95,33 +86,6 @@ const segments: Segment[] = [
   },
 ];
 
-function SegmentCard({ title, description, art }: Segment) {
-  return (
-    <div className="group relative flex min-h-[240px] flex-col justify-end overflow-hidden rounded-xl bg-[#222221] p-6 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(33,143,115,0.35)] lg:min-h-[299px]">
-      <CardImageIcon
-        src={art.src}
-        width={art.width}
-        height={art.height}
-        left={art.left}
-        top={art.top}
-        maskX={art.maskX}
-        maskY={art.maskY}
-        flip={false}
-        plateau={false}
-        blendMode="lighten"
-      />
-      <div className="relative mt-[124px] lg:mt-[140px] flex flex-col gap-4">
-        <h3 className="w-[242px] max-w-full font-heading text-h6 font-semibold text-neutral-200">
-          {title}
-        </h3>
-        <p className="text-body leading-[1.35] text-neutral-400">
-          {description}
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export function SegmentsSection() {
   const [topRow, bottomRow] = [segments.slice(0, 3), segments.slice(3)];
 
@@ -146,12 +110,20 @@ export function SegmentsSection() {
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {topRow.map((segment) => (
-            <SegmentCard key={segment.title} {...segment} />
+            <DarkArtCard
+              key={segment.title}
+              {...segment}
+              titleClassName="w-[242px] max-w-full"
+            />
           ))}
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mx-auto lg:w-2/3">
           {bottomRow.map((segment) => (
-            <SegmentCard key={segment.title} {...segment} />
+            <DarkArtCard
+              key={segment.title}
+              {...segment}
+              titleClassName="w-[242px] max-w-full"
+            />
           ))}
         </div>
       </div>

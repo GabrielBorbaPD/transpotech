@@ -1,1 +1,1 @@
-export { BlurRevealTitle } from "./blur-reveal-title";
+export { BlurRevealTitle, type BlurRevealSegment } from "./blur-reveal-title";
