@@ -393,7 +393,7 @@ const detailById: Record<string, ForkliftDetail> = {
   "linde-e35-e50": {
     ...genericDetail,
     media: {
-      hero: { src: detE50, alt: "Empilhadeira Elétrica Linde E35–E50 em pátio", fit: "cover" },
+      hero: { src: detE50, alt: "Empilhadeira Elétrica Linde E35–E100 em pátio", fit: "cover" },
     },
   },
   "linde-h50-evo": {

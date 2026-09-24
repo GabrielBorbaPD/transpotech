@@ -8,6 +8,7 @@ import ech15c from "@/assets/images/empilhadeiras/maq-ech15c.webp";
 import erx from "@/assets/images/empilhadeiras/maq-erx.webp";
 import exhSf from "@/assets/images/empilhadeiras/maq-exhsf.webp";
 import exhSf25 from "@/assets/images/empilhadeiras/maq-exhsf25.webp";
+import exh20 from "@/assets/images/empilhadeiras/maq-exh20.webp";
 import fmx from "@/assets/images/empilhadeiras/maq-fmx.webp";
 import rx20 from "@/assets/images/empilhadeiras/maq-rx20.webp";
 import t20 from "@/assets/images/empilhadeiras/maq-t20.webp";
@@ -17,7 +18,7 @@ import h80evo from "@/assets/images/empilhadeiras/maq-h80evo.webp";
 import kbd35 from "@/assets/images/empilhadeiras/maq-kbd35.webp";
 import kbd70 from "@/assets/images/empilhadeiras/maq-kbd70.webp";
 
-// Catálogo atual da TranspoTech (10 STILL + 4 Linde + 2 Baoli).
+// Catálogo atual da TranspoTech (11 STILL + 4 Linde + 2 Baoli).
 // Specs técnicas baseadas nos dados oficiais STILL, Linde e Baoli (grupo KION);
 // liftHeight = altura máx. de elevação, aisleWidth = corredor operacional (Ast,
 // varia conforme o mastro). Disponibilidade/localização são dados comerciais.
@@ -133,6 +134,26 @@ export const forkliftsNovas: Forklift[] = [
     image: exhSf25,
   },
   {
+    // Specs do site oficial STILL Brasil (EXH 20/Li-Ion) e da ficha técnica
+    // EXH_20_BR_TD — versão Compacta, bateria Li-Ion integrada 24 V/125 Ah;
+    // Ast com palete 1000×1200 transversal. Slug mantido: reconecta o conteúdo
+    // e as fotos de detalhe já existentes em forklift-details.ts.
+    id: "still-exh-20-litio-ion",
+    name: "Transpaleteira Elétrica STILL EXH 20",
+    brand: "STILL",
+    energyTag: "Elétrica",
+    equipmentType: "Transpaleteira",
+    application: "Movimentação horizontal e abastecimento",
+    capacity: "2,0 t",
+    energy: "Elétrica 24V (Li-Ion)",
+    liftHeight: "125 mm",
+    aisleWidth: "2.174 mm",
+    availability: "Pronta entrega",
+    location: "Curitiba - PR",
+    image: exh20,
+    madeInBrazil: true,
+  },
+  {
     id: "still-erx",
     name: "Transpaleteira Elétrica STILL ERX",
     brand: "STILL",
@@ -196,7 +217,7 @@ export const forkliftsNovas: Forklift[] = [
   },
   {
     id: "linde-e35-e50",
-    name: "Empilhadeira Elétrica Linde E35 – E50",
+    name: "Empilhadeira Elétrica Linde E35 – E100",
     brand: "Linde",
     energyTag: "Elétrica",
     equipmentType: "Contrabalançada",

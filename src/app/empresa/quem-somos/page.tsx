@@ -32,21 +32,31 @@ export default function QuemSomosPage() {
       {/* Hero com foto (padrão dos produtos/serviços) */}
       <QuemSomosHeroSection />
 
-      {/* Grupo claro — números e galeria das unidades */}
+      {/* Grupo claro — números da estrutura */}
       <div className="relative isolate bg-[#fdfdfd]">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <StatsSection />
+      </div>
+
+      {/* Abrangência nacional (mapa) logo após os números — bloco dark
+          próprio, com o mesmo fundo/ambient das demais dark sections. */}
+      <div className="relative isolate bg-[#181616]">
+        <DarkAmbient />
+        <StructureSection />
+      </div>
+
+      {/* Grupo claro — galeria das unidades */}
+      <div className="relative isolate bg-[#fdfdfd]">
+        <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <UnitsGallerySection />
       </div>
 
-      {/* Bloco dark contínuo — institucional, estrutura e história.
-          Um só DarkAmbient para os blurs laranja/verde percorrerem as três
-          seções de forma contínua (mesmo padrão das dark sections das outras
-          páginas). */}
+      {/* Bloco dark contínuo — institucional e história. Um só DarkAmbient
+          para os blurs laranja/verde percorrerem as seções de forma contínua
+          (mesmo padrão das dark sections das outras páginas). */}
       <div className="relative isolate bg-[#181616]">
         <DarkAmbient />
         <AboutSection />
-        <StructureSection />
         <HistorySection />
       </div>
 

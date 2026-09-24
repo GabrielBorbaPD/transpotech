@@ -64,8 +64,11 @@ export function ScrollReveal() {
               (child) => !isDecorative(child)
             );
 
+      // `data-reveal-atom`: entra como um bloco só, sem descer nos filhos
+      // (ex.: mapas SVG interativos, cujos paths controlam a própria opacidade).
       const atomsOf = (el: HTMLElement): HTMLElement[] => {
-        if (isVisualUnit(el)) return [el];
+        if (isVisualUnit(el) || el.hasAttribute("data-reveal-atom"))
+          return [el];
         const kids = childrenToReveal(el);
         return kids.length === 0 ? [el] : kids.flatMap(atomsOf);
       };

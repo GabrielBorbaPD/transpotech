@@ -1,6 +1,6 @@
 // Capitais e unidades TranspoTech projetadas nas coordenadas do br.svg
 // (Mercator, calibrado por mínimos quadrados a partir dos bounding boxes dos
-// estados em state-maps.ts). Pontos muito próximos da capital (Nova Santa
+// estados em brazil-states.ts). Pontos muito próximos da capital (Nova Santa
 // Rita, Curitiba, Aparecida de Goiânia) têm um leve afastamento visual para
 // os marcadores não se sobreporem.
 // Tempos = deslocamento rodoviário aproximado desde a capital.
@@ -56,7 +56,9 @@ export const STATE_UNITS: Record<string, StateUnitsItem> = {
         x: 552.2,
         y: 697.0,
         time: "2h30",
-        labelPos: "left",
+        // Acima do ponto: à esquerda, o bloco (cidade + tempo) encostava no
+        // de Blumenau, logo abaixo.
+        labelPos: "top",
         arcFlip: true,
       },
       {
@@ -86,7 +88,8 @@ export const STATE_UNITS: Record<string, StateUnitsItem> = {
         x: 505.3,
         y: 762.2,
         time: "2h",
-        labelPos: "left",
+        // Acima do ponto: à esquerda, encostava em Nova Santa Rita (abaixo).
+        labelPos: "top",
       },
     ],
   },
