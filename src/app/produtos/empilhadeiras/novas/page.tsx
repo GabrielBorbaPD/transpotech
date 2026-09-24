@@ -6,7 +6,8 @@ import { CompareSection } from "@/components/layout/compare-section/compare-sect
 import { ConsiderUsedSection } from "@/components/empilhadeiras-novas/consider-used-section/consider-used-section";
 import { WhyChooseSection } from "@/components/empilhadeiras-novas/why-choose-section/why-choose-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
-import { faqEmpilhadeiras } from "@/data/faq-empilhadeiras";
+import { getFaqItems } from "@/sanity/queries/faq";
+import { getForkliftsNovas } from "@/sanity/queries/forklifts";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
 import { DriftMesh } from "@/components/layout/drift-mesh";
@@ -25,7 +26,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function EmpilhadeirasNovasPage() {
+export default async function EmpilhadeirasNovasPage() {
+  const [forklifts, faqItems] = await Promise.all([
+    getForkliftsNovas(),
+    getFaqItems("empilhadeiras"),
+  ]);
+
   return (
     <main>
       {/* Grupo claro — catálogo.
@@ -37,7 +43,7 @@ export default function EmpilhadeirasNovasPage() {
           fade
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-svh"
         />
-        <CatalogSection />
+        <CatalogSection forklifts={forklifts} />
       </div>
 
       {/* Comparativo — fundo branco, cards neutral-50 */}
@@ -57,7 +63,7 @@ export default function EmpilhadeirasNovasPage() {
         <FaqSection
           titleRegular="Perguntas frequentes sobre "
           titleAccent="locação de empilhadeiras"
-          items={faqEmpilhadeiras}
+          items={faqItems}
         />
       </div>
 

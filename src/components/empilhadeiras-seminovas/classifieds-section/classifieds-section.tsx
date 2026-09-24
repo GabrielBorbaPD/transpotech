@@ -4,13 +4,14 @@ import { useState } from "react";
 import { Section } from "@/components/ui/section";
 import { ProductCard } from "@/components/layout/product-card/product-card";
 import { QuoteModal } from "@/components/layout/quote-modal/quote-modal";
-import { forkliftsSeminovas } from "@/data/forklifts-seminovas";
 import { ROUTES } from "@/lib/routes";
 import type { Forklift } from "@/types/forklift.types";
 
 type ClassifiedsSectionProps = {
-  /** Equipamentos exibidos. Default: todos os classificados. */
-  items?: Forklift[];
+  /** Equipamentos exibidos. */
+  items: Forklift[];
+  /** Opções do modal de orçamento. Default: `items`. */
+  quoteOptions?: Forklift[];
   eyebrow?: string;
   title?: string;
   /** id de âncora — usado por links que apontam direto para a lista. */
@@ -21,7 +22,8 @@ type ClassifiedsSectionProps = {
 // detalhe de novas): os cards fluem na vertical, quebrando em novas linhas
 // conforme o estoque cresce, sem rolagem horizontal.
 export function ClassifiedsSection({
-  items = forkliftsSeminovas,
+  items,
+  quoteOptions = items,
   eyebrow = "Classificados",
   title = "Seminovas disponíveis agora",
   id,
@@ -61,7 +63,7 @@ export function ClassifiedsSection({
       {quoteForId && (
         <QuoteModal
           onClose={() => setQuoteForId(null)}
-          forklifts={forkliftsSeminovas}
+          forklifts={quoteOptions}
           initialSelectedId={quoteForId}
         />
       )}

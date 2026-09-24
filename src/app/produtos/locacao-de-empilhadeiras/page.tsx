@@ -14,7 +14,7 @@ import { RentVsBuySection } from "@/components/locacao-de-empilhadeiras/rent-vs-
 import { FleetManagerSection } from "@/components/locacao-de-empilhadeiras/fleet-manager-section/fleet-manager-section";
 import { CompareSection } from "@/components/layout/compare-section/compare-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
-import { faqEmpilhadeiras } from "@/data/faq-empilhadeiras";
+import { getFaqItems } from "@/sanity/queries/faq";
 import { BrandsSection } from "@/components/layout/brands-section/brands-section";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
@@ -41,7 +41,9 @@ const dealerBrands = [
   { src: baoli, alt: "Baoli" },
 ];
 
-export default function LocacaoPage() {
+export default async function LocacaoPage() {
+  const faqItems = await getFaqItems("empilhadeiras");
+
   return (
     <main>
       <LocacaoHeroSection />
@@ -96,7 +98,7 @@ export default function LocacaoPage() {
         <FaqSection
           titleRegular="Perguntas frequentes sobre "
           titleAccent="locação de empilhadeiras"
-          items={faqEmpilhadeiras}
+          items={faqItems}
         />
       </div>
 

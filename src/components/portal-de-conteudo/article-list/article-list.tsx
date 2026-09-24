@@ -5,16 +5,13 @@ import { Search, SearchX } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { articles as allArticles } from "@/data/articles";
+import type { Article } from "@/data/articles";
 import { ArticleCard } from "@/components/layout/article-card/article-card";
 
 // Publicações exibidas por vez; "Carregar mais" acrescenta outro bloco.
 const PAGE_SIZE = 6;
 
 const unique = (values: string[]) => Array.from(new Set(values));
-
-// Tags de filtro = categorias das publicações.
-const categories = unique(allArticles.map((a) => a.category));
 
 function TagFilter({
   active,
@@ -41,7 +38,12 @@ function TagFilter({
   );
 }
 
-export function ArticleList() {
+export function ArticleList({ articles: allArticles }: { articles: Article[] }) {
+  // Tags de filtro = categorias das publicações.
+  const categories = useMemo(
+    () => unique(allArticles.map((a) => a.category)),
+    [allArticles]
+  );
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -56,7 +58,7 @@ export function ArticleList() {
       if (category && a.category !== category) return false;
       return true;
     });
-  }, [search, category]);
+  }, [allArticles, search, category]);
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = filtered.length > visible.length;

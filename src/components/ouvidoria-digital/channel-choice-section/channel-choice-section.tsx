@@ -1,6 +1,5 @@
 import { Section } from "@/components/ui/section";
 import { TextLink } from "@/components/ui/text-link";
-import { ROUTES } from "@/lib/routes";
 
 type Channel = {
   title: string;
@@ -12,7 +11,7 @@ type Channel = {
   accent: "primary" | "secondary";
 };
 
-const channels: Channel[] = [
+const getChannels = (ouvidorDigitalUrl: string): Channel[] => [
   {
     title: "Ouvidoria Digital",
     description:
@@ -38,7 +37,7 @@ const channels: Channel[] = [
       "Quero relatar discriminação",
     ],
     ctaLabel: "Acessar Canal da Transparência",
-    href: ROUTES.OUVIDOR_DIGITAL,
+    href: ouvidorDigitalUrl,
     accent: "secondary",
   },
 ];
@@ -99,7 +98,15 @@ function ChannelCard({
   );
 }
 
-export function ChannelChoiceSection() {
+type ChannelChoiceSectionProps = {
+  /** URL do canal de relatos do Ouvidor Digital (siteSettings). */
+  ouvidorDigitalUrl: string;
+};
+
+export function ChannelChoiceSection({
+  ouvidorDigitalUrl,
+}: ChannelChoiceSectionProps) {
+  const channels = getChannels(ouvidorDigitalUrl);
   return (
     <Section data-header-dark className="flex flex-col gap-10 lg:gap-12">
       <div className="flex max-w-[720px] flex-col gap-4">

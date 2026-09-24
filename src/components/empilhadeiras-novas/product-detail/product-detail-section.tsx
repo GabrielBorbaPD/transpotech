@@ -5,10 +5,19 @@ import { Breadcrumb } from "@/components/ui/breadcrumb/breadcrumb";
 import { ProductGallery } from "@/components/layout/product-gallery/product-gallery";
 import { ProductQuoteButton } from "@/components/layout/product-quote-button/product-quote-button";
 import { ROUTES } from "@/lib/routes";
-import { forkliftsNovas, stateFromLocation } from "@/data/forklifts-novas";
+import { stateFromLocation } from "@/data/forklifts-novas";
 import type { Forklift } from "@/types/forklift.types";
 
-export function ProductDetailSection({ forklift }: { forklift: Forklift }) {
+type ProductDetailSectionProps = {
+  forklift: Forklift;
+  /** Catálogo completo, oferecido no modal de orçamento. */
+  forklifts: Forklift[];
+};
+
+export function ProductDetailSection({
+  forklift,
+  forklifts,
+}: ProductDetailSectionProps) {
   const [firstWord, ...restWords] = forklift.name.split(" ");
   const galleryImages = [forklift.image];
   const specs = [
@@ -82,7 +91,7 @@ export function ProductDetailSection({ forklift }: { forklift: Forklift }) {
 
           {/* Ações */}
           <div className="flex flex-col gap-3 sm:flex-row">
-            <ProductQuoteButton forklift={forklift} forklifts={forkliftsNovas} />
+            <ProductQuoteButton forklift={forklift} forklifts={forklifts} />
             <Button
               variant="gray"
               size="lg"

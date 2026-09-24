@@ -11,7 +11,7 @@ import { DifferentialsSection } from "@/components/servicos/differentials-sectio
 import { TechStructureSection } from "@/components/servicos/tech-structure-section/tech-structure-section";
 import { SegmentsSection } from "@/components/servicos/segments-section/segments-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
-import { faqServicos } from "@/data/faq-servicos";
+import { getFaqItems } from "@/sanity/queries/faq";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
@@ -28,7 +28,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ServicosPage() {
+export default async function ServicosPage() {
+  const faqItems = await getFaqItems("servicos");
+
   return (
     <main>
       <ServicosHeroSection />
@@ -89,7 +91,7 @@ export default function ServicosPage() {
         <FaqSection
           titleRegular="Perguntas frequentes sobre "
           titleAccent="serviços e manutenção"
-          items={faqServicos}
+          items={faqItems}
         />
       </div>
 

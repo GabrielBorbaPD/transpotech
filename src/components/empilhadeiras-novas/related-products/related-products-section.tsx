@@ -4,12 +4,20 @@ import { useState } from "react";
 import { Section } from "@/components/ui/section";
 import { TextLink } from "@/components/ui/text-link";
 import { ProductCard } from "@/components/layout/product-card/product-card";
-import { forkliftsNovas } from "@/data/forklifts-novas";
 import { QuoteModal } from "@/components/layout/quote-modal/quote-modal";
 import { ROUTES } from "@/lib/routes";
 import type { Forklift } from "@/types/forklift.types";
 
-export function RelatedProductsSection({ items }: { items: Forklift[] }) {
+type RelatedProductsSectionProps = {
+  items: Forklift[];
+  /** Catálogo completo, oferecido no modal de orçamento. */
+  forklifts: Forklift[];
+};
+
+export function RelatedProductsSection({
+  items,
+  forklifts,
+}: RelatedProductsSectionProps) {
   const [quoteForId, setQuoteForId] = useState<string | null>(null);
 
   if (items.length === 0) return null;
@@ -44,7 +52,7 @@ export function RelatedProductsSection({ items }: { items: Forklift[] }) {
       {quoteForId && (
         <QuoteModal
           onClose={() => setQuoteForId(null)}
-          forklifts={forkliftsNovas}
+          forklifts={forklifts}
           initialSelectedId={quoteForId}
         />
       )}

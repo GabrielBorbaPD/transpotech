@@ -9,7 +9,7 @@ import { BatteryTypesSection } from "@/components/baterias-e-carregadores/batter
 import { RequestStepsSection } from "@/components/baterias-e-carregadores/request-steps-section/request-steps-section";
 import { WhyTranspotechSection } from "@/components/baterias-e-carregadores/why-transpotech-section/why-transpotech-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
-import { faqBaterias } from "@/data/faq-baterias";
+import { getFaqItems } from "@/sanity/queries/faq";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
@@ -26,7 +26,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BateriasPage() {
+export default async function BateriasPage() {
+  const faqItems = await getFaqItems("baterias");
+
   return (
     <main>
       <BateriasHeroSection />
@@ -64,7 +66,7 @@ export default function BateriasPage() {
         <FaqSection
           titleRegular="Dúvidas frequentes sobre "
           titleAccent="baterias e carregadores"
-          items={faqBaterias}
+          items={faqItems}
         />
       </div>
 

@@ -11,7 +11,8 @@ import { FaqSection } from "@/components/layout/faq/faq-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DriftMesh } from "@/components/layout/drift-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
-import { faqOuvidoria } from "@/data/faq-ouvidoria";
+import { getFaqItems } from "@/sanity/queries/faq";
+import { getSiteSettings } from "@/sanity/queries/site-settings";
 
 export const metadata: Metadata = {
   title: "Ouvidoria Digital",
@@ -25,7 +26,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function OuvidoriaPage() {
+export default async function OuvidoriaPage() {
+  const [settings, faqItems] = await Promise.all([
+    getSiteSettings(),
+    getFaqItems("ouvidoria"),
+  ]);
+
   return (
     <main>
       {/* Grupo claro 1 */}
@@ -44,7 +50,7 @@ export default function OuvidoriaPage() {
       {/* Bloco dark — Qual canal devo usar + Como funciona a Ouvidoria */}
       <div className="relative isolate bg-[#181616]">
         <DarkAmbient />
-        <ChannelChoiceSection />
+        <ChannelChoiceSection ouvidorDigitalUrl={settings.ouvidorDigitalUrl} />
         <ProcessSection />
       </div>
 
@@ -58,7 +64,7 @@ export default function OuvidoriaPage() {
         <FaqSection
           titleRegular="Perguntas "
           titleAccent="frequentes"
-          items={faqOuvidoria}
+          items={faqItems}
         />
       </div>
     </main>

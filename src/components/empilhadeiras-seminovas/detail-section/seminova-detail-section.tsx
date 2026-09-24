@@ -2,7 +2,6 @@ import { MapPin } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { Breadcrumb } from "@/components/ui/breadcrumb/breadcrumb";
 import { ProductGallery } from "@/components/layout/product-gallery/product-gallery";
-import { forkliftsSeminovas } from "@/data/forklifts-seminovas";
 import { ProductQuoteButton } from "@/components/layout/product-quote-button/product-quote-button";
 import { ROUTES } from "@/lib/routes";
 import { stateFromLocation } from "@/data/forklifts-novas";
@@ -12,7 +11,16 @@ import type { Forklift } from "@/types/forklift.types";
 // (galeria + informações), com as características de seminova e um único CTA
 // de orçamento. Sem palco do modelo nem destaques — o classificado é sobre o
 // equipamento em estoque, não sobre a linha do fabricante.
-export function SeminovaDetailSection({ forklift }: { forklift: Forklift }) {
+type SeminovaDetailSectionProps = {
+  forklift: Forklift;
+  /** Estoque completo, oferecido no modal de orçamento. */
+  forklifts: Forklift[];
+};
+
+export function SeminovaDetailSection({
+  forklift,
+  forklifts,
+}: SeminovaDetailSectionProps) {
   const [firstWord, ...restWords] = forklift.name.split(" ");
   const galleryImages = forklift.gallery ?? [forklift.image];
   const specs = [
@@ -88,7 +96,7 @@ export function SeminovaDetailSection({ forklift }: { forklift: Forklift }) {
           <div className="flex flex-col gap-3 sm:flex-row">
             <ProductQuoteButton
               forklift={forklift}
-              forklifts={forkliftsSeminovas}
+              forklifts={forklifts}
             />
           </div>
         </div>

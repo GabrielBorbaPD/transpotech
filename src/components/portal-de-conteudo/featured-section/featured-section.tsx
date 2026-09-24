@@ -2,12 +2,10 @@ import Image from "next/image";
 import { ArrowRight, Clock } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
-import { featuredArticle } from "@/data/articles";
+import type { Article } from "@/data/articles";
 import { ROUTES } from "@/lib/routes";
 
-export function FeaturedSection() {
-  const article = featuredArticle;
-
+export function FeaturedSection({ article }: { article: Article }) {
   return (
     <Section className="flex flex-col pt-0">
       {/* Linha divisória fina — mesmo tom dos filtros do catálogo. 20px acima

@@ -9,7 +9,7 @@ import { RequestStepsSection } from "@/components/pecas/request-steps-section/re
 import { InfoCardsSection } from "@/components/pecas/info-cards-section/info-cards-section";
 import { WhyTranspotechSection } from "@/components/pecas/why-transpotech-section/why-transpotech-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
-import { faqPecas } from "@/data/faq-pecas";
+import { getFaqItems } from "@/sanity/queries/faq";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
@@ -26,7 +26,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PecasPage() {
+export default async function PecasPage() {
+  const faqItems = await getFaqItems("pecas");
+
   return (
     <main>
       <PecasHeroSection />
@@ -63,7 +65,7 @@ export default function PecasPage() {
         <FaqSection
           titleRegular="Dúvidas frequentes sobre "
           titleAccent="peças"
-          items={faqPecas}
+          items={faqItems}
         />
       </div>
 

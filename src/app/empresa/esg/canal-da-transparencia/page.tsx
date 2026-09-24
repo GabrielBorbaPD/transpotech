@@ -11,7 +11,8 @@ import { FaqSection } from "@/components/layout/faq/faq-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DriftMesh } from "@/components/layout/drift-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
-import { faqCanalTransparencia } from "@/data/faq-canal-transparencia";
+import { getFaqItems } from "@/sanity/queries/faq";
+import { getSiteSettings } from "@/sanity/queries/site-settings";
 import { ROUTES } from "@/lib/routes";
 
 export const metadata: Metadata = {
@@ -26,7 +27,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CanalTransparenciaPage() {
+export default async function CanalTransparenciaPage() {
+  const [settings, faqItems] = await Promise.all([
+    getSiteSettings(),
+    getFaqItems("canal-transparencia"),
+  ]);
+
   return (
     <main>
       {/* Grupo claro 1 */}
@@ -34,7 +40,7 @@ export default function CanalTransparenciaPage() {
         {/* Hero — malha grande que anda pelo fundo (sem cursor) */}
         <div className="relative">
           <DriftMesh className="pointer-events-none absolute inset-0 -z-10" />
-          <CanalHeroSection />
+          <CanalHeroSection ouvidorDigitalUrl={settings.ouvidorDigitalUrl} />
         </div>
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
@@ -55,7 +61,7 @@ export default function CanalTransparenciaPage() {
         <FaqSection
           titleRegular="Perguntas "
           titleAccent="frequentes"
-          items={faqCanalTransparencia}
+          items={faqItems}
         />
       </div>
 

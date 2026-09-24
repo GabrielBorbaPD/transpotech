@@ -14,28 +14,32 @@ import { NewsletterSection } from "@/components/layout/newsletter-section/newsle
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { DriftMesh } from "@/components/layout/drift-mesh";
 import {
-  articles,
-  getArticleById,
+  articleSections,
+  getArticleSections,
+} from "@/components/portal-de-conteudo/article-sections";
+import {
+  getArticleBySlug,
+  getArticleSitemapEntries,
   getRelatedArticles,
-} from "@/data/articles";
+} from "@/sanity/queries/articles";
 import { ROUTES } from "@/lib/routes";
 
 type ArticlePageProps = {
   params: Promise<{ slug: string }>;
 };
 
-// Conjunto fixo de artigos: slugs fora de generateStaticParams retornam 404.
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return articles.map((article) => ({ slug: article.id }));
+// Artigos publicados no CMS depois do build são gerados na primeira visita
+// (dynamicParams padrão); slug inexistente cai no notFound() da página.
+export async function generateStaticParams() {
+  const entries = await getArticleSitemapEntries();
+  return entries.map((entry) => ({ slug: entry.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticleById(slug);
+  const article = await getArticleBySlug(slug);
 
   if (!article) {
     return { title: "Conteúdo não encontrado" };
@@ -55,11 +59,14 @@ export async function generateMetadata({
 
 export default async function ArtigoPage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  const article = getArticleById(slug);
+  const article = await getArticleBySlug(slug);
 
   if (!article) notFound();
 
-  const related = getRelatedArticles(article, 3);
+  const related = await getRelatedArticles(article, 3);
+  const sections = article.body
+    ? getArticleSections(article.body)
+    : articleSections;
 
   return (
     <main>
@@ -94,7 +101,7 @@ export default async function ArtigoPage({ params }: ArticlePageProps) {
       {/* Corpo do artigo — texto à esquerda, aside (compartilhar + sumário) à direita */}
       <div className="bg-background">
         <Section className="flex flex-col gap-10 pt-2 lg:flex-row lg:items-start lg:justify-between lg:gap-12 lg:pt-4">
-          <ArticleBody article={article} />
+          <ArticleBody article={article} sections={sections} />
 
           <aside className="flex flex-col gap-6 lg:sticky lg:top-28 lg:w-[300px] lg:shrink-0">
             {/* Caixinha de compartilhar */}
@@ -106,7 +113,7 @@ export default async function ArtigoPage({ params }: ArticlePageProps) {
             </div>
 
             {/* Sumário com os tópicos em link */}
-            <ArticleToc />
+            {sections.length > 0 && <ArticleToc sections={sections} />}
           </aside>
         </Section>
       </div>

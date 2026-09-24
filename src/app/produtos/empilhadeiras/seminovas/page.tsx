@@ -12,7 +12,8 @@ import { ConsiderNewSection } from "@/components/empilhadeiras-seminovas/conside
 import { ClassifiedsSection } from "@/components/empilhadeiras-seminovas/classifieds-section/classifieds-section";
 import { CompareSection } from "@/components/layout/compare-section/compare-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
-import { faqSeminovas } from "@/data/faq-seminovas";
+import { getFaqItems } from "@/sanity/queries/faq";
+import { getForkliftsSeminovas } from "@/sanity/queries/forklifts";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
 
@@ -28,7 +29,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function EmpilhadeirasSeminovasPage() {
+export default async function EmpilhadeirasSeminovasPage() {
+  const [forklifts, faqItems] = await Promise.all([
+    getForkliftsSeminovas(),
+    getFaqItems("seminovas"),
+  ]);
+
   return (
     <main>
       <SeminovasHeroSection />
@@ -75,7 +81,7 @@ export default function EmpilhadeirasSeminovasPage() {
           seção "Outras opções que podem servir" das páginas de detalhe. Fundo
           neutral-50 (igual ao dos relacionados) para os cards brancos destacarem. */}
       <div className="relative isolate bg-neutral-50">
-        <ClassifiedsSection id="disponiveis-agora" />
+        <ClassifiedsSection id="disponiveis-agora" items={forklifts} />
       </div>
 
       {/* Grupo claro 4 — FAQ (sem malha). pb-6 compensa o -mt-6 do footer (topo
@@ -84,7 +90,7 @@ export default function EmpilhadeirasSeminovasPage() {
         <FaqSection
           titleRegular="Dúvidas frequentes sobre "
           titleAccent="seminovas"
-          items={faqSeminovas}
+          items={faqItems}
         />
       </div>
     </main>

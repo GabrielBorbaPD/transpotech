@@ -1,9 +1,9 @@
 import { Section } from "@/components/ui/section";
 import { Catalog } from "@/components/empilhadeiras-novas/catalog-section/catalog/catalog";
-import { forkliftsNovas } from "@/data/forklifts-novas";
+import type { Forklift } from "@/types/forklift.types";
 import { BrandLogoFilters } from "./brand-logo-filters";
 
-export function CatalogSection() {
+export function CatalogSection({ forklifts }: { forklifts: Forklift[] }) {
   return (
     <Section className="flex flex-col gap-10 lg:gap-12">
       {/* Cabeçalho da página */}
@@ -20,11 +20,11 @@ export function CatalogSection() {
         </div>
 
         {/* Logos clicáveis: filtram o catálogo pela marca (Client Component;
-            esta seção segue no servidor, com forkliftsNovas fora do bundle). */}
+            esta seção segue no servidor). */}
         <BrandLogoFilters />
       </div>
 
-      <Catalog forklifts={forkliftsNovas} />
+      <Catalog forklifts={forklifts} />
     </Section>
   );
 }

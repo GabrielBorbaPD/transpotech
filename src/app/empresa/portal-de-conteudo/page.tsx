@@ -7,6 +7,7 @@ import { ArticleList } from "@/components/portal-de-conteudo/article-list/articl
 import { NewsletterSection } from "@/components/layout/newsletter-section/newsletter-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DriftMesh } from "@/components/layout/drift-mesh";
+import { getArticles } from "@/sanity/queries/articles";
 
 export const metadata: Metadata = {
   title: "Portal de Conteúdo",
@@ -20,7 +21,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PortalConteudoPage() {
+export default async function PortalConteudoPage() {
+  const articles = await getArticles();
+  const [featured] = articles;
+
   return (
     <main>
       {/* Página inteira num só tom (neutral-50) com a malha no fundo, como em
@@ -36,8 +40,8 @@ export default function PortalConteudoPage() {
         />
         <HoverMesh className="pointer-events-none absolute inset-x-0 bottom-0 top-[100svh] -z-10" />
         <PortalHeroSection />
-        <FeaturedSection />
-        <ArticleList />
+        {featured && <FeaturedSection article={featured} />}
+        <ArticleList articles={articles} />
         <NewsletterSection />
       </div>
     </main>

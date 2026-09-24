@@ -1,35 +1,21 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Building2 } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { getUnitMapsUrl, getUnitTitle, units, type Unit } from "@/data/units";
+import { getUnitMapsUrl, getUnitTitle, type Unit } from "@/data/units";
 
-// Ordem de exibição desta galeria (independente da ordem por estado usada no
-// rodapé e na Contato). Cada par [cidade, complemento] aponta para um registro
-// de `units`, que segue sendo a fonte única de nomes, endereços e links.
-const ORDER: [city: string, note?: string][] = [
-  ["Maringá - PR"],
-  ["Joinville - SC"],
-  ["Nova Santa Rita - RS"],
-  ["Caxias do Sul - RS"],
-  ["Indaiatuba - SP"],
-  ["Blumenau - SC", "Seminovas"],
-  ["Blumenau - SC", "Hub Adm. e Técnico"],
-  ["Aparecida de Goiânia - GO"],
-  ["Chapecó - SC"],
-  ["Curitiba - PR"],
-  ["Itajaí - SC"],
-];
+// A galeria segue `galleryOrder`, independente da ordem por estado usada no
+// rodapé e na Contato; unidade sem posição vai para o fim (sort estável).
+const byGalleryOrder = (a: Unit, b: Unit) =>
+  (a.galleryOrder ?? Number.MAX_SAFE_INTEGER) -
+  (b.galleryOrder ?? Number.MAX_SAFE_INTEGER);
 
-const galleryUnits: Unit[] = ORDER.map(([city, note]) => {
-  const unit = units.find((u) => u.city === city && u.note === note);
-  if (!unit) throw new Error(`Unidade não encontrada: ${city} ${note ?? ""}`);
-  return unit;
-});
+type UnitsGallerySectionProps = { units: Unit[] };
 
-export function UnitsGallerySection() {
+export function UnitsGallerySection({ units }: UnitsGallerySectionProps) {
+  const galleryUnits = useMemo(() => [...units].sort(byGalleryOrder), [units]);
   const trackRef = useRef<HTMLDivElement>(null);
 
   const scrollByCard = (dir: 1 | -1) => {
@@ -103,7 +89,10 @@ export function UnitsGallerySection() {
                 {unit.image ? (
                   <Image
                     src={unit.image}
-                    alt={`Fachada da unidade TranspoTech em ${title}`}
+                    alt={
+                      unit.image.alt ||
+                      `Fachada da unidade TranspoTech em ${title}`
+                    }
                     fill
                     sizes="(min-width: 1024px) 320px, 288px"
                     className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"

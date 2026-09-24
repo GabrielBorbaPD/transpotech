@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
@@ -8,24 +8,28 @@ import {
   getUnitMapsQuery,
   getUnitMapsUrl,
   getUnitTitle,
-  units,
+  type Unit,
 } from "@/data/units";
 
 // Monta um card por unidade (Blumenau tem duas: Hub Técnico e Seminovas),
 // na mesma ordem do rodapé. O link do mapa aponta para a busca real no Google
 // Maps da unidade.
-const cards = units.map((unit) => ({
-  key: `${unit.city}-${unit.note ?? ""}`,
-  title: getUnitTitle(unit),
-  mapUrl: getUnitMapsUrl(unit),
-  // Mapa real embutido do Google Maps (sem necessidade de API key).
-  embedUrl: `https://maps.google.com/maps?q=${encodeURIComponent(
-    getUnitMapsQuery(unit)
-  )}&z=15&output=embed`,
-  address: unit.address,
-}));
+const toCards = (units: Unit[]) =>
+  units.map((unit) => ({
+    key: `${unit.city}-${unit.note ?? ""}`,
+    title: getUnitTitle(unit),
+    mapUrl: getUnitMapsUrl(unit),
+    // Mapa real embutido do Google Maps (sem necessidade de API key).
+    embedUrl: `https://maps.google.com/maps?q=${encodeURIComponent(
+      getUnitMapsQuery(unit)
+    )}&z=15&output=embed`,
+    address: unit.address,
+  }));
 
-export function UnitsSection() {
+type UnitsSectionProps = { units: Unit[] };
+
+export function UnitsSection({ units }: UnitsSectionProps) {
+  const cards = useMemo(() => toCards(units), [units]);
   const trackRef = useRef<HTMLDivElement>(null);
 
   const scrollByCard = (dir: 1 | -1) => {

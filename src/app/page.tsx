@@ -18,6 +18,7 @@ import { CtaSection } from "@/components/layout/cta/cta-section";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { ROUTES } from "@/lib/routes";
+import { getHomeArticles } from "@/sanity/queries/articles";
 
 export const metadata: Metadata = {
   title: "TranspoTech | Empilhadeiras, Locação e Manutenção",
@@ -32,7 +33,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const articles = await getHomeArticles();
+
   return (
     <main>
       <HeroSection />
@@ -67,7 +70,7 @@ export default function HomePage() {
       {/* Grupo claro 3 — Blog (fundo neutral-50, branco mais escuro) */}
       <div className="relative isolate bg-neutral-50">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
-        <BlogSection />
+        <BlogSection articles={articles} />
       </div>
       <CtaSection />
     </main>

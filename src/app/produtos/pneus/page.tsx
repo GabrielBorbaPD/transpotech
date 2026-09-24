@@ -9,7 +9,7 @@ import { QuotationStepsSection } from "@/components/pneus/quotation-steps-sectio
 import { WhyTranspotechSection } from "@/components/pneus/why-transpotech-section/why-transpotech-section";
 import { BrandsSection } from "@/components/layout/brands-section/brands-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
-import { faqPneus } from "@/data/faq-pneus";
+import { getFaqItems } from "@/sanity/queries/faq";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
@@ -42,7 +42,9 @@ const partnerBrands = [
   { src: trelleborg, alt: "Trelleborg", mono: false },
 ];
 
-export default function PneusPage() {
+export default async function PneusPage() {
+  const faqItems = await getFaqItems("pneus");
+
   return (
     <main>
       <PneusHeroSection />
@@ -90,7 +92,7 @@ export default function PneusPage() {
         <FaqSection
           titleRegular="Dúvidas frequentes sobre "
           titleAccent="pneus"
-          items={faqPneus}
+          items={faqItems}
         />
       </div>
 

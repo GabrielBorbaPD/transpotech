@@ -1,12 +1,16 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
-import { ROUTES } from "@/lib/routes";
 
 // Hero centralizada (mesmo padrão de Ouvidoria / Quem Somos) — label, título
 // grande e parágrafo no centro; a malha animada (DriftMesh) fica no wrapper da
 // página.
-export function CanalHeroSection() {
+type CanalHeroSectionProps = {
+  /** URL do canal de relatos do Ouvidor Digital (siteSettings). */
+  ouvidorDigitalUrl: string;
+};
+
+export function CanalHeroSection({ ouvidorDigitalUrl }: CanalHeroSectionProps) {
   return (
     <Section
       data-header-hero
@@ -34,7 +38,7 @@ export function CanalHeroSection() {
       <Button
         variant="primary"
         size="lg"
-        href={ROUTES.OUVIDOR_DIGITAL}
+        href={ouvidorDigitalUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-4 w-full lg:mt-0 lg:w-auto"

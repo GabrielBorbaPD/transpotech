@@ -15,6 +15,8 @@ import { CtaSection } from "@/components/layout/cta/cta-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
 import { ROUTES } from "@/lib/routes";
+import { getSiteSettings } from "@/sanity/queries/site-settings";
+import { getUnits } from "@/sanity/queries/units";
 
 export const metadata: Metadata = {
   title: "Quem Somos",
@@ -28,7 +30,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function QuemSomosPage() {
+export default async function QuemSomosPage() {
+  const [settings, units] = await Promise.all([getSiteSettings(), getUnits()]);
+
   return (
     <main>
       {/* Hero com foto (padrão dos produtos/serviços) */}
@@ -50,7 +54,7 @@ export default function QuemSomosPage() {
       {/* Grupo claro — galeria das unidades */}
       <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
-        <UnitsGallerySection />
+        <UnitsGallerySection units={units} />
       </div>
 
       {/* Bloco dark contínuo — institucional e história. Um só DarkAmbient
@@ -66,7 +70,7 @@ export default function QuemSomosPage() {
       <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <CultureSection />
-        <CareersSection />
+        <CareersSection careersUrl={settings.careersUrl} />
         <EsgGovernanceSection />
         <WhyChooseSection />
       </div>

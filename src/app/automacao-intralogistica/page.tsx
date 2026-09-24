@@ -11,7 +11,7 @@ import { SegmentsSection } from "@/components/automacao-intralogistica/segments-
 // Seção "O que nossos clientes dizem" temporariamente oculta a pedido do cliente.
 // import { CasesSection } from "@/components/automacao-intralogistica/cases-section/cases-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
-import { faqAutomacao } from "@/data/faq-automacao";
+import { getFaqItems } from "@/sanity/queries/faq";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
@@ -29,7 +29,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AutomacaoPage() {
+export default async function AutomacaoPage() {
+  const faqItems = await getFaqItems("automacao");
+
   return (
     <main>
       <AutomacaoHeroSection />
@@ -74,7 +76,7 @@ export default function AutomacaoPage() {
         <FaqSection
           titleRegular="Perguntas que sempre recebemos "
           titleAccent="sobre automação"
-          items={faqAutomacao}
+          items={faqItems}
         />
       </div>
 

@@ -6,14 +6,19 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { ROUTES } from "@/lib/routes";
 
 // Botão do portal de carreiras — renderizado no cabeçalho (desktop) e após os
 // cards (mobile), via `className` de visibilidade.
-function GupyButton({ className = "" }: { className?: string }) {
+function GupyButton({
+  href,
+  className = "",
+}: {
+  href: string;
+  className?: string;
+}) {
   return (
     <a
-      href={ROUTES.GUPY}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       className={`h-12 w-fit items-center justify-center rounded-full bg-primary-500 px-6 py-3 text-body font-semibold text-neutral-50 transition-colors duration-200 hover:bg-primary-600 ${className}`}
@@ -48,7 +53,12 @@ const perks: Perk[] = [
   },
 ];
 
-export function CareersSection() {
+type CareersSectionProps = {
+  /** URL do portal de carreiras (siteSettings). */
+  careersUrl: string;
+};
+
+export function CareersSection({ careersUrl }: CareersSectionProps) {
   return (
     <Section className="flex flex-col gap-10 lg:flex-row lg:gap-16">
       {/* Cabeçalho + botão — à esquerda. No mobile o botão é ocultado aqui e
@@ -69,7 +79,7 @@ export function CareersSection() {
           </p>
         </div>
 
-        <GupyButton className="hidden lg:inline-flex" />
+        <GupyButton href={careersUrl} className="hidden lg:inline-flex" />
       </div>
 
       {/* Diferenciais — 2 colunas x 2 linhas, no estilo dos cards "Por que
@@ -97,7 +107,7 @@ export function CareersSection() {
       </div>
 
       {/* Botão no mobile — depois dos cards */}
-      <GupyButton className="inline-flex lg:hidden" />
+      <GupyButton href={careersUrl} className="inline-flex lg:hidden" />
     </Section>
   );
 }

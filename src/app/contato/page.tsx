@@ -7,7 +7,8 @@ import { UnitsSection } from "@/components/contato/units-section/units-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DriftMesh } from "@/components/layout/drift-mesh";
-import { faqContato } from "@/data/faq-contato";
+import { getFaqItems } from "@/sanity/queries/faq";
+import { getUnits } from "@/sanity/queries/units";
 
 export const metadata: Metadata = {
   title: "Contato",
@@ -21,7 +22,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContatoPage() {
+export default async function ContatoPage() {
+  const [units, faqItems] = await Promise.all([
+    getUnits(),
+    getFaqItems("contato"),
+  ]);
+
   return (
     <main>
       {/* Página inteira num só grupo claro — como nas demais páginas, a faixa do
@@ -43,13 +49,13 @@ export default function ContatoPage() {
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
           <HelpSection />
-          <UnitsSection />
+          <UnitsSection units={units} />
         </div>
 
         <FaqSection
           titleRegular="Perguntas "
           titleAccent="frequentes"
-          items={faqContato}
+          items={faqItems}
         />
       </div>
     </main>
