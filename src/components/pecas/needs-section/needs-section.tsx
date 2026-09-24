@@ -60,7 +60,7 @@ export function NeedsSection() {
             key={need.title}
             className="flex w-full flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)] sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)]"
           >
-            <div className="flex flex-1 flex-col gap-8 rounded-xl bg-[#fbfbfb] p-6">
+            <div className="flex flex-1 flex-col gap-8 rounded-xl bg-surface-subtle p-6">
               <div className="flex size-10 items-center justify-center rounded-full bg-primary-500 lg:size-12">
                 <need.Icon className="size-6 text-white lg:size-7" aria-hidden />
               </div>

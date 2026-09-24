@@ -1,13 +1,21 @@
 import { z } from "zod";
 
 export const contactRequestSchema = z.object({
-  name: z.string().min(2, "Informe seu nome completo"),
-  company: z.string().min(2, "Informe o nome da empresa"),
-  phone: z.string().min(8, "Informe um telefone ou WhatsApp para contato"),
-  email: z.string().email("Informe um e-mail válido"),
-  cityUf: z.string().min(2, "Informe a cidade e o estado"),
+  name: z.string().trim().min(2, "Informe seu nome completo"),
+  company: z.string().trim().min(2, "Informe o nome da empresa"),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\d[\d\s\-()]+$/, "Informe um telefone ou WhatsApp para contato")
+    .refine(
+      (value) => value.replace(/\D/g, "").length >= 8,
+      "Informe um telefone ou WhatsApp para contato",
+    ),
+  email: z.string().trim().email("Informe um e-mail válido"),
+  cityUf: z.string().trim().min(2, "Informe a cidade e o estado"),
   message: z
     .string()
+    .trim()
     .min(10, "Descreva sua necessidade com mais detalhes (mín. 10 caracteres)"),
   consent: z.literal(true, {
     message: "É necessário concordar com a Política de Privacidade",

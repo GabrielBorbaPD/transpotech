@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { ContatoHeroSection } from "@/components/contato/hero-section/hero-section";
 import { HelpSection } from "@/components/contato/help-section/help-section";
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   description:
     "Fale com um especialista em intralogística da TranspoTech. Envie sua solicitação de compra, locação, manutenção ou cotação e encontre a unidade mais próxima.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Contato | TranspoTech",
     description:
       "Fale com um especialista em intralogística. Unidades em SC, PR, RS, SP e GO.",
@@ -25,8 +27,8 @@ export default function ContatoPage() {
       {/* Página inteira num só grupo claro — como nas demais páginas, a faixa do
           formulário é FILHA deste fundo, e não uma seção irmã. Assim não há duas
           superfícies pintadas se encontrando: a faixa simplesmente desvanece e o
-          #fdfdfd do grupo aparece no lugar. */}
-      <div className="relative isolate bg-[#fdfdfd] pb-6">
+          fundo do grupo aparece no lugar. */}
+      <div className="relative isolate bg-background pb-6">
         {/* Hero com o formulário — faixa no tom de captação (topo chapado, base
             desvanecendo) e a malha que "anda" sozinha (DriftMesh) em versão mais
             sutil, cobrindo a hero inteira. pt no próprio hero cobre a clareira

@@ -6,7 +6,7 @@ import heroImageMobile from "@/assets/images/hero-servicos-mobile.webp";
 
 export function ServicosHeroSection() {
   return (
-    <section data-header-hero className="relative w-full bg-[#fdfdfd] md:p-4">
+    <section data-header-hero className="relative w-full bg-background md:p-4">
       {/* Card de imagem — full-bleed no mobile; de md em diante, 16px de padding em volta e bordas de 20px */}
       <div className="relative flex h-svh md:h-[calc(100svh-2rem)] min-h-[560px] w-full overflow-hidden md:rounded-[20px]">
         {/* Imagem de fundo (mobile) — recorte exato do Figma (node 3640:3253):

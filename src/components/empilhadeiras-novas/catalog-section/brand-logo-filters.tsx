@@ -7,7 +7,7 @@ import {
   readBrands,
   subscribeBrands,
   writeBrands,
-} from "@/components/catalog/brand-filter";
+} from "@/components/empilhadeiras-novas/catalog-section/catalog/brand-filter";
 import type { ForkliftBrand } from "@/types/forklift.types";
 import still from "@/assets/Logos/Logo still.svg";
 import linde from "@/assets/Logos/Logo Linde.svg";

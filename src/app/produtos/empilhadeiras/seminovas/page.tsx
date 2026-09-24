@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { SeminovasHeroSection } from "@/components/empilhadeiras-seminovas/hero-section/hero-section";
 import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
   description:
     "Empilhadeiras seminovas revisadas e com garantia. Equipamentos multimarcas com procedência e histórico de manutenção. Consulte disponibilidade.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Empilhadeiras Seminovas | TranspoTech",
     description:
       "Empilhadeiras seminovas revisadas com garantia. Consulte disponibilidade.",
@@ -33,7 +35,7 @@ export default function EmpilhadeirasSeminovasPage() {
 
       {/* Grupo claro 1 — Captação (logo após a hero) + Por que comprar + Como
           avaliamos. Uma única malha cobre tudo, sem cortes. */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <LeadFormSection
           id="consultar-seminovas"
@@ -54,7 +56,7 @@ export default function EmpilhadeirasSeminovasPage() {
       </div>
 
       {/* Grupo claro 2 — Onde entrega valor + Comparativo elétrica × GLP */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <ValueSection />
         <CompareSection />
@@ -71,14 +73,14 @@ export default function EmpilhadeirasSeminovasPage() {
 
       {/* Classificados — estoque de seminovas disponível, mesmo card e grid da
           seção "Outras opções que podem servir" das páginas de detalhe. Fundo
-          #f7f6f6 (igual ao dos relacionados) para os cards brancos destacarem. */}
-      <div className="relative isolate bg-[#f7f6f6]">
+          neutral-50 (igual ao dos relacionados) para os cards brancos destacarem. */}
+      <div className="relative isolate bg-neutral-50">
         <ClassifiedsSection id="disponiveis-agora" />
       </div>
 
       {/* Grupo claro 4 — FAQ (sem malha). pb-6 compensa o -mt-6 do footer (topo
           arredondado sobreposto), mantendo os 48/80px visuais da diretriz. */}
-      <div className="bg-[#fdfdfd] pb-6">
+      <div className="bg-background pb-6">
         <FaqSection
           titleRegular="Dúvidas frequentes sobre "
           titleAccent="seminovas"

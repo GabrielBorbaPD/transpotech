@@ -87,6 +87,7 @@ export function Header() {
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const closeTimer = useRef<number | undefined>(undefined);
+  const triggerRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const closeMobileMenu = () => {
     setMenuOpen(false);
@@ -120,15 +121,23 @@ export function Header() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Fecha o megamenu com Escape.
+  // Fecha o megamenu com Escape. Se o foco estava no gatilho ou no painel,
+  // devolve ao gatilho (senão o foco sumiria junto com o painel, que fica inert).
   useEffect(() => {
     if (!megaOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMegaOpen(false);
+      if (event.key !== "Escape") return;
+      const trigger = openLabel ? triggerRefs.current[openLabel] : null;
+      const panel = document.getElementById(MEGA_MENU_ID);
+      const active = document.activeElement;
+      setMegaOpen(false);
+      if (trigger && active && (trigger === active || panel?.contains(active))) {
+        trigger.focus();
+      }
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [megaOpen]);
+  }, [megaOpen, openLabel]);
 
   // Sobre a hero: fundo laranja claro #FFF4ED opaco (legível sobre a imagem).
   // Demais seções: comportamento atual (dark / branco translúcido).
@@ -184,6 +193,22 @@ export function Header() {
                 {navItems.map((item) => {
                   const hasMenu = megaMenus[item.label] != null;
                   const isActive = hasMenu && megaOpen && openLabel === item.label;
+                  const triggerClass = [
+                    "group relative flex h-6 items-center justify-center gap-1",
+                    "px-2 py-1 text-body font-normal transition-colors duration-300",
+                    textColor,
+                  ].join(" ");
+                  const underline = (
+                    <span
+                      aria-hidden
+                      className={[
+                        "pointer-events-none absolute inset-x-2 bottom-0 h-0.5 origin-center rounded-full bg-primary-400 transition duration-200",
+                        isActive
+                          ? "scale-x-100 opacity-100"
+                          : "scale-x-0 opacity-0 group-hover:scale-x-100 group-hover:opacity-100",
+                      ].join(" ")}
+                    />
+                  );
                   return (
                     <li
                       key={item.label}
@@ -192,19 +217,28 @@ export function Header() {
                       }
                       onMouseLeave={hasMenu ? scheduleCloseMega : undefined}
                     >
-                      <Link
-                        href={hasMenu ? "#" : (item.href ?? "#")}
-                        aria-haspopup={hasMenu ? "menu" : undefined}
-                        aria-expanded={hasMenu ? isActive : undefined}
-                        aria-controls={hasMenu ? MEGA_MENU_ID : undefined}
-                        className={[
-                          "group relative flex h-6 items-center justify-center gap-1",
-                          "px-2 py-1 text-body font-normal transition-colors duration-300",
-                          textColor,
-                        ].join(" ")}
-                      >
-                        {item.label}
-                        {hasMenu && (
+                      {hasMenu ? (
+                        <button
+                          type="button"
+                          ref={(el) => {
+                            triggerRefs.current[item.label] = el;
+                          }}
+                          aria-haspopup="menu"
+                          aria-expanded={isActive}
+                          aria-controls={MEGA_MENU_ID}
+                          // detail 0 = ativado por teclado (Enter/Espaço): alterna.
+                          // Clique de mouse só garante aberto, porque o hover já
+                          // abriu e alternar fecharia o painel sob o cursor.
+                          onClick={(event) => {
+                            if (event.detail === 0 && isActive) {
+                              setMegaOpen(false);
+                            } else {
+                              openMenu(item.label);
+                            }
+                          }}
+                          className={`${triggerClass} cursor-pointer`}
+                        >
+                          {item.label}
                           <ChevronDown
                             className={[
                               "size-5 transition-transform duration-200",
@@ -212,17 +246,14 @@ export function Header() {
                             ].join(" ")}
                             aria-hidden
                           />
-                        )}
-                        <span
-                          aria-hidden
-                          className={[
-                            "pointer-events-none absolute inset-x-2 bottom-0 h-0.5 origin-center rounded-full bg-primary-400 transition duration-200",
-                            isActive
-                              ? "scale-x-100 opacity-100"
-                              : "scale-x-0 opacity-0 group-hover:scale-x-100 group-hover:opacity-100",
-                          ].join(" ")}
-                        />
-                      </Link>
+                          {underline}
+                        </button>
+                      ) : (
+                        <Link href={item.href ?? "#"} className={triggerClass}>
+                          {item.label}
+                          {underline}
+                        </Link>
+                      )}
                     </li>
                   );
                 })}

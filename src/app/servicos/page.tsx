@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { ServicosHeroSection } from "@/components/servicos/hero-section/hero-section";
 import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
   description:
     "Serviços especializados em empilhadeiras: planos de manutenção preventiva, manutenção corretiva e assistência técnica multimarcas. 380 técnicos em todo o Brasil.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Serviços | TranspoTech",
     description:
       "Manutenção preventiva, corretiva e assistência multimarcas para empilhadeiras.",
@@ -33,7 +35,7 @@ export default function ServicosPage() {
 
       {/* Multimarcas — fundo branco, sem malha de fundo (grade própria com linhas
           finas + bolinhas nas interseções e blur verde no hover). */}
-      <div className="bg-[#fdfdfd]">
+      <div className="bg-background">
         <MultibrandSection />
       </div>
 
@@ -45,7 +47,7 @@ export default function ServicosPage() {
       </div>
 
       {/* Grupo claro 1 — Captação + Portfólio. Malha única, sem cortes. */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <LeadFormSection
           id="solicitar-servico"
@@ -65,13 +67,13 @@ export default function ServicosPage() {
       </div>
 
       {/* Grupo claro 2 — Processo */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <ProcessSection />
       </div>
 
       {/* Grupo claro 3 — Diferenciais */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <DifferentialsSection />
       </div>
@@ -83,7 +85,7 @@ export default function ServicosPage() {
       </div>
 
       {/* Grupo claro 4 — FAQ (sem malha) */}
-      <div className="bg-[#fdfdfd]">
+      <div className="bg-background">
         <FaqSection
           titleRegular="Perguntas frequentes sobre "
           titleAccent="serviços e manutenção"

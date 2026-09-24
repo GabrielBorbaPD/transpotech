@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { PecasHeroSection } from "@/components/pecas/hero-section/hero-section";
 import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
   description:
     "Peças originais e alternativas para empilhadeiras de todas as marcas. Estoque próprio, entrega ágil e suporte técnico especializado.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Peças para Empilhadeiras | TranspoTech",
     description:
       "Peças originais e alternativas para empilhadeiras de todas as marcas.",
@@ -31,7 +33,7 @@ export default function PecasPage() {
 
       {/* Grupo claro 1 — Captação (logo após a hero) + Qual é a sua necessidade.
           Uma única malha cobre tudo, sem cortes. */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <LeadFormSection
           id="solicitar-pecas"
@@ -53,7 +55,7 @@ export default function PecasPage() {
       </div>
 
       {/* Grupo claro 3 — Por que TranspoTech + FAQ (malha só no Por que) */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
           <WhyTranspotechSection />

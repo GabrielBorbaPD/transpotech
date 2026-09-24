@@ -1,33 +1,67 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
+import { preload } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
 import forklift from "@/assets/images/hero-image-empilhadeiras-seminovas.webp";
 import forkliftMobile from "@/assets/images/hero-image-empilhadeiras-seminovas-mobile.webp";
 
+// Mesmo ponto de corte do `md:` do Tailwind (48rem).
+const DESKTOP_MEDIA = "(min-width: 48rem)";
+
 export function SeminovasHeroSection() {
+  // Art direction com <picture>: o navegador baixa só a versão da viewport.
+  // Duas <Image preload> gerariam dois preloads sem media e a versão
+  // escondida por CSS disputaria banda com o LCP.
+  const common = {
+    alt: "",
+    fill: true,
+    sizes: "100vw",
+    loading: "eager",
+    fetchPriority: "high",
+  } as const;
+  const {
+    props: { srcSet: desktopSrcSet, src: desktopSrc },
+  } = getImageProps({ ...common, src: forklift });
+  const { props: mobileProps } = getImageProps({
+    ...common,
+    src: forkliftMobile,
+  });
+
+  // Um preload por viewport, cada um restrito à sua media.
+  preload(mobileProps.src, {
+    as: "image",
+    imageSrcSet: mobileProps.srcSet,
+    imageSizes: common.sizes,
+    fetchPriority: "high",
+    media: `not all and ${DESKTOP_MEDIA}`,
+  });
+  preload(desktopSrc, {
+    as: "image",
+    imageSrcSet: desktopSrcSet,
+    imageSizes: common.sizes,
+    fetchPriority: "high",
+    media: DESKTOP_MEDIA,
+  });
+
   return (
-    <section data-header-hero className="relative w-full bg-[#fdfdfd] md:p-4">
+    <section data-header-hero className="relative w-full bg-background md:p-4">
       {/* Card de imagem — full-bleed no mobile; de md em diante, 16px de padding em volta e bordas de 20px */}
       <div className="relative flex h-svh md:h-[calc(100svh-2rem)] min-h-[560px] w-full overflow-hidden md:rounded-[20px]">
-        {/* Imagem de fundo (mobile) — mesma cena em versão clara, corte do
-            Figma na empilhadeira da esquerda (object-position ≈ 44%). */}
-        <Image
-          src={forkliftMobile}
-          alt=""
-          priority
-          fill
-          sizes="100vw"
-          className="object-cover object-[44%_center] md:hidden"
-        />
-        {/* Imagem de fundo (desktop) — frota de empilhadeiras em operação */}
-        <Image
-          src={forklift}
-          alt=""
-          priority
-          fill
-          sizes="100vw"
-          className="hidden scale-[1.15] object-cover object-[72%_center] md:block"
-        />
+        {/* Imagem de fundo. Mobile: mesma cena em versão clara, corte do
+            Figma na empilhadeira da esquerda (object-position ≈ 44%).
+            Desktop: frota de empilhadeiras em operação. */}
+        <picture className="contents">
+          <source
+            media={DESKTOP_MEDIA}
+            srcSet={desktopSrcSet}
+            sizes={common.sizes}
+          />
+          <img
+            {...mobileProps}
+            alt=""
+            className="object-cover object-[44%_center] md:scale-[1.15] md:object-[72%_center]"
+          />
+        </picture>
 
         {/* Gradiente escuro (#01120E) da base para o topo, concentrado na base */}
         <div

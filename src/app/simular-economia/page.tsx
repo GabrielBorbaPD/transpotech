@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
-import { OrcamentoHeroSection } from "@/components/orcamento/hero-section/hero-section";
-import { SimulatorSection } from "@/components/orcamento/simulator-section/simulator-section";
+import { OrcamentoHeroSection } from "@/components/simular-economia/hero-section/hero-section";
+import { SimulatorSection } from "@/components/simular-economia/simulator-section/simulator-section";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { ROUTES } from "@/lib/routes";
 
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
   description:
     "Compare o custo de energia de uma empilhadeira a GLP com o de uma elétrica a lítio. Ajuste turnos, preço do cilindro e tarifa de kWh e veja o retorno do investimento.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Simulador de Economia — GLP × Elétrica | TranspoTech",
     description:
       "Compare custos por hora, mês, ano e 5 anos entre empilhadeira a GLP e elétrica a lítio, e descubra em quantos meses a elétrica se paga.",

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
-import { BateriasHeroSection } from "@/components/baterias/hero-section/hero-section";
+import { BateriasHeroSection } from "@/components/baterias-e-carregadores/hero-section/hero-section";
 import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
-import { TechSection } from "@/components/baterias/tech-section/tech-section";
-import { NeedsSection } from "@/components/baterias/needs-section/needs-section";
-import { BatteryTypesSection } from "@/components/baterias/battery-types-section/battery-types-section";
-import { RequestStepsSection } from "@/components/baterias/request-steps-section/request-steps-section";
-import { WhyTranspotechSection } from "@/components/baterias/why-transpotech-section/why-transpotech-section";
+import { TechSection } from "@/components/baterias-e-carregadores/tech-section/tech-section";
+import { NeedsSection } from "@/components/baterias-e-carregadores/needs-section/needs-section";
+import { BatteryTypesSection } from "@/components/baterias-e-carregadores/battery-types-section/battery-types-section";
+import { RequestStepsSection } from "@/components/baterias-e-carregadores/request-steps-section/request-steps-section";
+import { WhyTranspotechSection } from "@/components/baterias-e-carregadores/why-transpotech-section/why-transpotech-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { faqBaterias } from "@/data/faq-baterias";
 import { CtaSection } from "@/components/layout/cta/cta-section";
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
   description:
     "Baterias de tração e carregadores para empilhadeiras elétricas. Soluções de alto desempenho para operações contínuas e eletrificação da frota.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Baterias e Carregadores | TranspoTech",
     description:
       "Baterias de tração e carregadores para empilhadeiras elétricas.",
@@ -31,7 +33,7 @@ export default function BateriasPage() {
 
       {/* Grupo claro 1 — Especialistas em baterias (Tecnologia) + Captação +
           O que sua operação precisa. Uma única malha cobre tudo, sem cortes. */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <TechSection />
         <LeadFormSection
@@ -53,7 +55,7 @@ export default function BateriasPage() {
 
       {/* Grupo claro 3 — Como funciona + Por que TranspoTech + FAQ (malha só até
           o Por que) */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
           <RequestStepsSection />

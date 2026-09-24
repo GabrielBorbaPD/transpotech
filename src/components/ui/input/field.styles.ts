@@ -17,3 +17,14 @@ export const fieldIconTones: Record<FieldTone, string> = {
   light: "text-neutral-400",
   dark: "text-neutral-500",
 };
+
+// Painel flutuante e opções dos campos com lista (Select, CityAutocomplete).
+export const panelTones: Record<FieldTone, string> = {
+  light: "border-neutral-200 bg-white shadow-lg",
+  dark: "border-white/10 bg-neutral-900 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)]",
+};
+
+export const optionTones: Record<FieldTone, { base: string; active: string }> = {
+  light: { base: "text-neutral-800", active: "bg-neutral-100" },
+  dark: { base: "text-neutral-50", active: "bg-white/10" },
+};

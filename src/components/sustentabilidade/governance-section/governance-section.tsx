@@ -53,7 +53,7 @@ export function GovernanceSection() {
             key={channel.title}
             className="flex flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)]"
           >
-            <div className="flex flex-1 flex-col gap-8 rounded-xl bg-[#fbfbfb] p-6 lg:p-8">
+            <div className="flex flex-1 flex-col gap-8 rounded-xl bg-surface-subtle p-6 lg:p-8">
               <div className="flex size-10 items-center justify-center rounded-full bg-primary-500 lg:size-12">
                 <channel.Icon className="size-6 text-white lg:size-7" aria-hidden />
               </div>

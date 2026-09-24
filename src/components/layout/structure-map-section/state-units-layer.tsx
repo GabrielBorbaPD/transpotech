@@ -12,7 +12,7 @@ import { STATE_UNITS, type MapLabelPos } from "./state-units";
 // Dots laranjas seguem o padrão da "Solução 360" da home (um pouco maiores):
 // laranja com leve glow/sombra laranja, via filtro SVG (o drop-shadow de CSS
 // não rende de forma confiável em elementos SVG).
-export const UNIT_DOT_FILL = "#ff9448";
+export const UNIT_DOT_CLASS = "fill-primary-400";
 const UNIT_DOT_R = 8; // px
 const CAPITAL_DOT_R = 6; // px
 const CITY_FONT = 20; // px
@@ -126,7 +126,6 @@ export function StateUnitsLayer({
           key={p.city}
           d={arcPath(origin.x, origin.y, p.x, p.y, p.arcFlip)}
           fill="none"
-          stroke="#FDFDFD"
           strokeOpacity={0.75}
           // Sem non-scaling-stroke: ele faria o dasharray ser medido em
           // pixels de tela e quebraria a animação via pathLength=1.
@@ -135,7 +134,7 @@ export function StateUnitsLayer({
           pathLength={1}
           strokeDasharray={1}
           strokeDashoffset={drawn ? 0 : 1}
-          className="transition-[stroke-dashoffset] duration-700 ease-out motion-reduce:transition-none"
+          className="stroke-background transition-[stroke-dashoffset] duration-700 ease-out motion-reduce:transition-none"
           style={{ transitionDelay: `${150 + i * 120}ms` }}
         />
       ))}
@@ -150,7 +149,7 @@ export function StateUnitsLayer({
             cx={data.capital.x}
             cy={data.capital.y}
             r={px(CAPITAL_DOT_R)}
-            fill="#FDFDFD"
+            className="fill-background"
           />
           <text
             {...(() => {
@@ -195,7 +194,7 @@ export function StateUnitsLayer({
               cx={p.x}
               cy={p.y}
               r={px(UNIT_DOT_R)}
-              fill={UNIT_DOT_FILL}
+              className={UNIT_DOT_CLASS}
               filter={`url(#${glowId})`}
             />
             <text

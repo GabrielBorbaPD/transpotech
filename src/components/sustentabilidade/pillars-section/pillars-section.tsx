@@ -54,8 +54,8 @@ const pillars: Pillar[] = [
 function PillarCard({ title, description, items, Icon }: Pillar) {
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-3xl">
-      {/* Zona do título — fundo #F7F6F6 + blur verde bem suave (acende no hover) */}
-      <div className="relative overflow-hidden bg-[#f7f6f6] px-6 pb-6 pt-6 lg:px-8 lg:pt-8">
+      {/* Zona do título — fundo neutral-50 + blur verde bem suave (acende no hover) */}
+      <div className="relative overflow-hidden bg-neutral-50 px-6 pb-6 pt-6 lg:px-8 lg:pt-8">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-1/2 size-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-secondary-600 opacity-[0.1] blur-[120px] transition-opacity duration-500 group-hover:opacity-[0.28]"
@@ -69,8 +69,8 @@ function PillarCard({ title, description, items, Icon }: Pillar) {
         </p>
       </div>
 
-      {/* Zona dos tópicos — mesmo #F7F6F6 a 40% (divisão) + leve linha */}
-      <div className="relative flex-1 border-t border-black/[0.04] bg-[#f7f6f6]/40 px-6 pb-8 pt-6 lg:px-8">
+      {/* Zona dos tópicos — mesmo neutral-50 a 40% (divisão) + leve linha */}
+      <div className="relative flex-1 border-t border-black/[0.04] bg-neutral-50/40 px-6 pb-8 pt-6 lg:px-8">
         <ul className="relative z-10 flex flex-col gap-2.5">
           {items.map((item) => (
             <li key={item} className="flex items-start gap-3">

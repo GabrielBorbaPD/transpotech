@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { PneusHeroSection } from "@/components/pneus/hero-section/hero-section";
 import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
@@ -6,7 +7,7 @@ import { CategoriesSection } from "@/components/pneus/categories-section/categor
 import { ConsiderSection } from "@/components/pneus/consider-section/consider-section";
 import { QuotationStepsSection } from "@/components/pneus/quotation-steps-section/quotation-steps-section";
 import { WhyTranspotechSection } from "@/components/pneus/why-transpotech-section/why-transpotech-section";
-import { BrandsSection } from "@/components/home/brands-section/brands-section";
+import { BrandsSection } from "@/components/layout/brands-section/brands-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { faqPneus } from "@/data/faq-pneus";
 import { CtaSection } from "@/components/layout/cta/cta-section";
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
   description:
     "Pneus para empilhadeiras industriais. Sólidos, pneumáticos e de poliuretano para todas as marcas e modelos. Fornecimento e instalação.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Pneus para Empilhadeiras | TranspoTech",
     description:
       "Pneus sólidos, pneumáticos e de poliuretano para empilhadeiras.",
@@ -46,7 +48,7 @@ export default function PneusPage() {
       <PneusHeroSection />
 
       {/* Grupo claro — Marcas parceiras + Captação. Malha única, sem cortes. */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <BrandsSection
           tone="light"
@@ -64,7 +66,7 @@ export default function PneusPage() {
       </div>
 
       {/* Grupo claro 1 — Categorias */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <CategoriesSection />
       </div>
@@ -77,14 +79,14 @@ export default function PneusPage() {
       </div>
 
       {/* Grupo claro 2 — Por que TranspoTech */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <WhyTranspotechSection />
       </div>
 
 
       {/* Grupo claro 3 — FAQ (sem malha) */}
-      <div className="bg-[#fdfdfd]">
+      <div className="bg-background">
         <FaqSection
           titleRegular="Dúvidas frequentes sobre "
           titleAccent="pneus"

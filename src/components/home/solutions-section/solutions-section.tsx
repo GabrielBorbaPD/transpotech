@@ -344,10 +344,10 @@ export function SolutionsSection() {
               return (
                 <circle
                   key={i}
-                  className="hidden lg:block"
+                  className={`hidden lg:block ${act ? "fill-primary-400" : ""}`}
                   cx={dot.x.toFixed(2)} cy={dot.y.toFixed(2)}
                   r={act ? 6.5 : 4.5}
-                  fill={act ? "#ff9448" : "rgba(245,130,32,0.5)"}
+                  fill="rgba(245,130,32,0.5)"
                   style={{
                     transition: "all 0.4s",
                     filter: act ? "drop-shadow(0 0 8px rgba(245,130,32,0.9))" : "none",
@@ -442,12 +442,14 @@ export function SolutionsSection() {
         </div>
 
         {/* Progress strip centralizado */}
-        <div className="mt-8 flex items-center justify-center gap-2" aria-hidden>
+        <div className="mt-8 flex items-center justify-center gap-2">
           {solutions.map((_, i) => (
             <button
+              type="button"
               key={i}
               onClick={() => handleSelect(i)}
               aria-label={solutions[i].title}
+              aria-pressed={active === i}
               className={`h-[3px] rounded-full transition-all duration-300 ${
                 i === active
                   ? "w-6 bg-primary-400"

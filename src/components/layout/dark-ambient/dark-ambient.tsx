@@ -48,6 +48,7 @@ export function DarkAmbient({ greenOffset = GREEN_OFFSET }: DarkAmbientProps = {
         start: "top top",
         end: "bottom top",
         scrub: true,
+        invalidateOnRefresh: true,
       },
     });
 
@@ -59,6 +60,7 @@ export function DarkAmbient({ greenOffset = GREEN_OFFSET }: DarkAmbientProps = {
         start: "top top",
         end: "bottom top",
         scrub: true,
+        invalidateOnRefresh: true,
       },
     });
   }, { scope: ref, dependencies: [greenOffset] });

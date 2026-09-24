@@ -109,9 +109,9 @@ export function loadCities(): Promise<City[]> {
       return cities;
     })
     .catch(() => {
-      // Offline / IBGE fora do ar: usa as principais cidades embutidas.
-      cache = CITIES_FALLBACK.map((c) => toCity(c.name, c.uf));
-      return cache;
+      // Offline / IBGE fora do ar: usa as principais cidades embutidas, sem
+      // cachear, para a próxima chamada tentar o IBGE de novo.
+      return CITIES_FALLBACK.map((c) => toCity(c.name, c.uf));
     })
     .finally(() => {
       inflight = null;

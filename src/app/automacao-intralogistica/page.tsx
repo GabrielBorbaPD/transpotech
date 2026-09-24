@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
-import { AutomacaoHeroSection } from "@/components/automacao/hero-section/hero-section";
+import { AutomacaoHeroSection } from "@/components/automacao-intralogistica/hero-section/hero-section";
 import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
-import { PartnershipSection } from "@/components/automacao/partnership-section/partnership-section";
-import { BenefitsSection } from "@/components/automacao/benefits-section/benefits-section";
-import { SolutionsSection } from "@/components/automacao/solutions-section/solutions-section";
-import { ProcessSection } from "@/components/automacao/process-section/process-section";
-import { SegmentsSection } from "@/components/automacao/segments-section/segments-section";
+import { PartnershipSection } from "@/components/automacao-intralogistica/partnership-section/partnership-section";
+import { BenefitsSection } from "@/components/automacao-intralogistica/benefits-section/benefits-section";
+import { SolutionsSection } from "@/components/automacao-intralogistica/solutions-section/solutions-section";
+import { ProcessSection } from "@/components/automacao-intralogistica/process-section/process-section";
+import { SegmentsSection } from "@/components/automacao-intralogistica/segments-section/segments-section";
 // Seção "O que nossos clientes dizem" temporariamente oculta a pedido do cliente.
-// import { CasesSection } from "@/components/automacao/cases-section/cases-section";
+// import { CasesSection } from "@/components/automacao-intralogistica/cases-section/cases-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { faqAutomacao } from "@/data/faq-automacao";
 import { CtaSection } from "@/components/layout/cta/cta-section";
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
   description:
     "Soluções de automação intralogística com a Dematic. Sistemas automatizados de movimentação, armazenagem e distribuição para centros de distribuição e indústrias.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Automação Intralogística | TranspoTech",
     description:
       "Soluções de automação intralogística com a Dematic para CD e indústrias.",
@@ -33,8 +35,8 @@ export default function AutomacaoPage() {
       <AutomacaoHeroSection />
 
       {/* Grupo claro 1 — Parceria TranspoTech + Dematic + Captação.
-          Uma única malha cobre tudo, sem cortes (fundo #FBFBFB). */}
-      <div className="relative isolate bg-[#fbfbfb]">
+          Uma única malha cobre tudo, sem cortes (fundo surface-subtle). */}
+      <div className="relative isolate bg-surface-subtle">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <PartnershipSection />
         <LeadFormSection
@@ -55,7 +57,7 @@ export default function AutomacaoPage() {
 
       {/* Grupo claro 2 — Soluções/Sistemas/AGV + Processo + Segmentos.
           Uma única malha cobre as três, sem cortes. */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <SolutionsSection />
         <ProcessSection />
@@ -68,7 +70,7 @@ export default function AutomacaoPage() {
       {/* <CasesSection /> */}
 
       {/* Grupo claro 4 — FAQ (sem malha) */}
-      <div className="bg-[#fdfdfd]">
+      <div className="bg-background">
         <FaqSection
           titleRegular="Perguntas que sempre recebemos "
           titleAccent="sobre automação"

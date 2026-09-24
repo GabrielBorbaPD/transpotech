@@ -81,10 +81,13 @@ export function ContatoHeroSection() {
             autoComplete="name"
             placeholder="Digite seu nome completo."
             invalid={!!errors.name}
+            aria-describedby={errors.name ? "ct-name-error" : undefined}
             {...register("name")}
           />
           {errors.name && (
-            <p className="text-body text-error">{errors.name.message}</p>
+            <p id="ct-name-error" className="text-body text-error">
+              {errors.name.message}
+            </p>
           )}
         </div>
 
@@ -98,10 +101,13 @@ export function ContatoHeroSection() {
             autoComplete="organization"
             placeholder="Informe o nome da empresa."
             invalid={!!errors.company}
+            aria-describedby={errors.company ? "ct-company-error" : undefined}
             {...register("company")}
           />
           {errors.company && (
-            <p className="text-body text-error">{errors.company.message}</p>
+            <p id="ct-company-error" className="text-body text-error">
+              {errors.company.message}
+            </p>
           )}
         </div>
 
@@ -116,10 +122,13 @@ export function ContatoHeroSection() {
               autoComplete="tel"
               placeholder="Telefone ou WhatsApp."
               invalid={!!errors.phone}
+              aria-describedby={errors.phone ? "ct-phone-error" : undefined}
               {...register("phone")}
             />
             {errors.phone && (
-              <p className="text-body text-error">{errors.phone.message}</p>
+              <p id="ct-phone-error" className="text-body text-error">
+                {errors.phone.message}
+              </p>
             )}
           </div>
           <div className="flex flex-col gap-1.5">
@@ -132,10 +141,13 @@ export function ContatoHeroSection() {
               autoComplete="email"
               placeholder="nome@empresa.com.br"
               invalid={!!errors.email}
+              aria-describedby={errors.email ? "ct-email-error" : undefined}
               {...register("email")}
             />
             {errors.email && (
-              <p className="text-body text-error">{errors.email.message}</p>
+              <p id="ct-email-error" className="text-body text-error">
+                {errors.email.message}
+              </p>
             )}
           </div>
         </div>
@@ -159,7 +171,9 @@ export function ContatoHeroSection() {
             )}
           />
           {errors.cityUf && (
-            <p className="text-body text-error">{errors.cityUf.message}</p>
+            <p id="ct-city-error" className="text-body text-error">
+              {errors.cityUf.message}
+            </p>
           )}
         </div>
 
@@ -172,16 +186,20 @@ export function ContatoHeroSection() {
             rows={3}
             placeholder="Descreva sua operação, equipamento, urgência, cidade ou o que você precisa resolver."
             invalid={!!errors.message}
+            aria-describedby={errors.message ? "ct-message-error" : undefined}
             {...register("message")}
           />
           {errors.message && (
-            <p className="text-body text-error">{errors.message.message}</p>
+            <p id="ct-message-error" className="text-body text-error">
+              {errors.message.message}
+            </p>
           )}
         </div>
 
         <label className="flex cursor-pointer items-start gap-3">
           <Checkbox
             invalid={!!errors.consent}
+            aria-describedby={errors.consent ? "ct-consent-error" : undefined}
             {...register("consent")}
             className="mt-1"
           />
@@ -191,7 +209,7 @@ export function ContatoHeroSection() {
           </span>
         </label>
         {errors.consent && (
-          <p className="-mt-3 text-body text-error">
+          <p id="ct-consent-error" className="-mt-3 text-body text-error">
             {errors.consent.message}
           </p>
         )}

@@ -165,6 +165,7 @@ export function LeadFormSection({
             Falar com especialista
           </p>
           <BlurRevealTitle
+            as="h2"
             className="text-balance text-h2 text-neutral-800 lg:text-wrap"
             segments={[
               { text: titleTop, className: "font-normal", br: true },
@@ -196,10 +197,11 @@ export function LeadFormSection({
               autoComplete="name"
               placeholder="Digite seu nome completo."
               invalid={!!errors.name}
+              aria-describedby={errors.name ? `${uid}-name-error` : undefined}
               {...register("name")}
             />
             {errors.name && (
-              <p className="text-body text-error">{errors.name.message}</p>
+              <p id={`${uid}-name-error`} className="text-body text-error">{errors.name.message}</p>
             )}
           </div>
 
@@ -213,10 +215,11 @@ export function LeadFormSection({
               autoComplete="organization"
               placeholder="Informe o nome da empresa."
               invalid={!!errors.company}
+              aria-describedby={errors.company ? `${uid}-company-error` : undefined}
               {...register("company")}
             />
             {errors.company && (
-              <p className="text-body text-error">{errors.company.message}</p>
+              <p id={`${uid}-company-error`} className="text-body text-error">{errors.company.message}</p>
             )}
           </div>
 
@@ -231,10 +234,11 @@ export function LeadFormSection({
                 autoComplete="tel"
                 placeholder="Telefone ou WhatsApp."
                 invalid={!!errors.phone}
+                aria-describedby={errors.phone ? `${uid}-phone-error` : undefined}
                 {...register("phone")}
               />
               {errors.phone && (
-                <p className="text-body text-error">{errors.phone.message}</p>
+                <p id={`${uid}-phone-error`} className="text-body text-error">{errors.phone.message}</p>
               )}
             </div>
             <div className="flex flex-col gap-1.5">
@@ -247,10 +251,11 @@ export function LeadFormSection({
                 autoComplete="email"
                 placeholder="nome@empresa.com.br"
                 invalid={!!errors.email}
+                aria-describedby={errors.email ? `${uid}-email-error` : undefined}
                 {...register("email")}
               />
               {errors.email && (
-                <p className="text-body text-error">{errors.email.message}</p>
+                <p id={`${uid}-email-error`} className="text-body text-error">{errors.email.message}</p>
               )}
             </div>
           </div>
@@ -274,7 +279,11 @@ export function LeadFormSection({
               )}
             />
             {errors.cityUf && (
-              <p className="text-body text-error">{errors.cityUf.message}</p>
+              // CityAutocomplete não repassa aria-describedby ao input; role="alert"
+              // é o que faz o erro ser anunciado.
+              <p role="alert" className="text-body text-error">
+                {errors.cityUf.message}
+              </p>
             )}
           </div>
 
@@ -314,16 +323,20 @@ export function LeadFormSection({
               rows={3}
               placeholder={messagePlaceholder}
               invalid={!!errors.message}
+              aria-describedby={errors.message ? `${uid}-message-error` : undefined}
               {...register("message")}
             />
             {errors.message && (
-              <p className="text-body text-error">{errors.message.message}</p>
+              <p id={`${uid}-message-error`} className="text-body text-error">{errors.message.message}</p>
             )}
           </div>
 
           <label className="flex cursor-pointer items-start gap-3">
             <Checkbox
               invalid={!!errors.consent}
+              aria-describedby={
+                errors.consent ? `${uid}-consent-error` : undefined
+              }
               {...register("consent")}
               className="mt-1"
             />
@@ -333,7 +346,7 @@ export function LeadFormSection({
             </span>
           </label>
           {errors.consent && (
-            <p className="-mt-3 text-body text-error">
+            <p id={`${uid}-consent-error`} className="-mt-3 text-body text-error">
               {errors.consent.message}
             </p>
           )}

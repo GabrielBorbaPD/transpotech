@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 import { UnderConstruction } from "@/components/layout/under-construction/under-construction";
 
 export const metadata: Metadata = {
@@ -6,6 +7,7 @@ export const metadata: Metadata = {
   description:
     "Planos de manutenção preventiva para empilhadeiras: cronograma de visitas técnicas, inspeções programadas e disponibilidade garantida da frota.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Planos de Manutenção Preventiva | TranspoTech",
     description:
       "Cronograma de visitas técnicas e inspeções programadas para sua frota.",

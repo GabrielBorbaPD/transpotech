@@ -55,8 +55,7 @@ export function BlogSection() {
             src={featured.image}
             alt={featured.title}
             fill
-            sizes="55vw"
-            priority
+            sizes="(min-width: 1024px) 55vw, 100vw"
             className="object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
           />
           <div

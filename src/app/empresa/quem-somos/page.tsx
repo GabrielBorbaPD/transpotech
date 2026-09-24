@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { QuemSomosHeroSection } from "@/components/quem-somos/hero-section/hero-section";
 import { StatsSection } from "@/components/quem-somos/stats-section/stats-section";
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
   description:
     "Conheça a TranspoTech: desde 2001 em soluções de intralogística, com +760 colaboradores, unidades em várias regiões e distribuição autorizada Linde, STILL e Baoli.",
   openGraph: {
+    ...baseOpenGraph,
     title: "Quem Somos | TranspoTech",
     description:
       "Soluções em intralogística para manter operações em movimento. Estrutura, história, cultura e ESG da TranspoTech.",
@@ -33,7 +35,7 @@ export default function QuemSomosPage() {
       <QuemSomosHeroSection />
 
       {/* Grupo claro — números da estrutura */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <StatsSection />
       </div>
@@ -46,7 +48,7 @@ export default function QuemSomosPage() {
       </div>
 
       {/* Grupo claro — galeria das unidades */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <UnitsGallerySection />
       </div>
@@ -61,7 +63,7 @@ export default function QuemSomosPage() {
       </div>
 
       {/* Grupo claro — cultura, carreiras, ESG e por que escolher */}
-      <div className="relative isolate bg-[#fdfdfd]">
+      <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <CultureSection />
         <CareersSection />

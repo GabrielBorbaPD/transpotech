@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { baseOpenGraph } from "@/lib/metadata";
 
 import { CatalogSection } from "@/components/empilhadeiras-novas/catalog-section/catalog-section";
 import { CompareSection } from "@/components/layout/compare-section/compare-section";
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     "Catálogo de empilhadeiras novas STILL, Linde e Baoli: elétricas, a combustão, retráteis e transpaleteiras. Equipamentos zero-hora com garantia de fábrica e configuração sob medida.",
   alternates: { canonical: ROUTES.EMPILHADEIRAS_NOVAS },
   openGraph: {
+    ...baseOpenGraph,
     title: "Empilhadeiras Novas | TranspoTech",
     description:
       "Catálogo de empilhadeiras novas STILL, Linde e Baoli, zero-hora com garantia de fábrica e configuração sob medida.",
@@ -30,7 +32,7 @@ export default function EmpilhadeirasNovasPage() {
           pt extra → clareira do header flutuante (≈80px do título ao header).
           Malha animada (DriftMesh, como na hero do Canal da Transparência)
           só na região da hero: altura de viewport + fade na base. */}
-      <div className="relative isolate bg-[#f7f6f6] pt-[96px]">
+      <div className="relative isolate bg-neutral-50 pt-[96px]">
         <DriftMesh
           fade
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-svh"
@@ -38,7 +40,7 @@ export default function EmpilhadeirasNovasPage() {
         <CatalogSection />
       </div>
 
-      {/* Comparativo — fundo branco, cards #f7f6f6 */}
+      {/* Comparativo — fundo branco, cards neutral-50 */}
       <div className="bg-white">
         <CompareSection />
       </div>
@@ -51,7 +53,7 @@ export default function EmpilhadeirasNovasPage() {
       </div>
 
       {/* Grupo claro — FAQ (sem malha) */}
-      <div className="bg-[#fdfdfd]">
+      <div className="bg-background">
         <FaqSection
           titleRegular="Perguntas frequentes sobre "
           titleAccent="locação de empilhadeiras"
@@ -64,7 +66,7 @@ export default function EmpilhadeirasNovasPage() {
         titleAccent="segurança técnica?"
         description="Fale com a TranspoTech e receba uma recomendação conforme carga, altura, ambiente, prazo e orçamento."
         ctaLabel="Falar com especialista"
-        ctaHref={ROUTES.SIMULADOR}
+        ctaHref={ROUTES.CONTATO}
       />
     </main>
   );

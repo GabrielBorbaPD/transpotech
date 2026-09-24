@@ -205,7 +205,7 @@ export function PortfolioSection() {
               key={card.title}
               onMouseEnter={() => setActive(index)}
               onFocusCapture={() => setActive(index)}
-              className={`relative flex items-start overflow-hidden rounded-xl bg-[#222221] p-6 transition-[flex-grow] duration-300 ease-out xl:h-[400px] xl:items-center ${
+              className={`relative flex items-start overflow-hidden rounded-xl bg-surface-dark p-6 transition-[flex-grow] duration-300 ease-out xl:h-[400px] xl:items-center ${
                 open ? "xl:flex-[1_1_315px]" : "xl:flex-[0_0_315px]"
               }`}
             >

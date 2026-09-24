@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { fieldBase, fieldTones, type FieldTone } from "@/components/ui/input";
+import {
+  fieldBase,
+  fieldTones,
+  optionTones,
+  panelTones,
+  type FieldTone,
+} from "@/components/ui/input";
 import { useCities } from "@/hooks/use-cities";
 import {
   formatCity,
@@ -12,17 +18,6 @@ import {
   type CityMatch,
 } from "@/lib/cities";
 import type { CityAutocompleteProps } from "./city-autocomplete.types";
-
-// Reaproveita o painel/opções do Select para manter o visual dos campos.
-const panelTones: Record<FieldTone, string> = {
-  light: "border-neutral-200 bg-white shadow-lg",
-  dark: "border-white/10 bg-[#181616] shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)]",
-};
-
-const optionTones: Record<FieldTone, { base: string; active: string }> = {
-  light: { base: "text-neutral-800", active: "bg-neutral-100" },
-  dark: { base: "text-neutral-50", active: "bg-white/10" },
-};
 
 const ufTones: Record<FieldTone, string> = {
   light: "text-neutral-400",
@@ -189,9 +184,12 @@ export function CityAutocomplete({
           setOpen(true);
         }}
         onKeyDown={onKeyDown}
-        onBlur={() => {
-          // O blur real é tratado no clique-fora; aqui só cobre saída por Tab.
-          if (!open) onBlur?.();
+        onBlur={(e) => {
+          // As opções fazem preventDefault no mousedown, então o foco só sai
+          // para dentro do root em casos raros; qualquer saída real fecha.
+          if (rootRef.current?.contains(e.relatedTarget as Node | null)) return;
+          setOpen(false);
+          onBlur?.();
         }}
         className={`${fieldBase} ${fieldTones[tone]} h-12 px-4 ${className}`}
       />

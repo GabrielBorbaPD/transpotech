@@ -21,7 +21,7 @@ type Sdg = {
 // Os 11 ODS com os quais a TranspoTech contribui (3 a 13). Cada webp é a
 // arte oficial ONU completa (número + título pt-BR + pictograma), então o
 // card só emoldura a arte — padrão do Figma (node 3555-3141): quadrado
-// #f9f9f9 arredondado com a arte centralizada e ~13% de respiro.
+// surface-muted arredondado com a arte centralizada e ~13% de respiro.
 const sdgs: Sdg[] = [
   { number: 3, label: "Saúde e bem-estar", icon: ods3 },
   { number: 4, label: "Educação de qualidade", icon: ods4 },
@@ -58,11 +58,12 @@ export function SdgSection() {
         {sdgs.map((sdg) => (
           <li
             key={sdg.number}
-            className="flex aspect-square w-[calc((100%-24px)/3)] items-center justify-center rounded-2xl bg-[#f9f9f9] p-3 sm:w-[calc((100%-36px)/4)] sm:p-5 lg:w-[calc((100%-60px)/6)] lg:p-6"
+            className="flex aspect-square w-[calc((100%-24px)/3)] items-center justify-center rounded-2xl bg-surface-muted p-3 sm:w-[calc((100%-36px)/4)] sm:p-5 lg:w-[calc((100%-60px)/6)] lg:p-6"
           >
             <Image
               src={sdg.icon}
               alt={`ODS ${sdg.number}: ${sdg.label}`}
+              sizes="(min-width: 1024px) 200px, (min-width: 640px) 25vw, 33vw"
               className="h-full w-full object-contain object-left"
             />
           </li>
