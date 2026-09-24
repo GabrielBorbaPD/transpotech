@@ -7,6 +7,19 @@ import { gsap } from "@/lib/gsap";
 const GREEN_OFFSET = 220;
 const FACTOR = 0.6;
 
+// Perfil radial de um círculo de 520px a 25% com filter: blur(160px), calculado
+// numericamente (disco ⊛ gaussiana σ=160) em passos de 10% do raio de 740px
+// (260 + 3σ). Substitui o filtro: blur grande em movimento no scroll é caro no
+// mobile e o Safari do iOS deixava de pintar parte do bloco dark.
+const GLOW_ALPHAS = [18.3, 17.4, 14.8, 11.2, 7.4, 4.2, 2.0, 0.8, 0.3, 0.1, 0];
+
+function glowGradient(colorVar: string): string {
+  const stops = GLOW_ALPHAS.map(
+    (a, i) => `color-mix(in srgb, var(${colorVar}) ${a}%, transparent) ${i * 10}%`
+  );
+  return `radial-gradient(circle closest-side, ${stops.join(", ")})`;
+}
+
 type DarkAmbientProps = {
   /** Deslocamento vertical inicial do blur verde (px). Padrão: 220. */
   greenOffset?: number;
@@ -56,16 +69,21 @@ export function DarkAmbient({ greenOffset = GREEN_OFFSET }: DarkAmbientProps = {
       aria-hidden
       className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
     >
-      {/* Laranja — lado direito */}
-      <div
-        ref={orangeRef}
-        className="absolute right-0 top-0 size-[520px] rounded-full bg-primary-500/25 blur-[160px]"
-      />
+      {/* Laranja — lado direito. A caixa de 520px segue sendo a referência
+          de posição do GSAP; o gradiente transborda 480px (3σ do blur antigo). */}
+      <div ref={orangeRef} className="absolute right-0 top-0 size-[520px]">
+        <div
+          className="absolute -inset-[480px]"
+          style={{ backgroundImage: glowGradient("--color-primary-500") }}
+        />
+      </div>
       {/* Verde — lado esquerdo, um pouco abaixo */}
-      <div
-        ref={greenRef}
-        className="absolute left-0 top-0 size-[520px] rounded-full bg-secondary-600/25 blur-[160px]"
-      />
+      <div ref={greenRef} className="absolute left-0 top-0 size-[520px]">
+        <div
+          className="absolute -inset-[480px]"
+          style={{ backgroundImage: glowGradient("--color-secondary-600") }}
+        />
+      </div>
     </div>
   );
 }

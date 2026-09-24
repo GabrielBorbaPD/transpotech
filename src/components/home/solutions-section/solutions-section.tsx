@@ -148,9 +148,17 @@ function dotPct(i: number) {
 // Tempo sem nenhuma interação até a engrenagem voltar a girar.
 const IDLE_RESUME_MS = 20_000;
 
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function SolutionsSection() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  // O ciclo automático só roda com a seção na tela: fora dela, o re-render e
+  // o giro a cada 3s disputavam frame com o scroll no mobile.
+  const [inView, setInView] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
   const rotationDeg = useRef(0);
   // Espelho do ativo para o guard de rotação: mouseenter + click disparam
   // handleSelect em sequência antes do re-render, e o state ainda antigo
@@ -164,7 +172,7 @@ export function SolutionsSection() {
   const rotateGear = (targetDeg: number) => {
     gsap.to(gearRef.current, {
       rotation: targetDeg,
-      duration: 0.85,
+      duration: prefersReducedMotion() ? 0 : 0.85,
       ease: "gearEase",
       overwrite: "auto",
     });
@@ -172,7 +180,7 @@ export function SolutionsSection() {
 
   // Fade da solução ativa — substitui @keyframes fade-in-solution
   const fadeSolution = () => {
-    if (!solutionContentRef.current) return;
+    if (!solutionContentRef.current || prefersReducedMotion()) return;
     gsap.fromTo(
       solutionContentRef.current,
       { opacity: 0, y: 10 },
@@ -180,21 +188,29 @@ export function SolutionsSection() {
     );
   };
 
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) =>
+      setInView(entry.isIntersecting)
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   // Auto-cycle while not paused
   useEffect(() => {
-    if (paused) return;
+    if (paused || !inView || prefersReducedMotion()) return;
     const id = setInterval(() => {
-      setActive((a) => {
-        const next = (a + 1) % N;
-        activeRef.current = next;
-        rotationDeg.current += STEP_DEG;
-        rotateGear(rotationDeg.current);
-        return next;
-      });
+      const next = (activeRef.current + 1) % N;
+      activeRef.current = next;
+      rotationDeg.current += STEP_DEG;
+      rotateGear(rotationDeg.current);
+      setActive(next);
     }, 3000);
     return () => clearInterval(id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused]);
+  }, [paused, inView]);
 
   // Cleanup on unmount
   useEffect(() => () => { if (idleTimer.current) clearTimeout(idleTimer.current); }, []);
@@ -237,10 +253,12 @@ export function SolutionsSection() {
 
   const gearStyle: CSSProperties = {
     transformOrigin: "center",
+    willChange: "transform",
   };
 
   return (
     <section
+      ref={sectionRef}
       data-header-dark
       className="relative overflow-hidden"
       onMouseMove={handleActivity}
@@ -280,10 +298,10 @@ export function SolutionsSection() {
                 type="button"
                 onClick={() => handleSelect(i)}
                 aria-pressed={act}
-                className={`shrink-0 cursor-pointer whitespace-nowrap rounded-full border px-3 py-1.5 text-body transition-all duration-300 ${
+                className={`shrink-0 cursor-pointer whitespace-nowrap rounded-full border px-3 py-1.5 text-body font-medium transition-colors duration-300 ${
                   act
-                    ? "border-primary-400 bg-white/10 font-semibold text-white backdrop-blur-sm"
-                    : "border-white/10 font-medium text-white/60"
+                    ? "border-primary-400 bg-white/10 text-white backdrop-blur-sm"
+                    : "border-white/10 text-white/60"
                 }`}
               >
                 {solution.title}
@@ -371,23 +389,24 @@ export function SolutionsSection() {
 
           {/* Centro da engrenagem — descrição + botão da solução ativa */}
           <div className="absolute left-1/2 top-1/2 flex w-[60%] max-w-[300px] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-5 text-center">
-            <div
-              ref={solutionContentRef}
-              key={active}
-              className="flex flex-col items-center gap-3"
-            >
-              {/* Ícone da solução — laranja (mesma cor do label do botão),
-                  com leve glow laranja atrás sem comprometer a leitura */}
-              <div className="relative">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute left-1/2 top-1/2 size-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-500 opacity-30 blur-[32px]"
-                />
-                <SolIcon className="relative size-8 text-primary-300" aria-hidden />
+            <div className="relative flex flex-col items-center">
+              {/* Glow laranja atrás do ícone — fica fora do bloco que faz fade
+                  e em camada própria, para não ser repintado a cada troca.
+                  top-4 = centro do ícone (size-8). */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-4 size-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-500 opacity-30 blur-[32px] will-change-transform"
+              />
+              <div
+                ref={solutionContentRef}
+                className="relative flex flex-col items-center gap-3"
+              >
+                {/* Ícone da solução — laranja (mesma cor do label do botão) */}
+                <SolIcon className="size-8 text-primary-300" aria-hidden />
+                <p className="text-body leading-[1.5] text-neutral-300">
+                  {sol.description}
+                </p>
               </div>
-              <p className="text-body leading-[1.5] text-neutral-300">
-                {sol.description}
-              </p>
             </div>
             {/* CTA da solução ativa — leva à página correspondente. O
                 aria-label repete o título porque "Ver novas" sozinho não diz
