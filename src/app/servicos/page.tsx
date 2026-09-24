@@ -37,8 +37,14 @@ export default function ServicosPage() {
         <MultibrandSection />
       </div>
 
-      {/* Grupo claro 1 — Captação (após a Assistência multimarcas) + Portfólio.
-          Malha única, sem cortes. */}
+      {/* Bloco dark — Estrutura técnica (mapa de abrangência), logo após as
+          marcas atendidas. */}
+      <div className="relative isolate bg-[#181616]">
+        <DarkAmbient />
+        <TechStructureSection />
+      </div>
+
+      {/* Grupo claro 1 — Captação + Portfólio. Malha única, sem cortes. */}
       <div className="relative isolate bg-[#fdfdfd]">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <LeadFormSection
@@ -70,12 +76,9 @@ export default function ServicosPage() {
         <DifferentialsSection />
       </div>
 
-      {/* Bloco dark único — Estrutura técnica + Segmentos.
-          Um só DarkAmbient para os blurs percorrerem as duas seções de forma
-          contínua (parecem uma seção só). */}
+      {/* Bloco dark — Segmentos */}
       <div className="relative isolate bg-[#181616]">
         <DarkAmbient />
-        <TechStructureSection />
         <SegmentsSection />
       </div>
 
