@@ -2,7 +2,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import { Section } from "@/components/ui/section";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { servicosPage } from "@/sanity/content/pages/servicos";
@@ -56,73 +56,75 @@ export function MultibrandSection({ content }: { content: MultibrandContent }) {
     const footer = footerRef.current;
     if (!header || !grid) return;
 
-    const headerItems = Array.from(header.children) as HTMLElement[];
-    const cells = gsap.utils.toArray<HTMLElement>("[data-cell]", grid);
-    const dots = gsap.utils.toArray<HTMLElement>("[data-dot]", grid);
-    const logos = gsap.utils.toArray<HTMLElement>("[data-logo]", grid);
-    const lines = [grid, ...cells];
+    return withGsap(({ gsap, ScrollTrigger }) => {
+      const headerItems = Array.from(header.children) as HTMLElement[];
+      const cells = gsap.utils.toArray<HTMLElement>("[data-cell]", grid);
+      const dots = gsap.utils.toArray<HTMLElement>("[data-dot]", grid);
+      const logos = gsap.utils.toArray<HTMLElement>("[data-logo]", grid);
+      const lines = [grid, ...cells];
 
-    // Estados iniciais: cabeçalho/logos entram (fade + slide); linhas e bolinhas
-    // começam transparentes e aparecem.
-    gsap.set(headerItems, { opacity: 0, y: 16 });
-    gsap.set(lines, { borderColor: "rgba(245,130,32,0)" });
-    gsap.set(dots, { opacity: 0 });
-    gsap.set(logos, { opacity: 0, y: 16 });
-    if (footer) gsap.set(footer, { opacity: 0, y: 16 });
+      // Estados iniciais: cabeçalho/logos entram (fade + slide); linhas e bolinhas
+      // começam transparentes e aparecem.
+      gsap.set(headerItems, { opacity: 0, y: 16 });
+      gsap.set(lines, { borderColor: "rgba(245,130,32,0)" });
+      gsap.set(dots, { opacity: 0 });
+      gsap.set(logos, { opacity: 0, y: 16 });
+      if (footer) gsap.set(footer, { opacity: 0, y: 16 });
 
-    const triggers = [
-      ScrollTrigger.create({
-        trigger: header,
-        start: "top 90%",
-        once: true,
-        onEnter: () =>
-          gsap.to(headerItems, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power2.out",
-            stagger: 0.06,
-          }),
-      }),
-      ScrollTrigger.create({
-        trigger: grid,
-        start: "top 85%",
-        once: true,
-        onEnter: () => {
-          const tl = gsap.timeline();
-          tl.to(lines, {
-            borderColor: LINE_COLOR,
-            duration: 0.6,
-            ease: "power2.out",
-          })
-            .to(
-              dots,
-              { opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.015 },
-              0.1
-            )
-            .to(
-              logos,
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.7,
-                ease: "power2.out",
-                stagger: 0.06,
-              },
-              0.15
-            );
-          if (footer)
-            tl.to(
-              footer,
-              { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-              0.35
-            );
-        },
-      }),
-    ];
+      const triggers = [
+        ScrollTrigger.create({
+          trigger: header,
+          start: "top 90%",
+          once: true,
+          onEnter: () =>
+            gsap.to(headerItems, {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power2.out",
+              stagger: 0.06,
+            }),
+        }),
+        ScrollTrigger.create({
+          trigger: grid,
+          start: "top 85%",
+          once: true,
+          onEnter: () => {
+            const tl = gsap.timeline();
+            tl.to(lines, {
+              borderColor: LINE_COLOR,
+              duration: 0.6,
+              ease: "power2.out",
+            })
+              .to(
+                dots,
+                { opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.015 },
+                0.1
+              )
+              .to(
+                logos,
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.7,
+                  ease: "power2.out",
+                  stagger: 0.06,
+                },
+                0.15
+              );
+            if (footer)
+              tl.to(
+                footer,
+                { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+                0.35
+              );
+          },
+        }),
+      ];
 
-    ScrollTrigger.refresh();
-    return () => triggers.forEach((t) => t.kill());
+      ScrollTrigger.refresh();
+      return () => triggers.forEach((t) => t.kill());
+    });
   }, []);
 
   return (
@@ -183,6 +185,9 @@ export function MultibrandSection({ content }: { content: MultibrandContent }) {
                 <Image
                   src={brand.logo}
                   alt={brand.name}
+                  // Sem `sizes`, o srcset 1x/2x partia da largura do arquivo
+                  // (w=828); o logo é limitado pelo max-w abaixo.
+                  sizes="(min-width: 640px) 150px, 105px"
                   className={`${brand.heightClass ?? "h-7 sm:h-9"} w-auto max-w-[105px] object-contain transition-transform duration-300 group-hover:scale-105 sm:max-w-[150px]`}
                 />
               </span>

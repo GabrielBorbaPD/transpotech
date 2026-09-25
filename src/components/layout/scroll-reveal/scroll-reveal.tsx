@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { loadGsap, type Gsap, type GsapModule } from "@/lib/load-gsap";
 
 const STAGGER = 0.06;
 
@@ -56,7 +56,7 @@ const atomsOf = (el: HTMLElement): HTMLElement[] => {
   return kids.length === 0 ? [el] : kids.flatMap(atomsOf);
 };
 
-const reveal = (atoms: HTMLElement[]) => {
+const reveal = (gsap: Gsap, atoms: HTMLElement[]) => {
   gsap.to(atoms, {
     opacity: 1,
     y: 0,
@@ -99,6 +99,8 @@ export function ScrollReveal() {
 
     let raf = 0;
     let idle = 0;
+    let disposed = false;
+    let gsap: Gsap | undefined;
     let prepareObserver: IntersectionObserver | undefined;
     let revealObserver: IntersectionObserver | undefined;
     const atomsByBlock = new Map<Element, HTMLElement[]>();
@@ -111,7 +113,7 @@ export function ScrollReveal() {
         observer.unobserve(entry.target);
         const atoms = atomsByBlock.get(entry.target);
         atomsByBlock.delete(entry.target);
-        if (atoms) reveal(atoms);
+        if (atoms && gsap) reveal(gsap, atoms);
       }
     };
 
@@ -156,14 +158,23 @@ export function ScrollReveal() {
       // escondê-lo para refazer a entrada fazia o conteúdo piscar e empurrava o
       // LCP para o fim do fade.
       for (const { block, atoms, now } of plan) {
-        if (now) continue;
+        if (now || !gsap) continue;
         gsap.set(atoms, { opacity: 0, y: 16 });
         atomsByBlock.set(block, atoms);
         revealObserver?.observe(block);
       }
     };
 
-    const init = () => {
+    const init = async () => {
+      let mod: GsapModule;
+      try {
+        mod = await loadGsap();
+      } catch {
+        return;
+      }
+      if (disposed) return;
+      gsap = mod.gsap;
+
       const sections = Array.from(
         document.querySelectorAll<HTMLElement>(SECTION_SELECTOR)
       );
@@ -190,7 +201,7 @@ export function ScrollReveal() {
       // Em navegação client-side o layout da nova página acabou de montar;
       // recalcula as posições dos ScrollTriggers das seções com animação
       // própria. No primeiro carregamento o ScrollTrigger já faz isso no load.
-      if (isNavigation) ScrollTrigger.refresh();
+      if (isNavigation) mod.ScrollTrigger.refresh();
     };
 
     // ScrollReveal vive no layout raiz, acima dos Suspense boundaries do App
@@ -225,7 +236,7 @@ export function ScrollReveal() {
         });
       }
     };
-    const start = () => whenIdle(() => whenIdle(init));
+    const start = () => whenIdle(() => whenIdle(() => void init()));
 
     if (document.readyState === "complete") {
       start();
@@ -234,6 +245,7 @@ export function ScrollReveal() {
     }
 
     return () => {
+      disposed = true;
       window.removeEventListener("load", start);
       cancelAnimationFrame(raf);
       if (idle && typeof window.cancelIdleCallback === "function") {

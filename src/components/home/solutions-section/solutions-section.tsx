@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef, type CSSProperties } from "react";
-import { gsap } from "@/lib/gsap";
+import { loadGsap } from "@/lib/load-gsap";
 import Image from "next/image";
-import Link from "next/link";
+import { IntentLink } from "@/components/ui/intent-link";
 import {
   ArrowRight,
   Forklift,
@@ -117,24 +117,28 @@ export function SolutionsSection({ content }: { content: SolutionsContent }) {
   const solutionContentRef = useRef<HTMLDivElement>(null);
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Anima a engrenagem para o ângulo acumulado usando GSAP + CustomEase
+  // Anima a engrenagem para o ângulo acumulado (ease "gearEase" de lib/gsap)
   const rotateGear = (targetDeg: number) => {
-    gsap.to(gearRef.current, {
-      rotation: targetDeg,
-      duration: prefersReducedMotion() ? 0 : 0.85,
-      ease: "gearEase",
-      overwrite: "auto",
-    });
+    loadGsap().then(({ gsap }) => {
+      gsap.to(gearRef.current, {
+        rotation: targetDeg,
+        duration: prefersReducedMotion() ? 0 : 0.85,
+        ease: "gearEase",
+        overwrite: "auto",
+      });
+    }, () => {});
   };
 
   // Fade da solução ativa — substitui @keyframes fade-in-solution
   const fadeSolution = () => {
     if (!solutionContentRef.current || prefersReducedMotion()) return;
-    gsap.fromTo(
-      solutionContentRef.current,
-      { opacity: 0, y: 10 },
-      { opacity: 1, y: 0, duration: 0.35, ease: "power1.out" }
-    );
+    loadGsap().then(({ gsap }) => {
+      gsap.fromTo(
+        solutionContentRef.current,
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.35, ease: "power1.out" }
+      );
+    }, () => {});
   };
 
   useEffect(() => {
@@ -359,7 +363,7 @@ export function SolutionsSection({ content }: { content: SolutionsContent }) {
             {/* CTA da solução ativa — leva à página correspondente. O
                 aria-label repete o título porque "Ver novas" sozinho não diz
                 do que se trata fora do contexto visual do círculo. */}
-            <Link
+            <IntentLink
               href={sol.href}
               aria-label={`${sol.cta} — ${sol.title}`}
               className="group/cta inline-flex items-center gap-2 rounded-full bg-primary-500/15 px-5 py-2.5 text-body font-semibold text-primary-300 transition-colors hover:bg-primary-500/25"
@@ -369,7 +373,7 @@ export function SolutionsSection({ content }: { content: SolutionsContent }) {
                 className="size-4 transition-transform group-hover/cta:translate-x-0.5"
                 aria-hidden
               />
-            </Link>
+            </IntentLink>
           </div>
 
           {/* Áreas de clique transparentes sobre cada bolinha */}

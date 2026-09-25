@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Section } from "@/components/ui/section";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { quemSomosPage } from "@/sanity/content/pages/quem-somos";
 
@@ -86,15 +86,17 @@ export function HistorySection({ content }: { content: HistoryContent }) {
       return;
     }
     set(0);
-    const st = ScrollTrigger.create({
-      trigger: wrap,
-      start: "top 70%",
-      end: "bottom 80%",
-      scrub: true,
-      onUpdate: (self) => set(self.progress),
+    return withGsap(({ ScrollTrigger }) => {
+      const st = ScrollTrigger.create({
+        trigger: wrap,
+        start: "top 70%",
+        end: "bottom 80%",
+        scrub: true,
+        onUpdate: (self) => set(self.progress),
+      });
+      ScrollTrigger.refresh();
+      return () => st.kill();
     });
-    ScrollTrigger.refresh();
-    return () => st.kill();
   }, []);
 
   // A régua laranja "carrega" (esquerda → direita) uma única vez quando a seção
@@ -112,25 +114,27 @@ export function HistorySection({ content }: { content: HistoryContent }) {
       return;
     }
     set(0);
-    const state = { p: 0 };
-    const tween = gsap.to(state, {
-      p: 1,
-      duration: 1.8,
-      ease: "sine.inOut",
-      paused: true,
-      onUpdate: () => set(state.p),
+    return withGsap(({ gsap, ScrollTrigger }) => {
+      const state = { p: 0 };
+      const tween = gsap.to(state, {
+        p: 1,
+        duration: 1.8,
+        ease: "sine.inOut",
+        paused: true,
+        onUpdate: () => set(state.p),
+      });
+      const st = ScrollTrigger.create({
+        trigger: track,
+        start: "top 90%",
+        once: true,
+        onEnter: () => tween.play(),
+      });
+      ScrollTrigger.refresh();
+      return () => {
+        st.kill();
+        tween.kill();
+      };
     });
-    const st = ScrollTrigger.create({
-      trigger: track,
-      start: "top 90%",
-      once: true,
-      onEnter: () => tween.play(),
-    });
-    ScrollTrigger.refresh();
-    return () => {
-      st.kill();
-      tween.kill();
-    };
   }, []);
 
   return (

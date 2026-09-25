@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { pecasPage } from "@/sanity/content/pages/pecas";
 
@@ -41,25 +41,27 @@ export function NoCodeSection({ content }: { content: NoCodeContent }) {
     }
 
     apply(0);
-    const state = { p: 0 };
-    const tween = gsap.to(state, {
-      p: 1,
-      duration: 1.8,
-      ease: "sine.inOut",
-      paused: true,
-      onUpdate: () => apply(state.p),
+    return withGsap(({ gsap, ScrollTrigger }) => {
+      const state = { p: 0 };
+      const tween = gsap.to(state, {
+        p: 1,
+        duration: 1.8,
+        ease: "sine.inOut",
+        paused: true,
+        onUpdate: () => apply(state.p),
+      });
+      const st = ScrollTrigger.create({
+        trigger: wrap,
+        start: "top 85%",
+        once: true,
+        onEnter: () => tween.play(),
+      });
+      ScrollTrigger.refresh();
+      return () => {
+        st.kill();
+        tween.kill();
+      };
     });
-    const st = ScrollTrigger.create({
-      trigger: wrap,
-      start: "top 85%",
-      once: true,
-      onEnter: () => tween.play(),
-    });
-    ScrollTrigger.refresh();
-    return () => {
-      st.kill();
-      tween.kill();
-    };
   }, [n]);
 
   return (

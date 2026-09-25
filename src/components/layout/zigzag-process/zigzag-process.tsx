@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import Image, { type StaticImageData } from "next/image";
 import { Section } from "@/components/ui/section";
-import { ScrollTrigger } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import { useNearViewport } from "@/hooks/use-near-viewport";
 
 export type ZigzagStep = {
@@ -151,14 +151,16 @@ export function ZigzagProcess({
       return;
     }
     setProgress(0);
-    const st = ScrollTrigger.create({
-      trigger: wrap,
-      start: "top 60%",
-      end: "bottom 75%",
-      scrub: true,
-      onUpdate: (self) => setProgress(self.progress),
+    return withGsap(({ ScrollTrigger }) => {
+      const st = ScrollTrigger.create({
+        trigger: wrap,
+        start: "top 60%",
+        end: "bottom 75%",
+        scrub: true,
+        onUpdate: (self) => setProgress(self.progress),
+      });
+      return () => st.kill();
     });
-    return () => st.kill();
   }, [d, near]);
 
   return (

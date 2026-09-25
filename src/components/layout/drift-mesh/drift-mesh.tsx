@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
-import { gsap } from "@/lib/gsap";
+import { withGsap, type Gsap } from "@/lib/load-gsap";
 
 // Malha grande que "anda" sozinha pelo fundo (referência:
 // terminal-industries.com/about). Mesmo desenho do HoverMesh (pontos +
@@ -58,32 +58,37 @@ export function DriftMesh({
     // malha, e camadas de conteúdo empilhadas somariam a malha várias vezes.
     let visible = false;
     let started = false;
+    let loaded: Gsap | undefined;
+    let disposeGsap: (() => void) | undefined;
 
     // Os tweens só nascem na primeira entrada na viewport (o do footer, na
     // maioria das visitas, nunca). Até lá valem os fallbacks do var().
     const start = () => {
       started = true;
-      // Sem valor inicial explícito o GSAP parte de 0 (canto superior
-      // esquerdo), ignorando o fallback do var() — então os blobs começam nas
-      // posições definidas em BLOBS.
-      BLOBS.forEach((b, i) => {
-        el.style.setProperty(`--bx${i}`, `${b.x}%`);
-        el.style.setProperty(`--by${i}`, `${b.y}%`);
-      });
+      disposeGsap = withGsap(({ gsap }) => {
+        loaded = gsap;
+        // Sem valor inicial explícito o GSAP parte de 0 (canto superior
+        // esquerdo), ignorando o fallback do var() — então os blobs começam nas
+        // posições definidas em BLOBS.
+        BLOBS.forEach((b, i) => {
+          el.style.setProperty(`--bx${i}`, `${b.x}%`);
+          el.style.setProperty(`--by${i}`, `${b.y}%`);
+        });
 
-      // Cada blob vagueia para um alvo aleatório e re-sorteia ao chegar.
-      BLOBS.forEach((_, i) => {
-        const move = () => {
-          gsap.to(el, {
-            paused: !visible,
-            [`--bx${i}`]: `${gsap.utils.random(5, 95, 1)}%`,
-            [`--by${i}`]: `${gsap.utils.random(8, 92, 1)}%`,
-            duration: gsap.utils.random(3, 6) / speed,
-            ease: "sine.inOut",
-            onComplete: move,
-          });
-        };
-        move();
+        // Cada blob vagueia para um alvo aleatório e re-sorteia ao chegar.
+        BLOBS.forEach((_, i) => {
+          const move = () => {
+            gsap.to(el, {
+              paused: !visible,
+              [`--bx${i}`]: `${gsap.utils.random(5, 95, 1)}%`,
+              [`--by${i}`]: `${gsap.utils.random(8, 92, 1)}%`,
+              duration: gsap.utils.random(3, 6) / speed,
+              ease: "sine.inOut",
+              onComplete: move,
+            });
+          };
+          move();
+        });
       });
     };
 
@@ -93,13 +98,14 @@ export function DriftMesh({
         start();
         return;
       }
-      gsap.getTweensOf(el).forEach((t) => (visible ? t.resume() : t.pause()));
+      loaded?.getTweensOf(el).forEach((t) => (visible ? t.resume() : t.pause()));
     });
     observer.observe(el);
 
     return () => {
       observer.disconnect();
-      gsap.killTweensOf(el);
+      disposeGsap?.();
+      loaded?.killTweensOf(el);
     };
   }, [speed]);
 

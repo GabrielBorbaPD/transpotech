@@ -22,7 +22,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { automacaoPage } from "@/sanity/content/pages/automacao";
 
@@ -138,25 +138,27 @@ export function SolutionsSection({
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const ul = listRef.current;
     if (!ul) return;
-    const items = Array.from(ul.children) as HTMLElement[];
-    gsap.set(items, { opacity: 0, y: 16 });
-    const triggers = ScrollTrigger.batch(items, {
-      start: "top 92%",
-      onEnter: (els) =>
-        gsap.to(els, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-          stagger: 0.08,
-          overwrite: "auto",
-        }),
+    return withGsap(({ gsap, ScrollTrigger }) => {
+      const items = Array.from(ul.children) as HTMLElement[];
+      gsap.set(items, { opacity: 0, y: 16 });
+      const triggers = ScrollTrigger.batch(items, {
+        start: "top 92%",
+        onEnter: (els) =>
+          gsap.to(els, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power2.out",
+            stagger: 0.08,
+            overwrite: "auto",
+          }),
+      });
+      ScrollTrigger.refresh();
+      return () => {
+        triggers.forEach((t) => t.kill());
+        gsap.set(items, { clearProps: "opacity,transform" });
+      };
     });
-    ScrollTrigger.refresh();
-    return () => {
-      triggers.forEach((t) => t.kill());
-      gsap.set(items, { clearProps: "opacity,transform" });
-    };
   }, [active]);
 
   return (

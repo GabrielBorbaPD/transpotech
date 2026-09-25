@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import { automationDots } from "./automation-dots.data";
 
 // Cada bolinha usa um gradiente vertical (claro no topo → saturado embaixo),
@@ -22,63 +22,65 @@ export function AutomationDots() {
     const svg = svgRef.current;
     if (!svg) return;
 
-    // A ilustração é irmã do SVG dentro do mesmo wrapper (marcada como decorativa,
-    // então o ScrollReveal global a ignora — revelamos aqui, um pouco antes das
-    // bolinhas, no mesmo estilo das entradas de seção: fade + leve slide-up).
-    const wrapper = svg.parentElement;
-    const image = wrapper?.querySelector("img") ?? null;
+    return withGsap(({ gsap, ScrollTrigger }) => {
+      // A ilustração é irmã do SVG dentro do mesmo wrapper (marcada como decorativa,
+      // então o ScrollReveal global a ignora — revelamos aqui, um pouco antes das
+      // bolinhas, no mesmo estilo das entradas de seção: fade + leve slide-up).
+      const wrapper = svg.parentElement;
+      const image = wrapper?.querySelector("img") ?? null;
 
-    const circles = gsap.utils.toArray<SVGCircleElement>(
-      svg.querySelectorAll("circle")
-    );
+      const circles = gsap.utils.toArray<SVGCircleElement>(
+        svg.querySelectorAll("circle")
+      );
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.set(circles, { opacity: 1 });
-      if (image) gsap.set(image, { opacity: 1, y: 0 });
-      return;
-    }
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.set(circles, { opacity: 1 });
+        if (image) gsap.set(image, { opacity: 1, y: 0 });
+        return;
+      }
 
-    if (image) gsap.set(image, { opacity: 0, y: 16 });
-    // As bolinhas permanecem exatamente na posição — só a opacidade muda. Elas
-    // acendem em cascata, do extremo interno (conectado ao hub) para as pontas.
-    gsap.set(circles, { opacity: 0 });
+      if (image) gsap.set(image, { opacity: 0, y: 16 });
+      // As bolinhas permanecem exatamente na posição — só a opacidade muda. Elas
+      // acendem em cascata, do extremo interno (conectado ao hub) para as pontas.
+      gsap.set(circles, { opacity: 0 });
 
-    const imageTrigger = image
-      ? ScrollTrigger.create({
-          trigger: wrapper ?? svg,
-          start: "top 90%",
-          once: true,
-          onEnter: () =>
-            gsap.to(image, {
+      const imageTrigger = image
+        ? ScrollTrigger.create({
+            trigger: wrapper ?? svg,
+            start: "top 90%",
+            once: true,
+            onEnter: () =>
+              gsap.to(image, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out",
+              }),
+          })
+        : null;
+
+      const dotsTrigger = ScrollTrigger.create({
+        trigger: svg,
+        start: "top 78%",
+        once: true,
+        onEnter: () => {
+          circles.forEach((circle) => {
+            const t = Number(circle.dataset.t) || 0;
+            gsap.to(circle, {
               opacity: 1,
-              y: 0,
-              duration: 0.8,
-              ease: "power2.out",
-            }),
-        })
-      : null;
-
-    const dotsTrigger = ScrollTrigger.create({
-      trigger: svg,
-      start: "top 78%",
-      once: true,
-      onEnter: () => {
-        circles.forEach((circle) => {
-          const t = Number(circle.dataset.t) || 0;
-          gsap.to(circle, {
-            opacity: 1,
-            duration: 0.35,
-            delay: t * 1.8,
-            ease: "power1.out",
+              duration: 0.35,
+              delay: t * 1.8,
+              ease: "power1.out",
+            });
           });
-        });
-      },
-    });
+        },
+      });
 
-    return () => {
-      imageTrigger?.kill();
-      dotsTrigger.kill();
-    };
+      return () => {
+        imageTrigger?.kill();
+        dotsTrigger.kill();
+      };
+    });
   }, []);
 
   return (

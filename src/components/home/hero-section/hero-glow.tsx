@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 
 /**
  * Blur verde suave que acompanha o cursor dentro da Hero e só existe no hover.
@@ -16,58 +16,60 @@ export function HeroGlow() {
     const glow = glowRef.current;
     if (!wrap || !glow) return;
 
-    const xSet = gsap.quickSetter(glow, "x", "px");
-    const ySet = gsap.quickSetter(glow, "y", "px");
+    return withGsap(({ gsap }) => {
+      const xSet = gsap.quickSetter(glow, "x", "px");
+      const ySet = gsap.quickSetter(glow, "y", "px");
 
-    let tx = 0;
-    let ty = 0;
-    let cx = 0;
-    let cy = 0;
-    let inside = false;
-    let init = false;
+      let tx = 0;
+      let ty = 0;
+      let cx = 0;
+      let cy = 0;
+      let inside = false;
+      let init = false;
 
-    const ticker = () => {
-      if (!inside) return;
-      if (Math.abs(tx - cx) < 0.3 && Math.abs(ty - cy) < 0.3) return;
-      cx += (tx - cx) * 0.18;
-      cy += (ty - cy) * 0.18;
-      xSet(cx - glow.offsetWidth / 2);
-      ySet(cy - glow.offsetHeight / 2);
-    };
+      const ticker = () => {
+        if (!inside) return;
+        if (Math.abs(tx - cx) < 0.3 && Math.abs(ty - cy) < 0.3) return;
+        cx += (tx - cx) * 0.18;
+        cy += (ty - cy) * 0.18;
+        xSet(cx - glow.offsetWidth / 2);
+        ySet(cy - glow.offsetHeight / 2);
+      };
 
-    const onMove = (event: MouseEvent) => {
-      const rect = wrap.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const within = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
+      const onMove = (event: MouseEvent) => {
+        const rect = wrap.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const within = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
 
-      if (within) {
-        tx = x;
-        ty = y;
-        if (!init) {
-          cx = x;
-          cy = y;
-          xSet(cx - glow.offsetWidth / 2);
-          ySet(cy - glow.offsetHeight / 2);
-          init = true;
+        if (within) {
+          tx = x;
+          ty = y;
+          if (!init) {
+            cx = x;
+            cy = y;
+            xSet(cx - glow.offsetWidth / 2);
+            ySet(cy - glow.offsetHeight / 2);
+            init = true;
+          }
+          if (!inside) {
+            inside = true;
+            gsap.to(glow, { opacity: 0.18, duration: 0.3, ease: "power1.out" });
+          }
+        } else if (inside) {
+          inside = false;
+          gsap.to(glow, { opacity: 0, duration: 0.3, ease: "power1.out" });
         }
-        if (!inside) {
-          inside = true;
-          gsap.to(glow, { opacity: 0.18, duration: 0.3, ease: "power1.out" });
-        }
-      } else if (inside) {
-        inside = false;
-        gsap.to(glow, { opacity: 0, duration: 0.3, ease: "power1.out" });
-      }
-    };
+      };
 
-    gsap.ticker.add(ticker);
-    window.addEventListener("mousemove", onMove, { passive: true });
+      gsap.ticker.add(ticker);
+      window.addEventListener("mousemove", onMove, { passive: true });
 
-    return () => {
-      gsap.ticker.remove(ticker);
-      window.removeEventListener("mousemove", onMove);
-    };
+      return () => {
+        gsap.ticker.remove(ticker);
+        window.removeEventListener("mousemove", onMove);
+      };
+    });
   }, []);
 
   return (

@@ -1,11 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
+import { IntentLink } from "@/components/ui/intent-link";
 import type { Article } from "@/data/articles";
 import { ROUTES } from "@/lib/routes";
 
 export function ArticleCard({ article }: { article: Article }) {
   return (
-    <Link
+    <IntentLink
       href={`${ROUTES.PORTAL_CONTEUDO}/${article.id}`}
       className="group/card block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
     >
@@ -43,6 +43,6 @@ export function ArticleCard({ article }: { article: Article }) {
           <span className="text-body text-neutral-500">{article.date}</span>
         </div>
       </article>
-    </Link>
+    </IntentLink>
   );
 }

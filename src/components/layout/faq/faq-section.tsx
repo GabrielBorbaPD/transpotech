@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { gsap } from "@/lib/gsap";
+import { loadGsap } from "@/lib/load-gsap";
 
 export type FaqItem = { question: string; answer: string };
 
@@ -28,23 +28,26 @@ export function FaqSection({ titleRegular, titleAccent, items }: FaqSectionProps
       isFirstRun.current = false;
       return;
     }
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    panelRefs.current.forEach((panel, i) => {
-      if (!panel) return;
-      const isOpen = i === openIndex;
-      if (reduce) {
-        panel.style.height = isOpen ? "auto" : "0px";
-        return;
-      }
-      gsap.to(panel, {
-        height: isOpen ? panel.scrollHeight : 0,
-        duration: 0.35,
-        ease: "power2.out",
-        onComplete: () => {
-          if (isOpen) panel.style.height = "auto";
-        },
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      panelRefs.current.forEach((panel, i) => {
+        if (panel) panel.style.height = i === openIndex ? "auto" : "0px";
       });
-    });
+      return;
+    }
+    loadGsap().then(({ gsap }) => {
+      panelRefs.current.forEach((panel, i) => {
+        if (!panel) return;
+        const isOpen = i === openIndex;
+        gsap.to(panel, {
+          height: isOpen ? panel.scrollHeight : 0,
+          duration: 0.35,
+          ease: "power2.out",
+          onComplete: () => {
+            if (isOpen) panel.style.height = "auto";
+          },
+        });
+      });
+    }, () => {});
   }, [openIndex]);
 
   return (

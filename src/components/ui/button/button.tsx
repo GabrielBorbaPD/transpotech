@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, type ComponentProps, type MouseEventHandler } from "react";
-import Link from "next/link";
-import { gsap } from "@/lib/gsap";
+import { IntentLink } from "@/components/ui/intent-link";
+import { loadGsap } from "@/lib/load-gsap";
 import type { ButtonProps, ButtonSize, ButtonVariant } from "./button.types";
 
 const base =
@@ -45,22 +45,31 @@ export function Button({
   // Lift + rotação de texto apenas no botão primário (substitui lift-text-spin @keyframes)
   const onEnter = (e: React.MouseEvent<HTMLElement>) => {
     if (variant !== "primary") return;
-    gsap.to(e.currentTarget, { y: -3, duration: 0.2, ease: "power1.out" });
-    gsap.fromTo(
-      textRef.current,
-      { rotationX: 0 },
-      { rotationX: 16, duration: 0.14, ease: "power1.out", yoyo: true, repeat: 1 }
-    );
+    const el = e.currentTarget;
+    loadGsap().then(({ gsap }) => {
+      gsap.to(el, { y: -3, duration: 0.2, ease: "power1.out" });
+      gsap.fromTo(
+        textRef.current,
+        { rotationX: 0 },
+        { rotationX: 16, duration: 0.14, ease: "power1.out", yoyo: true, repeat: 1 }
+      );
+    }, () => {});
   };
 
   const onLeave = (e: React.MouseEvent<HTMLElement>) => {
     if (variant !== "primary") return;
-    gsap.to(e.currentTarget, { y: 0, duration: 0.2, ease: "power1.out" });
+    const el = e.currentTarget;
+    loadGsap().then(({ gsap }) => {
+      gsap.to(el, { y: 0, duration: 0.2, ease: "power1.out" });
+    }, () => {});
   };
 
   const onDown = (e: React.MouseEvent<HTMLElement>) => {
     if (variant !== "primary") return;
-    gsap.to(e.currentTarget, { y: 0, duration: 0.1, ease: "power1.out" });
+    const el = e.currentTarget;
+    loadGsap().then(({ gsap }) => {
+      gsap.to(el, { y: 0, duration: 0.1, ease: "power1.out" });
+    }, () => {});
   };
 
   const content = (
@@ -76,7 +85,7 @@ export function Button({
     // id, tabIndex) têm efeito.
     const anchorProps = props as unknown as ComponentProps<"a">;
     return (
-      <Link
+      <IntentLink
         {...anchorProps}
         href={href}
         target={target}
@@ -88,7 +97,7 @@ export function Button({
         onMouseDown={onDown}
       >
         {content}
-      </Link>
+      </IntentLink>
     );
   }
 

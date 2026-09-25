@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Controller, useForm, type Resolver } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { CircleCheck, PencilLine, X } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
@@ -15,25 +15,10 @@ import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { useSharedTexts } from "@/components/layout/shared-texts";
 import type { ContactRequestValues } from "@/lib/contact-request.schema";
-
-// zod + schema (~100KB) só baixam quando o visitante interage com o formulário
-// (foco em um campo) ou envia — a seção fica abaixo da dobra em todas as
-// páginas e o HTML dela não depende da validação. O import é memoizado pelo
-// bundler: o foco já deixa tudo pronto para o envio.
-const loadValidation = () =>
-  Promise.all([
-    import("@hookform/resolvers/zod"),
-    import("@/lib/contact-request.schema"),
-  ]);
-
-const contactResolver: Resolver<ContactRequestValues> = async (
-  values,
-  context,
-  options
-) => {
-  const [{ zodResolver }, { contactRequestSchema }] = await loadValidation();
-  return zodResolver(contactRequestSchema)(values, context, options);
-};
+import {
+  contactResolver,
+  loadContactValidation,
+} from "@/lib/contact-request.resolver";
 
 const labelBase = "text-body font-semibold text-neutral-700";
 
@@ -201,7 +186,7 @@ export function LeadFormSection({
           // Marca "começou a preencher" no primeiro input real (digitação/seleção
           // humana borbulha até aqui). É o gatilho do banner.
           onInput={() => setEngaged(true)}
-          onFocus={() => void loadValidation()}
+          onFocus={() => void loadContactValidation()}
           onChange={() => sent && setSent(false)}
           className="flex flex-col gap-5 rounded-2xl border-2 border-neutral-100 bg-white p-6 lg:p-8"
         >

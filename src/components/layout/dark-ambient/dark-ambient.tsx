@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 
 const GREEN_OFFSET = 220;
 const FACTOR = 0.6;
@@ -43,41 +43,44 @@ export function DarkAmbient({ greenOffset = GREEN_OFFSET }: DarkAmbientProps = {
     // blurs ficam na posição inicial, que já vem no HTML. Os ScrollTriggers só
     // nascem quando o bloco se aproxima, em vez de todos medirem layout na
     // hidratação. Criado depois, o scrub já assume o progresso do scroll atual.
-    let ctx: gsap.Context | null = null;
+    let disposeGsap: (() => void) | undefined;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         observer.disconnect();
-        ctx = gsap.context(() => {
-          // x: 0 explícito: o GSAP leria o translate(%) inline como px e
-          // somaria ao xPercent.
-          gsap.set(orange, { xPercent: 25, x: 0, y: 0 });
-          gsap.set(green, { xPercent: -25, x: 0, y: greenOffset });
+        disposeGsap = withGsap(({ gsap }) => {
+          const ctx = gsap.context(() => {
+            // x: 0 explícito: o GSAP leria o translate(%) inline como px e
+            // somaria ao xPercent.
+            gsap.set(orange, { xPercent: 25, x: 0, y: 0 });
+            gsap.set(green, { xPercent: -25, x: 0, y: greenOffset });
 
-          gsap.to(orange, {
-            y: () => container.offsetHeight * FACTOR,
-            ease: "none",
-            scrollTrigger: {
-              trigger: container,
-              start: "top top",
-              end: "bottom top",
-              scrub: true,
-              invalidateOnRefresh: true,
-            },
-          });
+            gsap.to(orange, {
+              y: () => container.offsetHeight * FACTOR,
+              ease: "none",
+              scrollTrigger: {
+                trigger: container,
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
+                invalidateOnRefresh: true,
+              },
+            });
 
-          gsap.to(green, {
-            y: () => container.offsetHeight * FACTOR + greenOffset,
-            ease: "none",
-            scrollTrigger: {
-              trigger: container,
-              start: "top top",
-              end: "bottom top",
-              scrub: true,
-              invalidateOnRefresh: true,
-            },
-          });
-        }, container);
+            gsap.to(green, {
+              y: () => container.offsetHeight * FACTOR + greenOffset,
+              ease: "none",
+              scrollTrigger: {
+                trigger: container,
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
+                invalidateOnRefresh: true,
+              },
+            });
+          }, container);
+          return () => ctx.revert();
+        });
       },
       { rootMargin: "50% 0px" }
     );
@@ -85,7 +88,7 @@ export function DarkAmbient({ greenOffset = GREEN_OFFSET }: DarkAmbientProps = {
 
     return () => {
       observer.disconnect();
-      ctx?.revert();
+      disposeGsap?.();
     };
   }, [greenOffset]);
 

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { IntentLink } from "@/components/ui/intent-link";
 import { ArrowRight, Clock } from "lucide-react";
 import { TextLink } from "@/components/ui/text-link";
 import type { Article } from "@/data/articles";
@@ -51,7 +51,7 @@ export function BlogSection({
           cada quadro dele abrir e cancelar uma transição CSS. */}
       <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-6">
         {/* Artigo em destaque */}
-        <Link
+        <IntentLink
           href={articleHref(featured.id)}
           className="group/card relative flex min-h-[360px] flex-col justify-end overflow-hidden rounded-2xl bg-neutral-900 transition-[scale,box-shadow] duration-300 hover:z-10 hover:scale-[1.01] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)] lg:min-h-[560px] lg:flex-[1.35]"
         >
@@ -92,12 +92,12 @@ export function BlogSection({
               </div>
             </div>
           </div>
-        </Link>
+        </IntentLink>
 
         {/* Cards menores empilhados */}
         <div className="flex flex-1 flex-col gap-4 lg:gap-6">
           {rest.map((article) => (
-            <Link
+            <IntentLink
               key={article.id}
               href={articleHref(article.id)}
               className="group/card relative flex min-h-[140px] flex-1 gap-4 overflow-hidden rounded-xl bg-white p-3 transition-[scale,box-shadow] duration-300 hover:z-10 hover:scale-[1.02] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)]"
@@ -139,7 +139,7 @@ export function BlogSection({
                   </div>
                 </div>
               </div>
-            </Link>
+            </IntentLink>
           ))}
         </div>
       </div>

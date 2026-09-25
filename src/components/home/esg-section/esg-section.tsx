@@ -2,12 +2,12 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { IntentLink } from "@/components/ui/intent-link";
 import { ArrowRight } from "lucide-react";
 import { ParallaxFrame } from "@/components/layout/parallax-frame";
 import gptw from "@/assets/images/gptw-badge.webp";
 import { ROUTES } from "@/lib/routes";
-import { gsap } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import { useNearViewport } from "@/hooks/use-near-viewport";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { homePage } from "@/sanity/content/pages/home";
@@ -38,40 +38,42 @@ export function EsgSection({ content }: { content: EsgContent }) {
   const itemContainerRefs = useRef<HTMLDivElement[]>([]);
   const gradientBarRefs = useRef<HTMLDivElement[]>([]);
 
-  useNearViewport(contentRef, () => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  useNearViewport(contentRef, () =>
+    withGsap(({ gsap }) => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: contentRef.current,
-          start: "top 75%",
-          once: true,
-        },
-      });
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: contentRef.current,
+            start: "top 75%",
+            once: true,
+          },
+        });
 
-      // Imagem
-      tl.from(imageRef.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" }, 0);
+        // Imagem
+        tl.from(imageRef.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" }, 0);
 
-      // Containers dos itens (500ms = 0.5s, stagger 160ms = 0.16s)
-      tl.from(itemContainerRefs.current, {
-        opacity: 0,
-        y: 12,
-        duration: 0.5,
-        ease: "power1.out",
-        stagger: STAGGER,
-      }, 0);
+        // Containers dos itens (500ms = 0.5s, stagger 160ms = 0.16s)
+        tl.from(itemContainerRefs.current, {
+          opacity: 0,
+          y: 12,
+          duration: 0.5,
+          ease: "power1.out",
+          stagger: STAGGER,
+        }, 0);
 
-      // Barras de gradiente (delay 300ms = 0.3s após início, stagger 160ms = 0.16s)
-      tl.from(gradientBarRefs.current, {
-        opacity: 0,
-        duration: 0.7,
-        ease: "power1.out",
-        stagger: STAGGER,
-      }, 0.3);
-    }, contentRef);
-    return () => ctx.revert();
-  });
+        // Barras de gradiente (delay 300ms = 0.3s após início, stagger 160ms = 0.16s)
+        tl.from(gradientBarRefs.current, {
+          opacity: 0,
+          duration: 0.7,
+          ease: "power1.out",
+          stagger: STAGGER,
+        }, 0.3);
+      }, contentRef);
+      return () => ctx.revert();
+    })
+  );
 
   return (
     <section
@@ -103,7 +105,7 @@ export function EsgSection({ content }: { content: EsgContent }) {
             src={gptw}
             alt={content.badgeAlt}
             fill
-            sizes="163px"
+            sizes="(min-width: 1024px) 163px, (min-width: 768px) 135px, (min-width: 640px) 110px, 71px"
             className="object-contain object-right"
           />
         </div>
@@ -158,13 +160,13 @@ export function EsgSection({ content }: { content: EsgContent }) {
                   </p>
                 </div>
                 {item.link && (
-                  <Link
+                  <IntentLink
                     href={item.link.href}
                     className="flex items-center gap-2 text-body font-semibold leading-[1.35] text-neutral-600 transition-colors hover:text-primary-500"
                   >
                     {item.link.label}
                     <ArrowRight className="size-5" aria-hidden />
-                  </Link>
+                  </IntentLink>
                 )}
               </div>
             </div>

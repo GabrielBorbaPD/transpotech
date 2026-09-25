@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGSAP } from "@gsap/react";
 import { X, Check, Plus } from "lucide-react";
-import { gsap } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import badgeImage from "@/assets/images/stats/card-badge.webp";
 import { Button } from "@/components/ui/button";
 import { CardImageIcon } from "@/components/ui/card-image-icon";
@@ -444,36 +443,40 @@ function QuoteSentCard({ onClose }: { onClose: () => void }) {
     if (el) revealRefs.current[i] = el;
   };
 
-  useGSAP(
-    () => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  // Layout effect, como o useGSAP que substitui: com o GSAP já carregado a
+  // promise resolve antes da pintura e o card não aparece antes do `.from()`.
+  useLayoutEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      gsap
-        .timeline()
-        .from(
-          cardRef.current,
-          { opacity: 0, y: 12, scale: 0.94, duration: 0.4, ease: "power2.out" },
-          0
-        )
-        .from(
-          badgeRef.current,
-          { scale: 0, duration: 0.5, ease: "back.out(1.7)" },
-          0.1
-        )
-        .from(
-          revealRefs.current,
-          {
-            opacity: 0,
-            y: 10,
-            duration: 0.4,
-            ease: "power1.out",
-            stagger: 0.08,
-          },
-          0.3
-        );
-    },
-    { scope: cardRef }
-  );
+    return withGsap(({ gsap }) => {
+      const ctx = gsap.context(() => {
+        gsap
+          .timeline()
+          .from(
+            cardRef.current,
+            { opacity: 0, y: 12, scale: 0.94, duration: 0.4, ease: "power2.out" },
+            0
+          )
+          .from(
+            badgeRef.current,
+            { scale: 0, duration: 0.5, ease: "back.out(1.7)" },
+            0.1
+          )
+          .from(
+            revealRefs.current,
+            {
+              opacity: 0,
+              y: 10,
+              duration: 0.4,
+              ease: "power1.out",
+              stagger: 0.08,
+            },
+            0.3
+          );
+      }, cardRef);
+      return () => ctx.revert();
+    });
+  }, []);
 
   return (
     <div

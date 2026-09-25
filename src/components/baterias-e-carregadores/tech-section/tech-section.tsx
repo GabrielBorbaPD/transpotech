@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import Image, { type StaticImageData } from "next/image";
 import { Section } from "@/components/ui/section";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import illo1 from "@/assets/images/baterias-tech/illo-1.webp";
 import illo2 from "@/assets/images/baterias-tech/illo-2.webp";
 import illo3 from "@/assets/images/baterias-tech/illo-3.webp";
@@ -114,6 +114,25 @@ const maskStyle = (m: Media): CSSProperties => ({
     : {}),
 });
 
+// Largura desenhada da ilustração: a caixa mede width × height cqw do card e o
+// object-cover a estica até cobrir os dois lados. O card é uma coluna do grid
+// (1 no mobile, 3 a partir de sm) dentro do padding da <Section> (20/24/64px,
+// conteúdo travado em 1312px) com gap de 16px; 1.05 é o zoom do hover.
+const illoSizes = ({ illo, width, height }: Media) => {
+  const coverCqw = Math.max(
+    parseFloat(width),
+    (parseFloat(height) * illo.width) / illo.height,
+  );
+  const k = (coverCqw / 100) * 1.05;
+  const col = (k / 3).toFixed(4);
+  return [
+    `(min-width: 1440px) ${Math.ceil(((1312 - 32) / 3) * k)}px`,
+    `(min-width: 1024px) calc((100vw - 160px) * ${col})`,
+    `(min-width: 640px) calc((100vw - 80px) * ${col})`,
+    `calc((100vw - 40px) * ${k.toFixed(4)})`,
+  ].join(", ");
+};
+
 const displayValue = (s: Stat, progress: number) => {
   const from = s.countdownFrom;
   return from != null
@@ -155,39 +174,41 @@ export function TechSection({ content }: { content: TechContent }) {
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    stats.forEach((s, i) => {
-      const node = numberRefs.current[i];
-      if (node) node.textContent = displayValue(s, 0);
+    return withGsap(({ gsap, ScrollTrigger }) => {
+      stats.forEach((s, i) => {
+        const node = numberRefs.current[i];
+        if (node) node.textContent = displayValue(s, 0);
+      });
+
+      const counters = stats.map(() => ({ progress: 0 }));
+      const tweens: gsap.core.Tween[] = [];
+
+      const trigger = ScrollTrigger.create({
+        trigger: el,
+        start: "top 75%",
+        once: true,
+        onEnter: () => {
+          stats.forEach((s, i) => {
+            tweens.push(
+              gsap.to(counters[i], {
+                progress: 1,
+                duration: 1.8,
+                ease: "power3.out",
+                onUpdate: () => {
+                  const node = numberRefs.current[i];
+                  if (node) node.textContent = displayValue(s, counters[i].progress);
+                },
+              })
+            );
+          });
+        },
+      });
+
+      return () => {
+        trigger.kill();
+        tweens.forEach((t) => t.kill());
+      };
     });
-
-    const counters = stats.map(() => ({ progress: 0 }));
-    const tweens: gsap.core.Tween[] = [];
-
-    const trigger = ScrollTrigger.create({
-      trigger: el,
-      start: "top 75%",
-      once: true,
-      onEnter: () => {
-        stats.forEach((s, i) => {
-          tweens.push(
-            gsap.to(counters[i], {
-              progress: 1,
-              duration: 1.8,
-              ease: "power3.out",
-              onUpdate: () => {
-                const node = numberRefs.current[i];
-                if (node) node.textContent = displayValue(s, counters[i].progress);
-              },
-            })
-          );
-        });
-      },
-    });
-
-    return () => {
-      trigger.kill();
-      tweens.forEach((t) => t.kill());
-    };
   }, [stats]);
 
   return (
@@ -226,7 +247,7 @@ export function TechSection({ content }: { content: TechContent }) {
                     src={s.media.illo}
                     alt=""
                     fill
-                    sizes="(min-width: 640px) 33vw, 100vw"
+                    sizes={illoSizes(s.media)}
                     className="select-none object-cover"
                     style={{
                       objectPosition: s.media.objectPosition,

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
 import { ParallaxFrame } from "@/components/layout/parallax-frame";
 import { CircleCheck } from "lucide-react";
-import { gsap } from "@/lib/gsap";
+import { withGsap } from "@/lib/load-gsap";
 import { useNearViewport } from "@/hooks/use-near-viewport";
 import { ROUTES } from "@/lib/routes";
 import type { SectionContent } from "@/sanity/content/fields";
@@ -22,26 +22,28 @@ export function AutomationSection({ content }: { content: AutomationContent }) {
   const buttonRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
 
-  useNearViewport(sectionRef, () => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  useNearViewport(sectionRef, () =>
+    withGsap(({ gsap }) => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 75%",
-          once: true,
-        },
-      });
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 75%",
+            once: true,
+          },
+        });
 
-      tl.from(h2Ref.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" }, 0)
-        .from(descRef.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" }, 0.12)
-        .from(imageRef.current, { opacity: 0, x: 28, duration: 0.7, ease: "power1.out" }, 0.16)
-        .from(bulletRefs.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out", stagger: 0.09 }, 0.24)
-        .from(buttonRef.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" }, 0.6);
-    }, sectionRef);
-    return () => ctx.revert();
-  });
+        tl.from(h2Ref.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" }, 0)
+          .from(descRef.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" }, 0.12)
+          .from(imageRef.current, { opacity: 0, x: 28, duration: 0.7, ease: "power1.out" }, 0.16)
+          .from(bulletRefs.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out", stagger: 0.09 }, 0.24)
+          .from(buttonRef.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" }, 0.6);
+      }, sectionRef);
+      return () => ctx.revert();
+    })
+  );
 
   return (
     <Section

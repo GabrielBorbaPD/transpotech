@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { IntentLink } from "@/components/ui/intent-link";
 import { ROUTES } from "@/lib/routes";
 
 // Hotspots sutis sobre a empilhadeira da hero (só desktop). Bolinhas sempre
@@ -155,7 +155,7 @@ export function HeroHotspots({ labels }: { labels: string[] }) {
                 if (engaged) setActive(-1);
               }}
             >
-              <Link
+              <IntentLink
                 href={spot.href}
                 aria-label={spot.label}
                 onMouseEnter={() => engage(i)}
@@ -182,11 +182,11 @@ export function HeroHotspots({ labels }: { labels: string[] }) {
                     className="relative size-[18px] rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.35)]"
                   />
                 </span>
-              </Link>
+              </IntentLink>
 
               {/* Pill do rótulo — abre para o lado definido em `side`. Escura/
                   translúcida para legibilidade sobre o fundo claro da hero. */}
-              <Link
+              <IntentLink
                 href={spot.href}
                 tabIndex={-1}
                 onMouseEnter={() => engage(i)}
@@ -204,7 +204,7 @@ export function HeroHotspots({ labels }: { labels: string[] }) {
                 }`}
               >
                 {spot.label}
-              </Link>
+              </IntentLink>
             </div>
           );
         })}
