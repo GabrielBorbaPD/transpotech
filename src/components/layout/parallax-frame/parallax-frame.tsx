@@ -7,7 +7,6 @@ import {
   type ReactNode,
   type Ref,
 } from "react";
-import { withGsap } from "@/lib/load-gsap";
 
 // Moldura com parallax sutil: a imagem "anda dentro do frame" conforme o
 // scroll — chega mais baixa quando a seção entra na viewport, sobe levemente
@@ -110,29 +109,31 @@ export function ParallaxFrame({
     if (!frame || !inner) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    return withGsap(({ gsap }) => {
-      const setY = gsap.quickSetter(inner, "yPercent") as (value: number) => void;
-      // pending: a posição inicial é aplicada a toda moldura, visível ou não.
-      const item: Item = { frame, setY, visible: false, pending: true };
+    // `translate`, que se compõe antes do `scale` do scale-[1.13]: o % é da
+    // altura sem escala.
+    const setY = (value: number) => {
+      inner.style.translate = `0px ${value}%`;
+    };
+    // pending: a posição inicial é aplicada a toda moldura, visível ou não.
+    const item: Item = { frame, setY, visible: false, pending: true };
 
-      // Margem: o IntersectionObserver entrega com um frame de atraso; a moldura
-      // já está sendo atualizada quando de fato entra na tela.
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          item.visible = entry.isIntersecting;
-          if (!item.visible) item.pending = true;
-          schedule();
-        },
-        { rootMargin: "25% 0px" }
-      );
-      observer.observe(frame);
-      register(item);
+    // Margem: o IntersectionObserver entrega com um frame de atraso; a moldura
+    // já está sendo atualizada quando de fato entra na tela.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        item.visible = entry.isIntersecting;
+        if (!item.visible) item.pending = true;
+        schedule();
+      },
+      { rootMargin: "25% 0px" }
+    );
+    observer.observe(frame);
+    register(item);
 
-      return () => {
-        observer.disconnect();
-        unregister(item);
-      };
-    });
+    return () => {
+      observer.disconnect();
+      unregister(item);
+    };
   }, [noParallax]);
 
   return (

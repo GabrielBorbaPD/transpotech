@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { withGsap } from "@/lib/load-gsap";
+import { ease, onScrollPast, prefersReducedMotion, tween } from "@/lib/motion";
 import { useNearViewport } from "@/hooks/use-near-viewport";
 
 export type Stat = { value: string; label: string };
@@ -57,54 +57,40 @@ export function StatsGrid({
     return () => observer.disconnect();
   }, []);
 
-  // Zera os números e cria o ScrollTrigger só quando a grade se aproxima da
+  // Zera os números e cria o gatilho de scroll só quando a grade se aproxima da
   // viewport, fora da hidratação. Uma tela de margem: a troca para 0 acontece
   // antes de o card ficar visível.
-  useNearViewport(gridRef, () =>
-    withGsap(({ gsap, ScrollTrigger }) => {
-      const el = gridRef.current;
-      if (!el) return;
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  useNearViewport(gridRef, () => {
+    const el = gridRef.current;
+    if (!el) return;
+    if (prefersReducedMotion()) return;
 
+    stats.forEach((s, i) => {
+      const node = numberRefs.current[i];
+      if (node) node.textContent = countValue(s.value, 0);
+    });
+
+    const cancels: (() => void)[] = [];
+    const stopTrigger = onScrollPast(el, 0.8, () => {
       stats.forEach((s, i) => {
-        const node = numberRefs.current[i];
-        if (node) node.textContent = countValue(s.value, 0);
+        cancels.push(
+          tween({
+            duration: 1.6,
+            ease: ease.power3Out,
+            onUpdate: (p) => {
+              const node = numberRefs.current[i];
+              if (node) node.textContent = countValue(s.value, p);
+            },
+          }),
+        );
       });
+    });
 
-      const counters = stats.map(() => ({ progress: 0 }));
-      const tweens: gsap.core.Tween[] = [];
-
-      const trigger = ScrollTrigger.create({
-        trigger: el,
-        start: "top 80%",
-        once: true,
-        onEnter: () => {
-          stats.forEach((s, i) => {
-            tweens.push(
-              gsap.to(counters[i], {
-                progress: 1,
-                duration: 1.6,
-                ease: "power3.out",
-                onUpdate: () => {
-                  const node = numberRefs.current[i];
-                  if (node)
-                    node.textContent = countValue(
-                      s.value,
-                      counters[i].progress,
-                    );
-                },
-              }),
-            );
-          });
-        },
-      });
-
-      return () => {
-        trigger.kill();
-        tweens.forEach((t) => t.kill());
-      };
-    }),
-  );
+    return () => {
+      stopTrigger();
+      cancels.forEach((cancel) => cancel());
+    };
+  });
 
   return (
     <div ref={gridRef} className={className}>

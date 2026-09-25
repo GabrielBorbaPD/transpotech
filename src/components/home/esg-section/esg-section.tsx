@@ -7,7 +7,13 @@ import { ArrowRight } from "lucide-react";
 import { ParallaxFrame } from "@/components/layout/parallax-frame";
 import gptw from "@/assets/images/gptw-badge.webp";
 import { ROUTES } from "@/lib/routes";
-import { withGsap } from "@/lib/load-gsap";
+import {
+  cssEase,
+  playOnScroll,
+  prefersReducedMotion,
+  prepareFrom,
+  prepareFromEach,
+} from "@/lib/motion";
 import { useNearViewport } from "@/hooks/use-near-viewport";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { homePage } from "@/sanity/content/pages/home";
@@ -38,42 +44,28 @@ export function EsgSection({ content }: { content: EsgContent }) {
   const itemContainerRefs = useRef<HTMLDivElement[]>([]);
   const gradientBarRefs = useRef<HTMLDivElement[]>([]);
 
-  useNearViewport(contentRef, () =>
-    withGsap(({ gsap }) => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  useNearViewport(contentRef, () => {
+    const content = contentRef.current;
+    if (!content || prefersReducedMotion()) return;
 
-      const ctx = gsap.context(() => {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: contentRef.current,
-            start: "top 75%",
-            once: true,
-          },
-        });
-
-        // Imagem
-        tl.from(imageRef.current, { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" }, 0);
-
-        // Containers dos itens (500ms = 0.5s, stagger 160ms = 0.16s)
-        tl.from(itemContainerRefs.current, {
-          opacity: 0,
-          y: 12,
-          duration: 0.5,
-          ease: "power1.out",
-          stagger: STAGGER,
-        }, 0);
-
-        // Barras de gradiente (delay 300ms = 0.3s após início, stagger 160ms = 0.16s)
-        tl.from(gradientBarRefs.current, {
-          opacity: 0,
-          duration: 0.7,
-          ease: "power1.out",
-          stagger: STAGGER,
-        }, 0.3);
-      }, contentRef);
-      return () => ctx.revert();
-    })
-  );
+    const easing = cssEase.power1Out;
+    return playOnScroll(content, 0.75, [
+      // Imagem
+      ...prepareFrom(imageRef.current, { opacity: 0, y: 16 }, { duration: 0.7, easing }),
+      // Containers dos itens (500ms = 0.5s, stagger 160ms = 0.16s)
+      ...prepareFromEach(
+        itemContainerRefs.current,
+        { opacity: 0, y: 12 },
+        { duration: 0.5, easing, stagger: STAGGER }
+      ),
+      // Barras de gradiente (delay 300ms = 0.3s após início, stagger 160ms = 0.16s)
+      ...prepareFromEach(
+        gradientBarRefs.current,
+        { opacity: 0 },
+        { duration: 0.7, easing, delay: 0.3, stagger: STAGGER }
+      ),
+    ]);
+  });
 
   return (
     <section

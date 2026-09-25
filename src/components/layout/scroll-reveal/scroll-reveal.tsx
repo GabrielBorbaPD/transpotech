@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { loadGsap, type Gsap, type GsapModule } from "@/lib/load-gsap";
+import { loadedGsap } from "@/lib/load-gsap";
+import { cssEase, prepareFromEach } from "@/lib/motion";
 
 const STAGGER = 0.06;
 
@@ -56,16 +57,14 @@ const atomsOf = (el: HTMLElement): HTMLElement[] => {
   return kids.length === 0 ? [el] : kids.flatMap(atomsOf);
 };
 
-const reveal = (gsap: Gsap, atoms: HTMLElement[]) => {
-  gsap.to(atoms, {
-    opacity: 1,
-    y: 0,
-    duration: 0.8,
-    ease: "power2.out",
-    stagger: STAGGER,
-    overwrite: "auto",
-  });
-};
+// Fade + slide de 16px, 0.8s power2.out. Nativo para o GSAP não baixar em
+// página sem animação com pin.
+const hide = (atoms: HTMLElement[]) =>
+  prepareFromEach(
+    atoms,
+    { opacity: 0, y: 16 },
+    { duration: 0.8, stagger: STAGGER, easing: cssEase.power2Out }
+  );
 
 // Topo acima da linha de entrada: visível agora ou já rolado para cima.
 const isPastLine = (entry: IntersectionObserverEntry, fallbackLine: number) =>
@@ -100,10 +99,10 @@ export function ScrollReveal() {
     let raf = 0;
     let idle = 0;
     let disposed = false;
-    let gsap: Gsap | undefined;
     let prepareObserver: IntersectionObserver | undefined;
     let revealObserver: IntersectionObserver | undefined;
-    const atomsByBlock = new Map<Element, HTMLElement[]>();
+    // Entradas preparadas (elementos ocultos) aguardando o bloco chegar à linha.
+    const pendingByBlock = new Map<Element, Animation[]>();
     const prepared = new WeakSet<Element>();
 
     const onReveal: IntersectionObserverCallback = (entries, observer) => {
@@ -111,9 +110,8 @@ export function ScrollReveal() {
       for (const entry of entries) {
         if (!isPastLine(entry, line)) continue;
         observer.unobserve(entry.target);
-        const atoms = atomsByBlock.get(entry.target);
-        atomsByBlock.delete(entry.target);
-        if (atoms && gsap) reveal(gsap, atoms);
+        pendingByBlock.get(entry.target)?.forEach((a) => a.play());
+        pendingByBlock.delete(entry.target);
       }
     };
 
@@ -158,23 +156,14 @@ export function ScrollReveal() {
       // escondê-lo para refazer a entrada fazia o conteúdo piscar e empurrava o
       // LCP para o fim do fade.
       for (const { block, atoms, now } of plan) {
-        if (now || !gsap) continue;
-        gsap.set(atoms, { opacity: 0, y: 16 });
-        atomsByBlock.set(block, atoms);
+        if (now) continue;
+        pendingByBlock.set(block, hide(atoms));
         revealObserver?.observe(block);
       }
     };
 
-    const init = async () => {
-      let mod: GsapModule;
-      try {
-        mod = await loadGsap();
-      } catch {
-        return;
-      }
+    const init = () => {
       if (disposed) return;
-      gsap = mod.gsap;
-
       const sections = Array.from(
         document.querySelectorAll<HTMLElement>(SECTION_SELECTOR)
       );
@@ -201,32 +190,23 @@ export function ScrollReveal() {
       // Em navegação client-side o layout da nova página acabou de montar;
       // recalcula as posições dos ScrollTriggers das seções com animação
       // própria. No primeiro carregamento o ScrollTrigger já faz isso no load.
-      if (isNavigation) mod.ScrollTrigger.refresh();
+      // Sem GSAP baixado não há ScrollTrigger para recalcular.
+      if (isNavigation) loadedGsap()?.ScrollTrigger.refresh();
     };
 
-    // ScrollReveal vive no layout raiz, acima dos Suspense boundaries do App
-    // Router. Seções e componentes interativos da página (com estado próprio)
-    // hidratam DEPOIS do shell; mutar o DOM antes disso faz o React encontrar
-    // opacity/transform/display inline ausentes no HTML do servidor (hydration
-    // mismatch — o GSAP inclusive força display:inline-block em <span>).
+    // A descoberta dos blocos força recálculo de estilo; roda só depois da
+    // hidratação para não disputar a thread com ela. As animações da Web
+    // Animations API não escrevem no atributo `style`, então não há risco de
+    // hydration mismatch — o adiamento é só de desempenho.
     //
-    // A hidratação do React roda como tasks de prioridade normal no scheduler e
-    // ocupa a thread principal. requestIdleCallback só dispara quando a thread
-    // fica ociosa, ou seja, depois que a hidratação termina.
+    // requestIdleCallback sem `timeout`: um timeout forçaria o callback com a
+    // thread ocupada. Se a página nunca ficar ociosa o init não roda e o
+    // conteúdo aparece sem animação (nunca fica oculto).
     //
-    // IMPORTANTE: sem `timeout`. Um timeout forçaria o callback a rodar mesmo
-    // com a thread ocupada — e em dev (Turbopack a compilar + hidratar páginas
-    // pesadas) a hidratação passa fácil de 1,5s, disparando o GSAP no meio dela
-    // (hydration mismatch). Sem timeout, se a página nunca ficar ociosa o init
-    // simplesmente não roda e o conteúdo aparece sem animação (degradação
-    // segura — nunca fica oculto nem quebra a hidratação).
-    //
-    // Espera DOIS períodos ociosos consecutivos antes de mexer no DOM. A
-    // hidratação do App Router (páginas dentro de Suspense boundaries) roda em
-    // vários chunks, cedendo a thread entre eles; um único requestIdleCallback
-    // pode cair numa dessas brechas e disparar o GSAP no meio da hidratação
-    // (hydration mismatch). Dois "idle" seguidos indicam a thread realmente
-    // livre — hidratação concluída. Fallback: rAF duplo onde não há idle.
+    // Espera DOIS períodos ociosos consecutivos: a hidratação do App Router
+    // roda em vários chunks, cedendo a thread entre eles, e um único
+    // requestIdleCallback pode cair numa dessas brechas. Fallback: rAF duplo
+    // onde não há idle.
     const whenIdle = (fn: () => void) => {
       if (typeof window.requestIdleCallback === "function") {
         idle = window.requestIdleCallback(() => fn());
@@ -236,7 +216,7 @@ export function ScrollReveal() {
         });
       }
     };
-    const start = () => whenIdle(() => whenIdle(() => void init()));
+    const start = () => whenIdle(() => whenIdle(init));
 
     if (document.readyState === "complete") {
       start();
@@ -253,6 +233,9 @@ export function ScrollReveal() {
       }
       prepareObserver?.disconnect();
       revealObserver?.disconnect();
+      // Bloco ainda oculto (ex.: footer, que sobrevive à troca de rota) volta
+      // ao estado do CSS; a próxima execução o prepara de novo.
+      pendingByBlock.forEach((anims) => anims.forEach((a) => a.cancel()));
     };
   }, [pathname]);
 

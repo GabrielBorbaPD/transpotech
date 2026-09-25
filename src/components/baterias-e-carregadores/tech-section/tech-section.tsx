@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import Image, { type StaticImageData } from "next/image";
 import { Section } from "@/components/ui/section";
-import { withGsap } from "@/lib/load-gsap";
+import { ease, onScrollPast, tween } from "@/lib/motion";
 import illo1 from "@/assets/images/baterias-tech/illo-1.webp";
 import illo2 from "@/assets/images/baterias-tech/illo-2.webp";
 import illo3 from "@/assets/images/baterias-tech/illo-3.webp";
@@ -174,41 +174,31 @@ export function TechSection({ content }: { content: TechContent }) {
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    return withGsap(({ gsap, ScrollTrigger }) => {
-      stats.forEach((s, i) => {
-        const node = numberRefs.current[i];
-        if (node) node.textContent = displayValue(s, 0);
-      });
-
-      const counters = stats.map(() => ({ progress: 0 }));
-      const tweens: gsap.core.Tween[] = [];
-
-      const trigger = ScrollTrigger.create({
-        trigger: el,
-        start: "top 75%",
-        once: true,
-        onEnter: () => {
-          stats.forEach((s, i) => {
-            tweens.push(
-              gsap.to(counters[i], {
-                progress: 1,
-                duration: 1.8,
-                ease: "power3.out",
-                onUpdate: () => {
-                  const node = numberRefs.current[i];
-                  if (node) node.textContent = displayValue(s, counters[i].progress);
-                },
-              })
-            );
-          });
-        },
-      });
-
-      return () => {
-        trigger.kill();
-        tweens.forEach((t) => t.kill());
-      };
+    stats.forEach((s, i) => {
+      const node = numberRefs.current[i];
+      if (node) node.textContent = displayValue(s, 0);
     });
+
+    const cancels: (() => void)[] = [];
+    const stopTrigger = onScrollPast(el, 0.75, () => {
+      stats.forEach((s, i) => {
+        cancels.push(
+          tween({
+            duration: 1.8,
+            ease: ease.power3Out,
+            onUpdate: (p) => {
+              const node = numberRefs.current[i];
+              if (node) node.textContent = displayValue(s, p);
+            },
+          })
+        );
+      });
+    });
+
+    return () => {
+      stopTrigger();
+      cancels.forEach((cancel) => cancel());
+    };
   }, [stats]);
 
   return (

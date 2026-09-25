@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { withGsap } from "@/lib/load-gsap";
+import { ease, onScrollPast, tween } from "@/lib/motion";
 import { useNearViewport } from "@/hooks/use-near-viewport";
 
 export type ProcessStep = {
@@ -133,44 +133,32 @@ export function StepsProcess({
 
   // A linha laranja começa apagada e "carrega" uma única vez quando a seção
   // entra na viewport (desktop: esquerda → direita; mobile: cima → baixo).
-  // Tween e ScrollTrigger só são criados quando a seção se aproxima — até lá o
+  // Animação e gatilho só são criados quando a seção se aproxima — até lá o
   // clip-path inicial do JSX já é o estado apagado.
-  useNearViewport(listWrapRef, () =>
-    withGsap(({ gsap, ScrollTrigger }) => {
-      const wrap = listWrapRef.current;
-      if (!wrap) return;
-      const set = (p: number) => {
-        const r = 1 - p;
-        if (fillRef.current)
-          fillRef.current.style.clipPath = `inset(-12px calc(${(r * 100).toFixed(2)}% + ${(r * 12).toFixed(1)}px) -12px -12px)`;
-        if (mobileFillRef.current)
-          mobileFillRef.current.style.clipPath = `inset(-12px -12px calc(${(r * 100).toFixed(2)}% + ${(r * 12).toFixed(1)}px) -12px)`;
-      };
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        set(1);
-        return;
-      }
-      set(0);
-      const state = { p: 0 };
-      const tween = gsap.to(state, {
-        p: 1,
-        duration: 1.8,
-        ease: "sine.inOut",
-        paused: true,
-        onUpdate: () => set(state.p),
-      });
-      const st = ScrollTrigger.create({
-        trigger: wrap,
-        start: "top 90%",
-        once: true,
-        onEnter: () => tween.play(),
-      });
-      return () => {
-        st.kill();
-        tween.kill();
-      };
-    })
-  );
+  useNearViewport(listWrapRef, () => {
+    const wrap = listWrapRef.current;
+    if (!wrap) return;
+    const set = (p: number) => {
+      const r = 1 - p;
+      if (fillRef.current)
+        fillRef.current.style.clipPath = `inset(-12px calc(${(r * 100).toFixed(2)}% + ${(r * 12).toFixed(1)}px) -12px -12px)`;
+      if (mobileFillRef.current)
+        mobileFillRef.current.style.clipPath = `inset(-12px -12px calc(${(r * 100).toFixed(2)}% + ${(r * 12).toFixed(1)}px) -12px)`;
+    };
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      set(1);
+      return;
+    }
+    set(0);
+    let stopTween: (() => void) | undefined;
+    const stopTrigger = onScrollPast(wrap, 0.9, () => {
+      stopTween = tween({ duration: 1.8, ease: ease.sineInOut, onUpdate: set });
+    });
+    return () => {
+      stopTrigger();
+      stopTween?.();
+    };
+  });
 
   return (
     <Section id={id} data-header-dark className="flex flex-col gap-10 lg:gap-14">

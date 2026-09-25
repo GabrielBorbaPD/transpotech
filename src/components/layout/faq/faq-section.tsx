@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { loadGsap } from "@/lib/load-gsap";
+import { cssEase, tweenStyle } from "@/lib/motion";
 
 export type FaqItem = { question: string; answer: string };
 
@@ -34,20 +34,21 @@ export function FaqSection({ titleRegular, titleAccent, items }: FaqSectionProps
       });
       return;
     }
-    loadGsap().then(({ gsap }) => {
-      panelRefs.current.forEach((panel, i) => {
-        if (!panel) return;
-        const isOpen = i === openIndex;
-        gsap.to(panel, {
-          height: isOpen ? panel.scrollHeight : 0,
+    panelRefs.current.forEach((panel, i) => {
+      if (!panel) return;
+      const isOpen = i === openIndex;
+      tweenStyle(
+        panel,
+        { height: isOpen ? `${panel.scrollHeight}px` : "0px" },
+        {
           duration: 0.35,
-          ease: "power2.out",
+          easing: cssEase.power2Out,
           onComplete: () => {
             if (isOpen) panel.style.height = "auto";
           },
-        });
-      });
-    }, () => {});
+        }
+      );
+    });
   }, [openIndex]);
 
   return (

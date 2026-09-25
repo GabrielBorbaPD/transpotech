@@ -6,7 +6,12 @@ import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X, Check, Plus } from "lucide-react";
-import { withGsap } from "@/lib/load-gsap";
+import {
+  cssEase,
+  prefersReducedMotion,
+  prepareFrom,
+  prepareFromEach,
+} from "@/lib/motion";
 import badgeImage from "@/assets/images/stats/card-badge.webp";
 import { Button } from "@/components/ui/button";
 import { CardImageIcon } from "@/components/ui/card-image-icon";
@@ -432,7 +437,7 @@ export function QuoteModal({
 }
 
 // Confirmação compacta exibida no lugar do formulário após o envio.
-// Anima com GSAP (mesma lib do site): card entra com fade + escala, selo
+// Card entra com fade + escala, selo
 // (imagem card-badge) com "pop", seguidos do texto e do botão.
 function QuoteSentCard({ onClose }: { onClose: () => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -443,39 +448,28 @@ function QuoteSentCard({ onClose }: { onClose: () => void }) {
     if (el) revealRefs.current[i] = el;
   };
 
-  // Layout effect, como o useGSAP que substitui: com o GSAP já carregado a
-  // promise resolve antes da pintura e o card não aparece antes do `.from()`.
+  // Layout effect: o card não chega a ser pintado antes do estado inicial.
   useLayoutEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    return withGsap(({ gsap }) => {
-      const ctx = gsap.context(() => {
-        gsap
-          .timeline()
-          .from(
-            cardRef.current,
-            { opacity: 0, y: 12, scale: 0.94, duration: 0.4, ease: "power2.out" },
-            0
-          )
-          .from(
-            badgeRef.current,
-            { scale: 0, duration: 0.5, ease: "back.out(1.7)" },
-            0.1
-          )
-          .from(
-            revealRefs.current,
-            {
-              opacity: 0,
-              y: 10,
-              duration: 0.4,
-              ease: "power1.out",
-              stagger: 0.08,
-            },
-            0.3
-          );
-      }, cardRef);
-      return () => ctx.revert();
-    });
+    if (prefersReducedMotion()) return;
+    const anims = [
+      ...prepareFrom(
+        cardRef.current,
+        { opacity: 0, y: 12, scale: 0.94 },
+        { duration: 0.4, easing: cssEase.power2Out }
+      ),
+      ...prepareFrom(
+        badgeRef.current,
+        { scale: 0 },
+        { duration: 0.5, delay: 0.1, easing: cssEase.backOut(1.7) }
+      ),
+      ...prepareFromEach(
+        revealRefs.current,
+        { opacity: 0, y: 10 },
+        { duration: 0.4, delay: 0.3, stagger: 0.08, easing: cssEase.power1Out }
+      ),
+    ];
+    anims.forEach((a) => a.play());
+    return () => anims.forEach((a) => a.cancel());
   }, []);
 
   return (

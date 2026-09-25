@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, type CSSProperties } from "react";
-import { loadGsap } from "@/lib/load-gsap";
+import { cssEase, ease, tween } from "@/lib/motion";
 import Image from "next/image";
 import { IntentLink } from "@/components/ui/intent-link";
 import {
@@ -117,28 +117,37 @@ export function SolutionsSection({ content }: { content: SolutionsContent }) {
   const solutionContentRef = useRef<HTMLDivElement>(null);
   const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Anima a engrenagem para o ângulo acumulado (ease "gearEase" de lib/gsap)
+  // Anima a engrenagem do ângulo em que está (mesmo no meio de um giro) até
+  // o ângulo acumulado. Por rAF e não por WAAPI: o ângulo passa de 360° e a
+  // partida tem que ser o valor exato, não o lido da matriz computada.
+  const gearAngle = useRef(0);
+  const stopGear = useRef<(() => void) | null>(null);
   const rotateGear = (targetDeg: number) => {
-    loadGsap().then(({ gsap }) => {
-      gsap.to(gearRef.current, {
-        rotation: targetDeg,
-        duration: prefersReducedMotion() ? 0 : 0.85,
-        ease: "gearEase",
-        overwrite: "auto",
-      });
-    }, () => {});
+    const gear = gearRef.current;
+    if (!gear) return;
+    stopGear.current?.();
+    const from = gearAngle.current;
+    stopGear.current = tween({
+      duration: prefersReducedMotion() ? 0 : 0.85,
+      ease: ease.gear,
+      onUpdate: (p) => {
+        gearAngle.current = from + (targetDeg - from) * p;
+        gear.style.transform = `rotate(${gearAngle.current}deg)`;
+      },
+    });
   };
 
-  // Fade da solução ativa — substitui @keyframes fade-in-solution
+  // Fade da solução ativa
   const fadeSolution = () => {
-    if (!solutionContentRef.current || prefersReducedMotion()) return;
-    loadGsap().then(({ gsap }) => {
-      gsap.fromTo(
-        solutionContentRef.current,
-        { opacity: 0, y: 10 },
-        { opacity: 1, y: 0, duration: 0.35, ease: "power1.out" }
-      );
-    }, () => {});
+    const el = solutionContentRef.current;
+    if (!el || prefersReducedMotion()) return;
+    el.animate(
+      [
+        { opacity: 0, translate: "0px 10px" },
+        { opacity: 1, translate: "0px 0px" },
+      ],
+      { duration: 350, easing: cssEase.power1Out }
+    );
   };
 
   useEffect(() => {
@@ -162,16 +171,17 @@ export function SolutionsSection({ content }: { content: SolutionsContent }) {
       setActive(next);
     }, 3000);
     return () => clearInterval(id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paused, inView]);
 
   // Cleanup on unmount
-  useEffect(() => () => { if (idleTimer.current) clearTimeout(idleTimer.current); }, []);
+  useEffect(() => () => {
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    stopGear.current?.();
+  }, []);
 
   // Fade da solução sempre que o ativo muda
   useEffect(() => {
     fadeSolution();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
 
   const scheduleResume = () => {
@@ -264,7 +274,7 @@ export function SolutionsSection({ content }: { content: SolutionsContent }) {
 
         <div className="relative mx-auto aspect-square w-full max-w-[560px]">
 
-          {/* Anel segmentado do Figma — gira de ponto em ponto via GSAP */}
+          {/* Anel segmentado do Figma — gira de ponto em ponto */}
           {/* Mobile (sem labels ao redor): engrenagem e anéis ganham escala
               extra; como tudo é percentual, segue cabendo em qualquer largura */}
           <div

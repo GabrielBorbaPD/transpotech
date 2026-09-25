@@ -1,19 +1,27 @@
 // GSAP + ScrollTrigger (~117KB) fora do bundle inicial: nenhum componente
 // importa "@/lib/gsap" estaticamente, então o chunk só baixa quando a primeira
-// animação é preparada. Memoizado: um download e um registro de plugin/eases.
+// animação com pin é preparada (o resto é nativo, em lib/motion).
+// Memoizado: um download e um registro de plugin.
 export type GsapModule = typeof import("./gsap");
 export type Gsap = GsapModule["gsap"];
 
 let pending: Promise<GsapModule> | null = null;
+let loaded: GsapModule | undefined;
 
 export function loadGsap(): Promise<GsapModule> {
-  pending ??= import("./gsap").catch((error: unknown) => {
-    // Permite nova tentativa (ex.: rede instável) na próxima animação.
-    pending = null;
-    throw error;
-  });
+  pending ??= import("./gsap").then(
+    (mod) => (loaded = mod),
+    (error: unknown) => {
+      // Permite nova tentativa (ex.: rede instável) na próxima animação.
+      pending = null;
+      throw error;
+    },
+  );
   return pending;
 }
+
+/** O módulo, se alguma animação da página já o baixou; sem disparar download. */
+export const loadedGsap = (): GsapModule | undefined => loaded;
 
 /**
  * Roda `setup` quando o GSAP estiver carregado e devolve o cleanup para o

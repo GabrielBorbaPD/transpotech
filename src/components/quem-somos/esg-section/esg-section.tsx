@@ -7,7 +7,13 @@ import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { ParallaxFrame } from "@/components/layout/parallax-frame";
 import { ROUTES } from "@/lib/routes";
-import { withGsap } from "@/lib/load-gsap";
+import {
+  cssEase,
+  playOnScroll,
+  prefersReducedMotion,
+  prepareFrom,
+  prepareFromEach,
+} from "@/lib/motion";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { quemSomosPage } from "@/sanity/content/pages/quem-somos";
 
@@ -30,38 +36,23 @@ export function EsgGovernanceSection({ content }: { content: EsgContent }) {
   const gradientBarRefs = useRef<HTMLDivElement[]>([]);
 
   useLayoutEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const content = contentRef.current;
+    if (!content || prefersReducedMotion()) return;
 
-    return withGsap(({ gsap }) => {
-      const ctx = gsap.context(() => {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: contentRef.current,
-            start: "top 75%",
-            once: true,
-          },
-        });
-
-        tl.from(
-          imageRef.current,
-          { opacity: 0, y: 16, duration: 0.7, ease: "power1.out" },
-          0
-        );
-
-        tl.from(
-          itemContainerRefs.current,
-          { opacity: 0, y: 12, duration: 0.5, ease: "power1.out", stagger: STAGGER },
-          0
-        );
-
-        tl.from(
-          gradientBarRefs.current,
-          { opacity: 0, duration: 0.7, ease: "power1.out", stagger: STAGGER },
-          0.3
-        );
-      }, contentRef);
-      return () => ctx.revert();
-    });
+    const easing = cssEase.power1Out;
+    return playOnScroll(content, 0.75, [
+      ...prepareFrom(imageRef.current, { opacity: 0, y: 16 }, { duration: 0.7, easing }),
+      ...prepareFromEach(
+        itemContainerRefs.current,
+        { opacity: 0, y: 12 },
+        { duration: 0.5, easing, stagger: STAGGER }
+      ),
+      ...prepareFromEach(
+        gradientBarRefs.current,
+        { opacity: 0 },
+        { duration: 0.7, easing, delay: 0.3, stagger: STAGGER }
+      ),
+    ]);
   }, []);
 
   return (

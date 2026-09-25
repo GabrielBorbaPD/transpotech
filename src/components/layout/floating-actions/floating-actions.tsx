@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { IntentLink } from "@/components/ui/intent-link";
 import { MapPin, Phone, Plus } from "lucide-react";
-import { loadGsap } from "@/lib/load-gsap";
+import { cssEase, prefersReducedMotion, tweenStyle } from "@/lib/motion";
 import { ROUTES } from "@/lib/routes";
 
 // "Nossas unidades" leva à seção de unidades da página de contato; "Contatos"
@@ -26,8 +26,6 @@ export function FloatingActions() {
   const iconRef = useRef<SVGSVGElement>(null);
 
   // Estado inicial (fechado) — opções invisíveis
-  // Escrito sem GSAP (que carrega sob demanda) para não atrasar o
-  // ocultamento; o GSAP lê este transform como y: 8 no primeiro tween.
   useEffect(() => {
     optionRefs.current.forEach((el) => {
       if (!el) return;
@@ -38,36 +36,60 @@ export function FloatingActions() {
   }, []);
 
   // Anima ao abrir/fechar. Antes da primeira abertura não há o que fechar
-  // (o estado fechado já foi aplicado acima): o GSAP só baixa ao abrir.
+  // (o estado fechado já foi aplicado acima).
   const hasOpened = useRef(false);
   useEffect(() => {
     if (open) hasOpened.current = true;
     if (!hasOpened.current) return;
-    loadGsap().then(({ gsap }) => {
-      if (open) {
-        gsap.set(optionRefs.current, { pointerEvents: "auto" });
-        gsap.to(optionRefs.current, {
-          opacity: 1,
-          y: 0,
-          duration: 0.2,
-          ease: "power1.out",
-          stagger: { each: 0.06, from: "end" },
-        });
-        gsap.to(iconRef.current, { rotation: 45, duration: 0.2, ease: "power1.out" });
-      } else {
-        gsap.to(optionRefs.current, {
-          opacity: 0,
-          y: 8,
-          duration: 0.15,
-          ease: "power1.in",
-          stagger: 0.06,
-          onComplete: () => {
-            gsap.set(optionRefs.current, { pointerEvents: "none" });
-          },
-        });
-        gsap.to(iconRef.current, { rotation: 0, duration: 0.2, ease: "power1.out" });
+    const opts = optionRefs.current.filter((el) => el !== null);
+    const icon = iconRef.current;
+    const reduced = prefersReducedMotion();
+    if (open) {
+      opts.forEach((el) => (el.style.pointerEvents = "auto"));
+      // Cascata a partir do último (o mais próximo do botão).
+      opts.forEach((el, i) =>
+        tweenStyle(
+          el,
+          { opacity: "1", transform: "translate(0px, 0px)" },
+          {
+            duration: reduced ? 0 : 0.2,
+            delay: reduced ? 0 : (opts.length - 1 - i) * 0.06,
+            easing: cssEase.power1Out,
+          }
+        )
+      );
+      if (icon) {
+        tweenStyle(
+          icon,
+          { transform: "rotate(45deg)" },
+          { duration: reduced ? 0 : 0.2, easing: cssEase.power1Out }
+        );
       }
-    }, () => {});
+    } else {
+      opts.forEach((el, i) =>
+        tweenStyle(
+          el,
+          { opacity: "0", transform: "translate(0px, 8px)" },
+          {
+            duration: reduced ? 0 : 0.15,
+            delay: reduced ? 0 : i * 0.06,
+            easing: cssEase.power1In,
+            // Cliques voltam a passar só ao fim da cascata inteira.
+            onComplete:
+              i === opts.length - 1
+                ? () => opts.forEach((o) => (o.style.pointerEvents = "none"))
+                : undefined,
+          }
+        )
+      );
+      if (icon) {
+        tweenStyle(
+          icon,
+          { transform: "rotate(0deg)" },
+          { duration: reduced ? 0 : 0.2, easing: cssEase.power1Out }
+        );
+      }
+    }
   }, [open]);
 
   // Fecha ao clicar fora ou pressionar Escape

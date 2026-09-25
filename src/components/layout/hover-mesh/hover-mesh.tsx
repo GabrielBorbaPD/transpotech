@@ -5,6 +5,7 @@ import { useEffect, useRef, type CSSProperties } from "react";
 const SPACING = 18;
 const RADIUS = 160;
 const FAR = -9999;
+const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 
 // O site monta dezenas de instâncias (até 3 por página + formulários). Em vez
 // de um mousemove por instância, com getBoundingClientRect e repintura da área
@@ -97,6 +98,8 @@ export function HoverMesh({ className }: { className?: string }) {
   const meshRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Sem mouse (toque) o círculo nunca aparece: nem observer nem listener.
+    if (!window.matchMedia(FINE_POINTER).matches) return;
     const root = rootRef.current;
     const spot = spotRef.current;
     const mesh = meshRef.current;
@@ -157,7 +160,13 @@ export function HoverMesh({ className }: { className?: string }) {
       className={className}
       style={{ overflow: "hidden" }}
     >
-      <div ref={spotRef} style={spotStyle}>
+      {/* Oculto em tela de toque: as duas camadas com will-change viram
+          camadas de GPU mesmo paradas fora da tela. */}
+      <div
+        ref={spotRef}
+        style={spotStyle}
+        className="[@media(hover:none),(pointer:coarse)]:hidden"
+      >
         <div ref={meshRef} style={meshStyle} />
       </div>
     </div>

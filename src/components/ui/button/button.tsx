@@ -2,7 +2,7 @@
 
 import { useRef, type ComponentProps, type MouseEventHandler } from "react";
 import { IntentLink } from "@/components/ui/intent-link";
-import { loadGsap } from "@/lib/load-gsap";
+import { cssEase, prefersReducedMotion, tweenStyle } from "@/lib/motion";
 import type { ButtonProps, ButtonSize, ButtonVariant } from "./button.types";
 
 const base =
@@ -42,34 +42,34 @@ export function Button({
   const textRef = useRef<HTMLSpanElement>(null);
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
-  // Lift + rotação de texto apenas no botão primário (substitui lift-text-spin @keyframes)
+  // Lift + rotação de texto apenas no botão primário. Por evento e não por
+  // :hover/:active: o lift some no mousedown e só volta no próximo mouseenter.
+  const lift = (el: HTMLElement, y: number, duration: number) => {
+    if (variant !== "primary" || prefersReducedMotion()) return false;
+    tweenStyle(el, { translate: `0px ${y}px` }, { duration, easing: cssEase.power1Out });
+    return true;
+  };
+
   const onEnter = (e: React.MouseEvent<HTMLElement>) => {
-    if (variant !== "primary") return;
-    const el = e.currentTarget;
-    loadGsap().then(({ gsap }) => {
-      gsap.to(el, { y: -3, duration: 0.2, ease: "power1.out" });
-      gsap.fromTo(
-        textRef.current,
-        { rotationX: 0 },
-        { rotationX: 16, duration: 0.14, ease: "power1.out", yoyo: true, repeat: 1 }
-      );
-    }, () => {});
+    if (!lift(e.currentTarget, -3, 0.2)) return;
+    // Vai a 16° e volta pela mesma curva, de trás para frente.
+    textRef.current?.animate(
+      [{ transform: "rotateX(0deg)" }, { transform: "rotateX(16deg)" }],
+      {
+        duration: 140,
+        easing: cssEase.power1Out,
+        direction: "alternate",
+        iterations: 2,
+      }
+    );
   };
 
   const onLeave = (e: React.MouseEvent<HTMLElement>) => {
-    if (variant !== "primary") return;
-    const el = e.currentTarget;
-    loadGsap().then(({ gsap }) => {
-      gsap.to(el, { y: 0, duration: 0.2, ease: "power1.out" });
-    }, () => {});
+    lift(e.currentTarget, 0, 0.2);
   };
 
   const onDown = (e: React.MouseEvent<HTMLElement>) => {
-    if (variant !== "primary") return;
-    const el = e.currentTarget;
-    loadGsap().then(({ gsap }) => {
-      gsap.to(el, { y: 0, duration: 0.1, ease: "power1.out" });
-    }, () => {});
+    lift(e.currentTarget, 0, 0.1);
   };
 
   const content = (

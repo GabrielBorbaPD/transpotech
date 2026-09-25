@@ -9,7 +9,7 @@ import card1 from "@/assets/images/stats/card1.png";
 import card2 from "@/assets/images/stats/card2.png";
 import illoCar from "@/assets/images/stats/illustration-car.webp";
 import illoMap from "@/assets/images/stats/map-illustration.webp";
-import { withGsap } from "@/lib/load-gsap";
+import { ease, onScrollPast, tween } from "@/lib/motion";
 import { ROUTES } from "@/lib/routes";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { homePage } from "@/sanity/content/pages/home";
@@ -79,41 +79,32 @@ export function ExperienceSection({ content }: { content: ExperienceContent }) {
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    return withGsap(({ gsap, ScrollTrigger }) => {
-      // Zera todos os contadores antes de entrar na viewport
-      stats.forEach((s, i) => {
-        const node = numberRefs.current[i];
-        if (node) node.textContent = countValue(s.value, 0);
-      });
-
-      const counters = stats.map(() => ({ progress: 0 }));
-      const tweens: gsap.core.Tween[] = [];
-
-      const trigger = ScrollTrigger.create({
-        trigger: el,
-        start: "top 70%",
-        once: true,
-        onEnter: () => {
-          stats.forEach((s, i) => {
-            const tween = gsap.to(counters[i], {
-              progress: 1,
-              duration: 1.8,
-              ease: "power3.out", // equivale ao easeOut cúbico original: 1 - (1-t)^3
-              onUpdate: () => {
-                const node = numberRefs.current[i];
-                if (node) node.textContent = countValue(s.value, counters[i].progress);
-              },
-            });
-            tweens.push(tween);
-          });
-        },
-      });
-
-      return () => {
-        trigger.kill();
-        tweens.forEach((t) => t.kill());
-      };
+    // Zera todos os contadores antes de entrar na viewport
+    stats.forEach((s, i) => {
+      const node = numberRefs.current[i];
+      if (node) node.textContent = countValue(s.value, 0);
     });
+
+    const cancels: (() => void)[] = [];
+    const stopTrigger = onScrollPast(el, 0.7, () => {
+      stats.forEach((s, i) => {
+        cancels.push(
+          tween({
+            duration: 1.8,
+            ease: ease.power3Out,
+            onUpdate: (p) => {
+              const node = numberRefs.current[i];
+              if (node) node.textContent = countValue(s.value, p);
+            },
+          })
+        );
+      });
+    });
+
+    return () => {
+      stopTrigger();
+      cancels.forEach((cancel) => cancel());
+    };
     // content.stats vem do servidor e não muda depois da montagem.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

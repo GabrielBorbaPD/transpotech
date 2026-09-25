@@ -10,7 +10,7 @@ import illoUser from "@/assets/images/stats/illustration-user.webp";
 import illoCar from "@/assets/images/stats/illustration-car.webp";
 import card1 from "@/assets/images/stats/card1.png";
 import illoHangar from "@/assets/images/stats/illustration-hangar.webp";
-import { withGsap } from "@/lib/load-gsap";
+import { ease, onScrollPast, tween } from "@/lib/motion";
 
 // Conta o número principal preservando prefixo e separador de milhar pt-BR:
 // "+3.700" → "+" + (3700 × progress) formatado como "3.700".
@@ -60,42 +60,32 @@ export function StatsSection({ content }: { content: StatsContent }) {
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    return withGsap(({ gsap, ScrollTrigger }) => {
-      // Zera todos os contadores antes de entrar na viewport
-      stats.forEach((s, i) => {
-        const node = numberRefs.current[i];
-        if (node) node.textContent = countValue(s.value, 0);
-      });
-
-      const counters = stats.map(() => ({ progress: 0 }));
-      const tweens: gsap.core.Tween[] = [];
-
-      const trigger = ScrollTrigger.create({
-        trigger: el,
-        start: "top 70%",
-        once: true,
-        onEnter: () => {
-          stats.forEach((s, i) => {
-            const tween = gsap.to(counters[i], {
-              progress: 1,
-              duration: 1.8,
-              ease: "power3.out",
-              onUpdate: () => {
-                const node = numberRefs.current[i];
-                if (node)
-                  node.textContent = countValue(s.value, counters[i].progress);
-              },
-            });
-            tweens.push(tween);
-          });
-        },
-      });
-
-      return () => {
-        trigger.kill();
-        tweens.forEach((t) => t.kill());
-      };
+    // Zera todos os contadores antes de entrar na viewport
+    stats.forEach((s, i) => {
+      const node = numberRefs.current[i];
+      if (node) node.textContent = countValue(s.value, 0);
     });
+
+    const cancels: (() => void)[] = [];
+    const stopTrigger = onScrollPast(el, 0.7, () => {
+      stats.forEach((s, i) => {
+        cancels.push(
+          tween({
+            duration: 1.8,
+            ease: ease.power3Out,
+            onUpdate: (p) => {
+              const node = numberRefs.current[i];
+              if (node) node.textContent = countValue(s.value, p);
+            },
+          })
+        );
+      });
+    });
+
+    return () => {
+      stopTrigger();
+      cancels.forEach((cancel) => cancel());
+    };
   }, [stats]);
 
   return (
