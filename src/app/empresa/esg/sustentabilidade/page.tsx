@@ -9,6 +9,8 @@ import { SdgSection } from "@/components/sustentabilidade/sdg-section/sdg-sectio
 import { GovernanceSection } from "@/components/sustentabilidade/governance-section/governance-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { getEsgProjects } from "@/sanity/queries/esg-projects";
+import { getPage } from "@/sanity/queries/pages";
+import { sustentabilidadePage } from "@/sanity/content/pages/sustentabilidade";
 
 export const metadata: Metadata = {
   title: "Sustentabilidade",
@@ -23,20 +25,23 @@ export const metadata: Metadata = {
 };
 
 export default async function SustentabilidadePage() {
-  const projects = await getEsgProjects();
+  const [projects, content] = await Promise.all([
+    getEsgProjects(),
+    getPage(sustentabilidadePage),
+  ]);
 
   return (
     <main>
-      <SustentabilidadeHeroSection />
+      <SustentabilidadeHeroSection content={content.hero} />
 
       {/* Grupo claro — demais seções ESG */}
       <div className="relative isolate bg-background pb-6">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
-        <PillarsSection />
-        <InitiativesSection />
-        <ProjectsSection projects={projects} />
-        <SdgSection />
-        <GovernanceSection />
+        <PillarsSection content={content.pillars} />
+        <InitiativesSection content={content.initiatives} />
+        <ProjectsSection projects={projects} content={content.projects} />
+        <SdgSection content={content.sdg} />
+        <GovernanceSection content={content.governance} />
       </div>
     </main>
   );

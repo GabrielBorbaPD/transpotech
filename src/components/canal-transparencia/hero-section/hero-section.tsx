@@ -1,6 +1,8 @@
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
+import type { SectionContent } from "@/sanity/content/fields";
+import type { canalTransparenciaPage } from "@/sanity/content/pages/canal-transparencia";
 
 // Hero centralizada (mesmo padrão de Ouvidoria / Quem Somos) — label, título
 // grande e parágrafo no centro; a malha animada (DriftMesh) fica no wrapper da
@@ -8,9 +10,13 @@ import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
 type CanalHeroSectionProps = {
   /** URL do canal de relatos do Ouvidor Digital (siteSettings). */
   ouvidorDigitalUrl: string;
+  content: SectionContent<typeof canalTransparenciaPage.sections.hero>;
 };
 
-export function CanalHeroSection({ ouvidorDigitalUrl }: CanalHeroSectionProps) {
+export function CanalHeroSection({
+  ouvidorDigitalUrl,
+  content,
+}: CanalHeroSectionProps) {
   return (
     <Section
       data-header-hero
@@ -18,21 +24,18 @@ export function CanalHeroSection({ ouvidorDigitalUrl }: CanalHeroSectionProps) {
     >
       <div className="flex flex-col items-center gap-4">
         <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
-          Ética e integridade
+          {content.eyebrow}
         </p>
         <BlurRevealTitle
           className="max-w-[900px] text-h2 text-neutral-800"
           segments={[
-            { text: "Canal da ", className: "font-normal" },
-            { text: "Transparência", className: "font-normal" },
+            { text: content.titleStart, className: "font-normal" },
+            { text: content.titleEnd, className: "font-normal" },
           ]}
         />
       </div>
       <p className="max-w-[640px] text-h6 font-normal leading-[1.35] text-neutral-700">
-        Um espaço para relatar situações relacionadas à ética, integridade,
-        conduta e responsabilidade corporativa. Os relatos são direcionados para
-        análise responsável, com tratamento confidencial conforme as políticas
-        internas.
+        {content.description}
       </p>
 
       <Button
@@ -43,7 +46,7 @@ export function CanalHeroSection({ ouvidorDigitalUrl }: CanalHeroSectionProps) {
         rel="noopener noreferrer"
         className="mt-4 w-full lg:mt-0 lg:w-auto"
       >
-        Fazer um relato
+        {content.buttonLabel}
       </Button>
     </Section>
   );

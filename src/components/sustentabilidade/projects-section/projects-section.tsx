@@ -1,24 +1,26 @@
 import Image from "next/image";
 import { Section } from "@/components/ui/section";
 import type { EsgProject } from "@/data/esg-projects";
+import type { SectionContent } from "@/sanity/content/fields";
+import type { sustentabilidadePage } from "@/sanity/content/pages/sustentabilidade";
 
 type ProjectsSectionProps = {
   projects: EsgProject[];
+  content: SectionContent<typeof sustentabilidadePage.sections.projects>;
 };
 
-export function ProjectsSection({ projects }: ProjectsSectionProps) {
+export function ProjectsSection({ projects, content }: ProjectsSectionProps) {
   return (
     <Section className="flex flex-col gap-10 lg:gap-14">
       <div className="flex max-w-[720px] flex-col gap-4">
         <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
-          Apoio
+          {content.eyebrow}
         </p>
         <h2 className="text-h3 font-normal text-neutral-800">
-          Projetos que apoiamos
+          {content.title}
         </h2>
         <p className="text-body leading-[1.35] text-neutral-600">
-          A TranspoTech apoia iniciativas com impacto social, comunitário,
-          esportivo, educacional e ambiental.
+          {content.description}
         </p>
       </div>
 

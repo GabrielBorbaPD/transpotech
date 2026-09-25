@@ -8,6 +8,8 @@ import { NewsletterSection } from "@/components/layout/newsletter-section/newsle
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DriftMesh } from "@/components/layout/drift-mesh";
 import { getArticles } from "@/sanity/queries/articles";
+import { getPage } from "@/sanity/queries/pages";
+import { portalConteudoPage } from "@/sanity/content/pages/portal-conteudo";
 
 export const metadata: Metadata = {
   title: "Portal de Conteúdo",
@@ -22,7 +24,10 @@ export const metadata: Metadata = {
 };
 
 export default async function PortalConteudoPage() {
-  const articles = await getArticles();
+  const [articles, content] = await Promise.all([
+    getArticles(),
+    getPage(portalConteudoPage),
+  ]);
   const [featured] = articles;
 
   return (
@@ -39,9 +44,11 @@ export default async function PortalConteudoPage() {
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-svh"
         />
         <HoverMesh className="pointer-events-none absolute inset-x-0 bottom-0 top-[100svh] -z-10" />
-        <PortalHeroSection />
-        {featured && <FeaturedSection article={featured} />}
-        <ArticleList articles={articles} />
+        <PortalHeroSection content={content.hero} />
+        {featured && (
+          <FeaturedSection article={featured} content={content.featured} />
+        )}
+        <ArticleList articles={articles} content={content.articleList} />
         <NewsletterSection />
       </div>
     </main>

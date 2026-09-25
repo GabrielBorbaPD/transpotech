@@ -22,6 +22,8 @@ import {
   getArticleSitemapEntries,
   getRelatedArticles,
 } from "@/sanity/queries/articles";
+import { getPage } from "@/sanity/queries/pages";
+import { artigoPage } from "@/sanity/content/pages/artigo";
 import { ROUTES } from "@/lib/routes";
 
 type ArticlePageProps = {
@@ -63,7 +65,10 @@ export default async function ArtigoPage({ params }: ArticlePageProps) {
 
   if (!article) notFound();
 
-  const related = await getRelatedArticles(article, 3);
+  const [related, content] = await Promise.all([
+    getRelatedArticles(article, 3),
+    getPage(artigoPage),
+  ]);
   const sections = article.body
     ? getArticleSections(article.body)
     : articleSections;
@@ -86,11 +91,17 @@ export default async function ArtigoPage({ params }: ArticlePageProps) {
         <Section className="flex flex-col gap-8">
           <Breadcrumb
             items={[
-              { label: "Portal de Conteúdo", href: ROUTES.PORTAL_CONTEUDO },
+              {
+                label: content.header.breadcrumbLabel,
+                href: ROUTES.PORTAL_CONTEUDO,
+              },
               { label: article.title },
             ]}
           />
-          <ArticleHeader article={article} />
+          <ArticleHeader
+            article={article}
+            authorPrefix={content.header.authorPrefix}
+          />
           {/* Mais espaço entre o título/descrição e a imagem de capa */}
           <div className="mt-4 lg:mt-8">
             <ArticleCover article={article} />
@@ -107,31 +118,29 @@ export default async function ArtigoPage({ params }: ArticlePageProps) {
             {/* Caixinha de compartilhar */}
             <div className="flex items-center justify-between gap-3 rounded-xl border border-neutral-200 p-4">
               <span className="text-body font-semibold text-neutral-800">
-                Compartilhar
+                {content.aside.shareLabel}
               </span>
               <ArticleShare title={article.title} />
             </div>
 
             {/* Sumário com os tópicos em link */}
-            {sections.length > 0 && <ArticleToc sections={sections} />}
+            {sections.length > 0 && (
+              <ArticleToc sections={sections} title={content.aside.tocTitle} />
+            )}
           </aside>
         </Section>
       </div>
 
       {/* Relacionados + Newsletter — mesmo tom do portal de conteúdo (neutral-50) */}
       <div className="bg-neutral-50">
-        <RelatedSection articles={related} />
+        <RelatedSection articles={related} content={content.related} />
         <NewsletterSection />
       </div>
 
       <CtaSection
-        titleRegular="Pronto pra evoluir "
-        titleAccent="sua operação?"
+        {...content.cta}
         titleBreak
-        description="Locação, compra, manutenção, acessórios e automação em um só parceiro: a TranspoTech mantém sua operação disponível, previsível e pronta para crescer."
-        ctaLabel="Falar com especialista"
         ctaHref={ROUTES.CONTATO}
-        secondaryLabel="Ver soluções"
         secondaryHref={ROUTES.SERVICOS}
       />
     </main>

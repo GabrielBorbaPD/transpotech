@@ -81,7 +81,7 @@ const articlesQuery = defineQuery(`*[_type == "article" && defined(slug.current)
 // Referência a artigo apagado vira null no ->; o filtro por id a descarta.
 // Os parênteses fazem o filtro valer sobre a lista; sem eles o GROQ o aplica a
 // cada item e a referência apagada (null) continua lá.
-const homeArticlesQuery = defineQuery(`(*[_id == "siteSettings"][0].homeArticles[]->{
+const homeArticlesQuery = defineQuery(`(*[_id == "page_home"][0].blog.articles[]->{
   ${articleFields}
 })[defined(id)][0...${HOME_ARTICLE_LIMIT}]`);
 
@@ -105,16 +105,16 @@ export async function getArticles(): Promise<Article[]> {
 }
 
 /**
- * Artigos da seção de blog da home, na ordem de "Artigos da home" nas
- * Configurações do site: o primeiro é o destaque.
+ * Artigos da seção de blog da home, na ordem de "Artigos em destaque" na
+ * página Home do Studio: o primeiro é o destaque.
  */
 export async function getHomeArticles(): Promise<Article[]> {
   const data = await sanityFetch<CmsArticle[] | null>({
     query: homeArticlesQuery,
-    tags: ["siteSettings", "article"],
+    tags: ["page_home", "article"],
   });
   if (data) return data.map(toArticle);
-  // Com o Sanity configurado, null é lista vazia ou configurações ausentes.
+  // Com o Sanity configurado, null é lista vazia ou página Home ausente.
   if (isSanityConfigured) return [];
   return HOME_ARTICLE_IDS.map((id) =>
     localArticles.find((article) => article.id === id)

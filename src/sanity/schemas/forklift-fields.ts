@@ -41,7 +41,7 @@ const availabilities = ["Pronta entrega", "Sob consulta"];
 const locations = ["Curitiba - PR", "Joinville - SC", "Porto Alegre - RS", "São Paulo - SP"];
 
 export const forkliftGroups = [
-  { name: "card", title: "Card e filtros", default: true },
+  { name: "card", title: "Card e filtros" },
   { name: "detail", title: "Página do equipamento" },
 ];
 

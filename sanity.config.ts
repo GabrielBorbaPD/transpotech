@@ -1,6 +1,7 @@
-import { defineConfig } from "sanity";
+import { defineConfig, defineLocaleResourceBundle } from "sanity";
 import { structureTool } from "sanity/structure";
-import { schemaTypes, singletonTypes } from "./src/sanity/schemas";
+import { ptBRLocale } from "@sanity/locale-pt-br";
+import { fixedTypes, schemaTypes } from "./src/sanity/schemas";
 import { structure } from "./src/sanity/structure";
 
 // O build do Studio (sanity deploy/dev) só expõe variáveis SANITY_STUDIO_*.
@@ -12,16 +13,26 @@ export default defineConfig({
   title: "TranspoTech",
   projectId,
   dataset,
-  plugins: [structureTool({ structure })],
+  plugins: [structureTool({ structure }), ptBRLocale()],
+  // A tradução oficial diz "Todos os campos"; o cliente pediu "Tudo".
+  i18n: {
+    bundles: [
+      defineLocaleResourceBundle({
+        locale: "pt-BR",
+        namespace: "studio",
+        resources: { "inputs.object.field-group-tabs.all-fields-title": "Tudo" },
+      }),
+    ],
+  },
   schema: {
     types: schemaTypes,
-    // Singletons não aparecem no menu "criar novo".
+    // Tipos fixos não aparecem no menu "criar novo".
     templates: (templates) =>
-      templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
+      templates.filter(({ schemaType }) => !fixedTypes.has(schemaType)),
   },
   document: {
     actions: (actions, { schemaType }) =>
-      singletonTypes.has(schemaType)
+      fixedTypes.has(schemaType)
         ? actions.filter(
             ({ action }) =>
               action && ["publish", "discardChanges", "restore"].includes(action),

@@ -11,6 +11,8 @@ import {
   getForkliftsSeminovas,
   getOtherSeminovas,
 } from "@/sanity/queries/forklifts";
+import { getPage } from "@/sanity/queries/pages";
+import { seminovasPage } from "@/sanity/content/pages/seminovas";
 import { ROUTES } from "@/lib/routes";
 
 type DetailPageProps = {
@@ -55,7 +57,10 @@ export default async function EmpilhadeiraSeminovaDetalhePage({
   params,
 }: DetailPageProps) {
   const { slug } = await params;
-  const forklifts = await getForkliftsSeminovas();
+  const [forklifts, { detail: content, classifieds }] = await Promise.all([
+    getForkliftsSeminovas(),
+    getPage(seminovasPage),
+  ]);
   const forklift = forklifts.find((f) => f.id === slug);
 
   if (!forklift) notFound();
@@ -72,7 +77,11 @@ export default async function EmpilhadeiraSeminovaDetalhePage({
           fade
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-svh"
         />
-        <SeminovaDetailSection forklift={forklift} forklifts={forklifts} />
+        <SeminovaDetailSection
+          forklift={forklift}
+          forklifts={forklifts}
+          content={content}
+        />
       </div>
 
       {/* Outros classificados — mesmo carrossel da página de seminovas */}
@@ -80,8 +89,12 @@ export default async function EmpilhadeiraSeminovaDetalhePage({
         <ClassifiedsSection
           items={others}
           quoteOptions={forklifts}
-          eyebrow="Classificados"
-          title="Outras seminovas disponíveis"
+          eyebrow={content.othersEyebrow}
+          title={content.othersTitle}
+          labelYear={classifieds.labelYear}
+          labelHours={classifieds.labelHours}
+          labelCapacity={classifieds.labelCapacity}
+          labelLocation={classifieds.labelLocation}
         />
       </div>
     </main>

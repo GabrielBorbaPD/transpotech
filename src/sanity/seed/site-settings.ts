@@ -1,7 +1,6 @@
 import { ROUTES } from "@/lib/routes";
 import { defaultDescription, defaultShareDescription } from "@/lib/metadata";
-import { HOME_ARTICLE_IDS } from "@/components/home/blog-section/home-articles";
-import { seedKey, type SeedDocument } from "./helpers";
+import type { SeedDocument } from "./helpers";
 
 export function documents(): SeedDocument[] {
   return [
@@ -16,11 +15,6 @@ export function documents(): SeedDocument[] {
         description: defaultDescription,
         shareDescription: defaultShareDescription,
       },
-      homeArticles: HOME_ARTICLE_IDS.map((id, i) => ({
-        _type: "reference",
-        _key: seedKey(i, "home-article"),
-        _ref: `article-${id}`,
-      })),
     },
   ];
 }

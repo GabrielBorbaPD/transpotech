@@ -10,6 +10,8 @@ import { InfoCardsSection } from "@/components/pecas/info-cards-section/info-car
 import { WhyTranspotechSection } from "@/components/pecas/why-transpotech-section/why-transpotech-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { getFaqItems } from "@/sanity/queries/faq";
+import { getPage } from "@/sanity/queries/pages";
+import { pecasPage } from "@/sanity/content/pages/pecas";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
@@ -27,11 +29,14 @@ export const metadata: Metadata = {
 };
 
 export default async function PecasPage() {
-  const faqItems = await getFaqItems("pecas");
+  const [faqItems, content] = await Promise.all([
+    getFaqItems("pecas"),
+    getPage(pecasPage),
+  ]);
 
   return (
     <main>
-      <PecasHeroSection />
+      <PecasHeroSection content={content.hero} />
 
       {/* Grupo claro 1 — Captação (logo após a hero) + Qual é a sua necessidade.
           Uma única malha cobre tudo, sem cortes. */}
@@ -39,41 +44,33 @@ export default async function PecasPage() {
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <LeadFormSection
           id="solicitar-pecas"
-          titleTop="As peças que a"
-          titleBottom="sua frota precisa"
-          description="Informe o modelo e o item e a TranspoTech localiza a peça original ou multimarcas com o melhor prazo de entrega."
-          messagePlaceholder="Modelo do equipamento, código ou descrição da peça e quantidade."
-          submitLabel="Solicitar cotação de peças"
+          {...content.leadForm}
         />
-        <NeedsSection />
+        <NeedsSection content={content.needs} />
       </div>
 
       {/* Bloco dark — Não sabe o código + Como funciona + Informações que ajudam */}
       <div className="relative isolate bg-[#181616]">
         <DarkAmbient />
-        <NoCodeSection />
-        <RequestStepsSection />
-        <InfoCardsSection />
+        <NoCodeSection content={content.noCode} />
+        <RequestStepsSection content={content.requestSteps} />
+        <InfoCardsSection content={content.infoCards} />
       </div>
 
       {/* Grupo claro 3 — Por que TranspoTech + FAQ (malha só no Por que) */}
       <div className="relative isolate bg-background">
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
-          <WhyTranspotechSection />
+          <WhyTranspotechSection content={content.whyTranspotech} />
         </div>
         <FaqSection
-          titleRegular="Dúvidas frequentes sobre "
-          titleAccent="peças"
+          {...content.faq}
           items={faqItems}
         />
       </div>
 
       <CtaSection
-        titleRegular="Precisa de peça, mas não sabe "
-        titleAccent="exatamente qual?"
-        description="Descreva o problema, informe o equipamento e fale com a TranspoTech para direcionar sua cotação."
-        ctaLabel="Solicitar cotação de peças"
+        {...content.cta}
         ctaHref="#solicitar-pecas"
       />
     </main>

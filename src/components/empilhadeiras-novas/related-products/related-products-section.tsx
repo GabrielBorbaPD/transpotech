@@ -7,16 +7,22 @@ import { ProductCard } from "@/components/layout/product-card/product-card";
 import { QuoteModal } from "@/components/layout/quote-modal/quote-modal";
 import { ROUTES } from "@/lib/routes";
 import type { Forklift } from "@/types/forklift.types";
+import type { SectionContent } from "@/sanity/content/fields";
+import type { empilhadeirasNovasPage } from "@/sanity/content/pages/empilhadeiras-novas";
+
+type DetailContent = SectionContent<typeof empilhadeirasNovasPage.sections.detail>;
 
 type RelatedProductsSectionProps = {
   items: Forklift[];
   /** Catálogo completo, oferecido no modal de orçamento. */
   forklifts: Forklift[];
+  content: Pick<DetailContent, "relatedEyebrow" | "relatedTitle" | "relatedLinkLabel">;
 };
 
 export function RelatedProductsSection({
   items,
   forklifts,
+  content,
 }: RelatedProductsSectionProps) {
   const [quoteForId, setQuoteForId] = useState<string | null>(null);
 
@@ -27,15 +33,15 @@ export function RelatedProductsSection({
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-4">
           <p className="text-body font-semibold uppercase leading-[1.1] text-secondary-600">
-            Produtos relacionados
+            {content.relatedEyebrow}
           </p>
           <h2 className="max-w-[408px] text-h2 font-normal leading-[1.1] text-neutral-800">
-            Outras opções que podem servir
+            {content.relatedTitle}
           </h2>
         </div>
 
         <TextLink href={ROUTES.EMPILHADEIRAS_NOVAS} className="shrink-0">
-          Ver catálogo completo
+          {content.relatedLinkLabel}
         </TextLink>
       </div>
 

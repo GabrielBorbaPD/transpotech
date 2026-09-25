@@ -12,8 +12,12 @@ type ClassifiedsSectionProps = {
   items: Forklift[];
   /** Opções do modal de orçamento. Default: `items`. */
   quoteOptions?: Forklift[];
-  eyebrow?: string;
-  title?: string;
+  eyebrow: string;
+  title: string;
+  labelYear: string;
+  labelHours: string;
+  labelCapacity: string;
+  labelLocation: string;
   /** id de âncora — usado por links que apontam direto para a lista. */
   id?: string;
 };
@@ -24,8 +28,12 @@ type ClassifiedsSectionProps = {
 export function ClassifiedsSection({
   items,
   quoteOptions = items,
-  eyebrow = "Classificados",
-  title = "Seminovas disponíveis agora",
+  eyebrow,
+  title,
+  labelYear,
+  labelHours,
+  labelCapacity,
+  labelLocation,
   id,
 }: ClassifiedsSectionProps) {
   const [quoteForId, setQuoteForId] = useState<string | null>(null);
@@ -51,10 +59,10 @@ export function ClassifiedsSection({
             onRequestQuote={(f) => setQuoteForId(f.id)}
             detailsHref={`${ROUTES.EMPILHADEIRAS_SEMINOVAS}/${forklift.id}`}
             specs={[
-              { label: "Ano", value: forklift.year ?? "—" },
-              { label: "Horas trabalhadas", value: forklift.workedHours ?? "—" },
-              { label: "Capacidade", value: forklift.capacity },
-              { label: "Localização", value: forklift.location },
+              { label: labelYear, value: forklift.year ?? "—" },
+              { label: labelHours, value: forklift.workedHours ?? "—" },
+              { label: labelCapacity, value: forklift.capacity },
+              { label: labelLocation, value: forklift.location },
             ]}
           />
         ))}

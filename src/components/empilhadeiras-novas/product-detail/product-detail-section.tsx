@@ -7,16 +7,23 @@ import { ProductQuoteButton } from "@/components/layout/product-quote-button/pro
 import { ROUTES } from "@/lib/routes";
 import { stateFromLocation } from "@/data/forklifts-novas";
 import type { Forklift } from "@/types/forklift.types";
+import type { SectionContent } from "@/sanity/content/fields";
+import type { empilhadeirasNovasPage } from "@/sanity/content/pages/empilhadeiras-novas";
+
+type DetailContent = SectionContent<typeof empilhadeirasNovasPage.sections.detail>;
 
 type ProductDetailSectionProps = {
   forklift: Forklift;
   /** Catálogo completo, oferecido no modal de orçamento. */
   forklifts: Forklift[];
+  /** Textos comuns a todas as páginas de modelo. */
+  content: DetailContent;
 };
 
 export function ProductDetailSection({
   forklift,
   forklifts,
+  content,
 }: ProductDetailSectionProps) {
   const [firstWord, ...restWords] = forklift.name.split(" ");
   const galleryImages = [forklift.image];
@@ -79,11 +86,11 @@ export function ProductDetailSection({
               <MapPin aria-hidden className="size-6 shrink-0 text-primary-500" />
               <div className="flex flex-col gap-2">
                 <p className="text-body font-semibold leading-[1.35] text-neutral-700">
-                  Disponibilidade regional
+                  {content.regionalTitle}
                 </p>
                 <p className="text-body leading-[1.35] text-neutral-600">
-                  Equipamento disponível em {stateFromLocation(forklift.location)}{" "}
-                  - confirme logística e prazo de entrega para outras cidades.
+                  {content.regionalPrefix} {stateFromLocation(forklift.location)}{" "}
+                  {content.regionalSuffix}
                 </p>
               </div>
             </div>
@@ -98,7 +105,7 @@ export function ProductDetailSection({
               href={ROUTES.SIMULADOR}
               className="justify-center"
             >
-              Falar com especialista
+              {content.specialistLabel}
             </Button>
           </div>
         </div>

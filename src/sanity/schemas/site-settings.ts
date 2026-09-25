@@ -1,5 +1,4 @@
-import { defineArrayMember, defineField, defineType } from "sanity";
-import { HOME_ARTICLE_LIMIT } from "../../components/home/blog-section/home-articles";
+import { defineField, defineType } from "sanity";
 
 const socialField = (name: string, title: string) =>
   defineField({
@@ -16,10 +15,9 @@ export const siteSettings = defineType({
   title: "Configurações do site",
   type: "document",
   groups: [
-    { name: "links", title: "Links externos", default: true },
+    { name: "links", title: "Links externos" },
     { name: "social", title: "Redes sociais" },
     { name: "seo", title: "SEO padrão" },
-    { name: "home", title: "Home" },
   ],
   fields: [
     defineField({
@@ -88,20 +86,6 @@ export const siteSettings = defineType({
           type: "imageWithAlt",
         }),
       ],
-    }),
-    defineField({
-      name: "homeArticles",
-      title: "Artigos da home",
-      description: `Artigos da seção de conteúdos da home, na ordem da lista (arraste para reordenar). O primeiro é o destaque grande; os demais viram os cards menores. Máximo de ${HOME_ARTICLE_LIMIT}.`,
-      type: "array",
-      group: "home",
-      of: [
-        defineArrayMember({
-          type: "reference",
-          to: [{ type: "article" }],
-        }),
-      ],
-      validation: (r) => r.max(HOME_ARTICLE_LIMIT).unique(),
     }),
   ],
   preview: {

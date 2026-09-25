@@ -13,6 +13,8 @@ import { DriftMesh } from "@/components/layout/drift-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
 import { getFaqItems } from "@/sanity/queries/faq";
 import { getSiteSettings } from "@/sanity/queries/site-settings";
+import { getPage } from "@/sanity/queries/pages";
+import { ouvidoriaPage } from "@/sanity/content/pages/ouvidoria";
 
 export const metadata: Metadata = {
   title: "Ouvidoria Digital",
@@ -27,9 +29,10 @@ export const metadata: Metadata = {
 };
 
 export default async function OuvidoriaPage() {
-  const [settings, faqItems] = await Promise.all([
+  const [settings, faqItems, content] = await Promise.all([
     getSiteSettings(),
     getFaqItems("ouvidoria"),
+    getPage(ouvidoriaPage),
   ]);
 
   return (
@@ -39,31 +42,33 @@ export default async function OuvidoriaPage() {
         {/* Hero — malha grande que anda pelo fundo (sem cursor) */}
         <div className="relative">
           <DriftMesh className="pointer-events-none absolute inset-0 -z-10" />
-          <OuvidoriaHeroSection />
+          <OuvidoriaHeroSection content={content.hero} />
         </div>
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
-          <ScopeSection />
+          <ScopeSection content={content.scope} />
         </div>
       </div>
 
       {/* Bloco dark — Qual canal devo usar + Como funciona a Ouvidoria */}
       <div className="relative isolate bg-[#181616]">
         <DarkAmbient />
-        <ChannelChoiceSection ouvidorDigitalUrl={settings.ouvidorDigitalUrl} />
-        <ProcessSection />
+        <ChannelChoiceSection
+          ouvidorDigitalUrl={settings.ouvidorDigitalUrl}
+          content={content.channelChoice}
+        />
+        <ProcessSection content={content.process} />
       </div>
 
       {/* Grupo claro 2 (malha só até o redirecionamento comercial) */}
       <div className="relative isolate bg-background pb-6">
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
-          <ManifestacaoForm />
-          <CommercialRedirectSection />
+          <ManifestacaoForm content={content.form} />
+          <CommercialRedirectSection content={content.commercialRedirect} />
         </div>
         <FaqSection
-          titleRegular="Perguntas "
-          titleAccent="frequentes"
+          {...content.faq}
           items={faqItems}
         />
       </div>

@@ -8,6 +8,8 @@ import { WhyChooseSection } from "@/components/empilhadeiras-novas/why-choose-se
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { getFaqItems } from "@/sanity/queries/faq";
 import { getForkliftsNovas } from "@/sanity/queries/forklifts";
+import { getPage } from "@/sanity/queries/pages";
+import { empilhadeirasNovasPage } from "@/sanity/content/pages/empilhadeiras-novas";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
 import { DriftMesh } from "@/components/layout/drift-mesh";
@@ -27,9 +29,10 @@ export const metadata: Metadata = {
 };
 
 export default async function EmpilhadeirasNovasPage() {
-  const [forklifts, faqItems] = await Promise.all([
+  const [forklifts, faqItems, content] = await Promise.all([
     getForkliftsNovas(),
     getFaqItems("empilhadeiras"),
+    getPage(empilhadeirasNovasPage),
   ]);
 
   return (
@@ -43,7 +46,7 @@ export default async function EmpilhadeirasNovasPage() {
           fade
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-svh"
         />
-        <CatalogSection forklifts={forklifts} />
+        <CatalogSection forklifts={forklifts} content={content.catalog} />
       </div>
 
       {/* Comparativo — fundo branco, cards neutral-50 */}
@@ -54,26 +57,16 @@ export default async function EmpilhadeirasNovasPage() {
       {/* Bloco dark — considere seminovas + por que escolher a TranspoTech */}
       <div className="relative isolate bg-[#181616]">
         <DarkAmbient />
-        <ConsiderUsedSection />
-        <WhyChooseSection />
+        <ConsiderUsedSection content={content.considerUsed} />
+        <WhyChooseSection content={content.whyChoose} />
       </div>
 
       {/* Grupo claro — FAQ (sem malha) */}
       <div className="bg-background">
-        <FaqSection
-          titleRegular="Perguntas frequentes sobre "
-          titleAccent="locação de empilhadeiras"
-          items={faqItems}
-        />
+        <FaqSection {...content.faq} items={faqItems} />
       </div>
 
-      <CtaSection
-        titleRegular="Precisa comprar empilhadeira com "
-        titleAccent="segurança técnica?"
-        description="Fale com a TranspoTech e receba uma recomendação conforme carga, altura, ambiente, prazo e orçamento."
-        ctaLabel="Falar com especialista"
-        ctaHref={ROUTES.CONTATO}
-      />
+      <CtaSection {...content.cta} ctaHref={ROUTES.CONTATO} />
     </main>
   );
 }

@@ -10,6 +10,8 @@ import { FloatingActions } from "@/components/layout/floating-actions";
 import { ScrollReveal } from "@/components/layout/scroll-reveal";
 import { getSiteSettings } from "@/sanity/queries/site-settings";
 import { getUnits } from "@/sanity/queries/units";
+import { getSharedTexts } from "@/sanity/queries/shared";
+import { SharedTextsProvider } from "@/components/layout/shared-texts";
 
 // "Stack Sans Text" — fonte do design original (TPT01 / Figma), carregada
 // localmente. O arquivo variável cobre os pesos 400–700 usados nos headings.
@@ -67,7 +69,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [settings, units] = await Promise.all([getSiteSettings(), getUnits()]);
+  const [settings, units, shared] = await Promise.all([
+    getSiteSettings(),
+    getUnits(),
+    getSharedTexts(),
+  ]);
+  const { leadForm, newsletter, productCard, productQuote } = shared;
 
   return (
     <html
@@ -76,15 +83,19 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col font-body text-neutral-900">
         <Providers>
-          <Header careersUrl={settings.careersUrl} />
-          {children}
-          <Footer
-            units={units}
-            careersUrl={settings.careersUrl}
-            social={settings.social}
-          />
-          <FloatingActions />
-          <ScrollReveal />
+          <SharedTextsProvider
+            texts={{ leadForm, newsletter, productCard, productQuote }}
+          >
+            <Header careersUrl={settings.careersUrl} />
+            {children}
+            <Footer
+              units={units}
+              careersUrl={settings.careersUrl}
+              social={settings.social}
+            />
+            <FloatingActions />
+            <ScrollReveal />
+          </SharedTextsProvider>
         </Providers>
       </body>
     </html>

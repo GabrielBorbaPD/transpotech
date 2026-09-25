@@ -9,6 +9,8 @@ import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DriftMesh } from "@/components/layout/drift-mesh";
 import { getFaqItems } from "@/sanity/queries/faq";
 import { getUnits } from "@/sanity/queries/units";
+import { getPage } from "@/sanity/queries/pages";
+import { contatoPage } from "@/sanity/content/pages/contato";
 
 export const metadata: Metadata = {
   title: "Contato",
@@ -23,9 +25,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ContatoPage() {
-  const [units, faqItems] = await Promise.all([
+  const [units, faqItems, content] = await Promise.all([
     getUnits(),
     getFaqItems("contato"),
+    getPage(contatoPage),
   ]);
 
   return (
@@ -42,19 +45,19 @@ export default async function ContatoPage() {
             próprio, o -z-10 da malha cai atrás do fundo desta faixa e ela some. */}
         <div className="form-band-top relative isolate">
           <DriftMesh className="pointer-events-none absolute inset-0 -z-10 opacity-50" />
-          <ContatoHeroSection />
+          <ContatoHeroSection content={content.hero} />
         </div>
 
         {/* Ajuda e unidades (malha do cursor só até aqui; o FAQ fica sem) */}
         <div className="relative">
           <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
-          <HelpSection />
-          <UnitsSection units={units} />
+          <HelpSection content={content.help} />
+          <UnitsSection units={units} content={content.units} />
         </div>
 
         <FaqSection
-          titleRegular="Perguntas "
-          titleAccent="frequentes"
+          titleRegular={content.faq.titleRegular}
+          titleAccent={content.faq.titleAccent}
           items={faqItems}
         />
       </div>

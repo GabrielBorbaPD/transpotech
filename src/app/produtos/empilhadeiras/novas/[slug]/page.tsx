@@ -15,6 +15,8 @@ import {
   getForkliftsNovas,
   getRelatedForklifts,
 } from "@/sanity/queries/forklifts";
+import { getPage } from "@/sanity/queries/pages";
+import { empilhadeirasNovasPage } from "@/sanity/content/pages/empilhadeiras-novas";
 import { ROUTES } from "@/lib/routes";
 
 type DetailPageProps = {
@@ -57,7 +59,10 @@ export default async function EmpilhadeiraNovaDetalhePage({
   params,
 }: DetailPageProps) {
   const { slug } = await params;
-  const forklifts = await getForkliftsNovas();
+  const [forklifts, { detail: content }] = await Promise.all([
+    getForkliftsNovas(),
+    getPage(empilhadeirasNovasPage),
+  ]);
   const forklift = forklifts.find((f) => f.id === slug);
 
   if (!forklift) notFound();
@@ -80,7 +85,11 @@ export default async function EmpilhadeiraNovaDetalhePage({
           fade
           className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-svh"
         />
-        <ProductDetailSection forklift={forklift} forklifts={forklifts} />
+        <ProductDetailSection
+          forklift={forklift}
+          forklifts={forklifts}
+          content={content}
+        />
       </div>
 
       {/* Palco do modelo — imagem full-bleed com zoom (fundo claro) */}
@@ -90,14 +99,21 @@ export default async function EmpilhadeiraNovaDetalhePage({
 
       {/* Destaques do modelo — layout de lista (Planos de locação), dark mode,
           com o botão "Ver ficha técnica" no cabeçalho */}
-      <ModelHighlightsSection detail={detail} />
+      <ModelHighlightsSection
+        detail={detail}
+        datasheetLabel={content.datasheetLabel}
+      />
 
       {/* Relacionados */}
       <div className="relative isolate bg-neutral-50">
-        <RelatedProductsSection items={related} forklifts={forklifts} />
+        <RelatedProductsSection
+          items={related}
+          forklifts={forklifts}
+          content={content}
+        />
       </div>
 
-      <BackToCatalog />
+      <BackToCatalog label={content.backLabel} />
     </main>
   );
 }

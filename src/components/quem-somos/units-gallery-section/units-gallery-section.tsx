@@ -5,6 +5,8 @@ import Image from "next/image";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Building2 } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { getUnitMapsUrl, getUnitTitle, type Unit } from "@/data/units";
+import type { SectionContent } from "@/sanity/content/fields";
+import type { quemSomosPage } from "@/sanity/content/pages/quem-somos";
 
 // A galeria segue `galleryOrder`, independente da ordem por estado usada no
 // rodapé e na Contato; unidade sem posição vai para o fim (sort estável).
@@ -12,9 +14,12 @@ const byGalleryOrder = (a: Unit, b: Unit) =>
   (a.galleryOrder ?? Number.MAX_SAFE_INTEGER) -
   (b.galleryOrder ?? Number.MAX_SAFE_INTEGER);
 
-type UnitsGallerySectionProps = { units: Unit[] };
+type UnitsGallerySectionProps = {
+  units: Unit[];
+  content: SectionContent<typeof quemSomosPage.sections.units>;
+};
 
-export function UnitsGallerySection({ units }: UnitsGallerySectionProps) {
+export function UnitsGallerySection({ units, content }: UnitsGallerySectionProps) {
   const galleryUnits = useMemo(() => [...units].sort(byGalleryOrder), [units]);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -35,17 +40,16 @@ export function UnitsGallerySection({ units }: UnitsGallerySectionProps) {
       <div className="flex w-full flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
         <div className="flex max-w-[720px] flex-col gap-4">
           <p className="text-body font-semibold uppercase tracking-wide text-secondary-600">
-            Nossas unidades
+            {content.eyebrow}
           </p>
           <h2 className="text-h2 text-neutral-800">
-            <span className="font-normal lg:block">Presença real,</span>{" "}
+            <span className="font-normal lg:block">{content.titleTop}</span>{" "}
             <span className="font-bold text-primary-500 lg:block">
-              perto da sua operação
+              {content.titleAccent}
             </span>
           </h2>
           <p className="text-body leading-[1.5] text-neutral-600">
-            São 11 unidades próprias em cinco estados, com equipe técnica,
-            estoque e estrutura física para atender sua empresa de perto.
+            {content.description}
           </p>
         </div>
 
@@ -121,7 +125,7 @@ export function UnitsGallerySection({ units }: UnitsGallerySectionProps) {
                   className="group/link inline-flex w-fit items-center gap-1.5 rounded-sm text-body font-semibold text-primary-500 transition-colors hover:text-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
                 >
                   <span className="underline-offset-4 group-hover/link:underline">
-                    Conhecer unidade
+                    {content.linkLabel}
                   </span>
                   <ArrowUpRight
                     className="size-4 transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"

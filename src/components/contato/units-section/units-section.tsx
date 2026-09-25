@@ -10,6 +10,11 @@ import {
   getUnitTitle,
   type Unit,
 } from "@/data/units";
+import { LineBreaks } from "@/components/ui/line-breaks";
+import type { SectionContent } from "@/sanity/content/fields";
+import type { contatoPage } from "@/sanity/content/pages/contato";
+
+type UnitsContent = SectionContent<typeof contatoPage.sections.units>;
 
 // Monta um card por unidade (Blumenau tem duas: Hub Técnico e Seminovas),
 // na mesma ordem do rodapé. O link do mapa aponta para a busca real no Google
@@ -26,9 +31,9 @@ const toCards = (units: Unit[]) =>
     address: unit.address,
   }));
 
-type UnitsSectionProps = { units: Unit[] };
+type UnitsSectionProps = { units: Unit[]; content: UnitsContent };
 
-export function UnitsSection({ units }: UnitsSectionProps) {
+export function UnitsSection({ units, content }: UnitsSectionProps) {
   const cards = useMemo(() => toCards(units), [units]);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -49,14 +54,12 @@ export function UnitsSection({ units }: UnitsSectionProps) {
       <div className="flex w-full flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
         <div className="flex flex-col gap-4">
           <h2 className="text-h3 text-neutral-800">
-            <span className="font-normal">Encontre a unidade</span>{" "}
+            <span className="font-normal">{content.titleRegular}</span>{" "}
             <br className="hidden lg:inline" />
-            <span className="font-bold text-primary-500">mais próxima</span>
+            <span className="font-bold text-primary-500">{content.titleAccent}</span>
           </h2>
           <p className="text-body leading-[1.35] text-neutral-600">
-            A TranspoTech conta com unidades e estrutura regional
-            <br className="hidden sm:block" /> para atender empresas em
-            diferentes localidades.
+            <LineBreaks text={content.description} brClassName="hidden sm:block" />
           </p>
         </div>
 
@@ -121,7 +124,7 @@ export function UnitsSection({ units }: UnitsSectionProps) {
                 {card.title}
               </h3>
               <p className="text-body leading-[1.35] text-neutral-600">
-                {card.address ?? "Endereço completo disponível em breve."}
+                {card.address ?? content.addressFallback}
               </p>
             </div>
           </article>
@@ -135,7 +138,7 @@ export function UnitsSection({ units }: UnitsSectionProps) {
           href="#solicitacao"
           className="self-start"
         >
-          Encontrar atendimento na minha região
+          {content.buttonLabel}
         </Button>
       </div>
     </Section>

@@ -6,6 +6,8 @@ import { ProductQuoteButton } from "@/components/layout/product-quote-button/pro
 import { ROUTES } from "@/lib/routes";
 import { stateFromLocation } from "@/data/forklifts-novas";
 import type { Forklift } from "@/types/forklift.types";
+import type { SectionContent } from "@/sanity/content/fields";
+import type { seminovasPage } from "@/sanity/content/pages/seminovas";
 
 // Detalhe enxuto do classificado: mesma composição da hero do detalhe de novas
 // (galeria + informações), com as características de seminova e um único CTA
@@ -15,11 +17,14 @@ type SeminovaDetailSectionProps = {
   forklift: Forklift;
   /** Estoque completo, oferecido no modal de orçamento. */
   forklifts: Forklift[];
+  /** Textos comuns a todas as páginas de equipamento. */
+  content: SectionContent<typeof seminovasPage.sections.detail>;
 };
 
 export function SeminovaDetailSection({
   forklift,
   forklifts,
+  content,
 }: SeminovaDetailSectionProps) {
   const [firstWord, ...restWords] = forklift.name.split(" ");
   const galleryImages = forklift.gallery ?? [forklift.image];
@@ -81,12 +86,11 @@ export function SeminovaDetailSection({
               <MapPin aria-hidden className="size-6 shrink-0 text-primary-500" />
               <div className="flex flex-col gap-2">
                 <p className="text-body font-semibold leading-[1.35] text-neutral-700">
-                  Onde está o equipamento
+                  {content.locationTitle}
                 </p>
                 <p className="text-body leading-[1.35] text-neutral-600">
-                  Disponível em {stateFromLocation(forklift.location)} -
-                  confirme visita técnica, logística e prazo de entrega para
-                  outras cidades.
+                  {content.locationPrefix} {stateFromLocation(forklift.location)}{" "}
+                  {content.locationSuffix}
                 </p>
               </div>
             </div>
