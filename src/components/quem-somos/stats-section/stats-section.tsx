@@ -148,7 +148,7 @@ export function StatsSection({ content }: { content: StatsContent }) {
                     src={image}
                     alt=""
                     fill
-                    sizes="320px"
+                    sizes={`${Math.ceil(art.width)}px`}
                     className="object-cover"
                   />
                 </div>

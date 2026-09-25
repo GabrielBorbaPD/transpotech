@@ -18,6 +18,65 @@ import { gsap } from "@/lib/gsap";
 // estático.
 const RANGE = 6; // deslocamento máximo em % (±)
 
+// Um listener de scroll e um rAF para todas as molduras da página: lê os rects
+// de todas e só depois escreve os transforms (um rAF por instância intercalava
+// escrita e leitura, forçando recálculo de estilo). Moldura fora da viewport
+// fica de fora; ao sair ela ganha uma última leitura, que a crava em 0 ou 1.
+type Item = {
+  frame: HTMLDivElement;
+  setY: (value: number) => void;
+  visible: boolean;
+  pending: boolean;
+};
+
+const items = new Set<Item>();
+let raf = 0;
+
+const flush = () => {
+  raf = 0;
+  const due = [...items].filter((item) => item.visible || item.pending);
+  const rects = due.map((item) => item.frame.getBoundingClientRect());
+  const vh = window.innerHeight;
+  due.forEach((item, i) => {
+    item.pending = false;
+    const rect = rects[i];
+    // 0 = frame entrando por baixo; 1 = frame saindo por cima.
+    const progress = Math.min(
+      1,
+      Math.max(0, (vh - rect.top) / (vh + rect.height))
+    );
+    item.setY(RANGE - RANGE * 2 * progress);
+  });
+};
+
+const schedule = () => {
+  if (!raf) raf = requestAnimationFrame(flush);
+};
+
+const onResize = () => {
+  items.forEach((item) => (item.pending = true));
+  schedule();
+};
+
+const register = (item: Item) => {
+  if (items.size === 0) {
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+  }
+  items.add(item);
+  schedule();
+};
+
+const unregister = (item: Item) => {
+  items.delete(item);
+  if (items.size === 0) {
+    window.removeEventListener("scroll", schedule);
+    window.removeEventListener("resize", onResize);
+    cancelAnimationFrame(raf);
+    raf = 0;
+  }
+};
+
 type ParallaxFrameProps = {
   /** Classes da moldura (tamanho, cantos etc.) — o clip fica por conta do componente. */
   className?: string;
@@ -51,32 +110,26 @@ export function ParallaxFrame({
     if (!frame || !inner) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const setY = gsap.quickSetter(inner, "yPercent");
-    let raf = 0;
+    const setY = gsap.quickSetter(inner, "yPercent") as (value: number) => void;
+    // pending: a posição inicial é aplicada a toda moldura, visível ou não.
+    const item: Item = { frame, setY, visible: false, pending: true };
 
-    const update = () => {
-      raf = 0;
-      const rect = frame.getBoundingClientRect();
-      const vh = window.innerHeight;
-      // 0 = frame entrando por baixo; 1 = frame saindo por cima.
-      const progress = Math.min(
-        1,
-        Math.max(0, (vh - rect.top) / (vh + rect.height))
-      );
-      setY(RANGE - RANGE * 2 * progress);
-    };
+    // Margem: o IntersectionObserver entrega com um frame de atraso; a moldura
+    // já está sendo atualizada quando de fato entra na tela.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        item.visible = entry.isIntersecting;
+        if (!item.visible) item.pending = true;
+        schedule();
+      },
+      { rootMargin: "25% 0px" }
+    );
+    observer.observe(frame);
+    register(item);
 
-    const schedule = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule, { passive: true });
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
+      observer.disconnect();
+      unregister(item);
     };
   }, [noParallax]);
 

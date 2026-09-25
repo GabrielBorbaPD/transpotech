@@ -12,6 +12,10 @@ import atomsix from "@/assets/images/atomsix-symbol.svg";
 
 const logoWatermark = logoLight;
 
+// Selo GPTW: altura fixa (90px / lg:115px) e largura proporcional. Sem
+// `sizes`, o srcset em 1x/2x da largura intrínseca baixava a versão de 1080px.
+const gptwSizes = `(min-width: 1024px) ${Math.ceil((115 * gptw.width) / gptw.height)}px, ${Math.ceil((90 * gptw.width) / gptw.height)}px`;
+
 const getLinkGroups = (careersUrl: string) => [
   {
     title: "Produtos",
@@ -136,6 +140,7 @@ export function Footer({ units, careersUrl, social }: FooterProps) {
           <Image
             src={gptw}
             alt="Great Place To Work Certificada — 4 anos consecutivos"
+            sizes={gptwSizes}
             className="h-[90px] w-auto shrink-0 self-start lg:h-[115px] lg:self-auto"
           />
         </div>

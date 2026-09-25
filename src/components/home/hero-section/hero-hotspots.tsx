@@ -81,7 +81,9 @@ export function HeroHotspots({ labels }: { labels: string[] }) {
 
   // Mede o container (= tamanho da section) e recalcula as posições ancoradas
   // na imagem a cada resize — assim as bolinhas grudam na peça em qualquer
-  // largura, mesmo com o recorte do object-cover mudando.
+  // largura, mesmo com o recorte do object-cover mudando. Sem medição síncrona
+  // na montagem: o ResizeObserver já entrega a primeira medida após o layout do
+  // frame, e ler o retângulo aqui forçava um layout no meio da hidratação.
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
@@ -91,7 +93,6 @@ export function HeroHotspots({ labels }: { labels: string[] }) {
         setPositions(computePositions(rect.width, rect.height));
       }
     };
-    recalc();
     const observer = new ResizeObserver(recalc);
     observer.observe(el);
     return () => observer.disconnect();

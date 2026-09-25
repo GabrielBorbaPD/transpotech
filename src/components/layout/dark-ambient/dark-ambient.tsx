@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
+import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap";
 
 const GREEN_OFFSET = 220;
@@ -34,36 +33,61 @@ export function DarkAmbient({ greenOffset = GREEN_OFFSET }: DarkAmbientProps = {
   const orangeRef = useRef<HTMLDivElement>(null);
   const greenRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    const container = ref.current!;
+  useEffect(() => {
+    const container = ref.current;
+    const orange = orangeRef.current;
+    const green = greenRef.current;
+    if (!container || !orange || !green) return;
 
-    gsap.set(orangeRef.current, { xPercent: 25, y: 0 });
-    gsap.set(greenRef.current, { xPercent: -25, y: greenOffset });
+    // Antes do topo do bloco chegar ao topo da viewport o scrub está em 0 e os
+    // blurs ficam na posição inicial, que já vem no HTML. Os ScrollTriggers só
+    // nascem quando o bloco se aproxima, em vez de todos medirem layout na
+    // hidratação. Criado depois, o scrub já assume o progresso do scroll atual.
+    let ctx: gsap.Context | null = null;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        ctx = gsap.context(() => {
+          // x: 0 explícito: o GSAP leria o translate(%) inline como px e
+          // somaria ao xPercent.
+          gsap.set(orange, { xPercent: 25, x: 0, y: 0 });
+          gsap.set(green, { xPercent: -25, x: 0, y: greenOffset });
 
-    gsap.to(orangeRef.current, {
-      y: () => container.offsetHeight * FACTOR,
-      ease: "none",
-      scrollTrigger: {
-        trigger: container,
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
-        invalidateOnRefresh: true,
+          gsap.to(orange, {
+            y: () => container.offsetHeight * FACTOR,
+            ease: "none",
+            scrollTrigger: {
+              trigger: container,
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          gsap.to(green, {
+            y: () => container.offsetHeight * FACTOR + greenOffset,
+            ease: "none",
+            scrollTrigger: {
+              trigger: container,
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          });
+        }, container);
       },
-    });
+      { rootMargin: "50% 0px" }
+    );
+    observer.observe(container);
 
-    gsap.to(greenRef.current, {
-      y: () => container.offsetHeight * FACTOR + greenOffset,
-      ease: "none",
-      scrollTrigger: {
-        trigger: container,
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
-        invalidateOnRefresh: true,
-      },
-    });
-  }, { scope: ref, dependencies: [greenOffset] });
+    return () => {
+      observer.disconnect();
+      ctx?.revert();
+    };
+  }, [greenOffset]);
 
   return (
     <div
@@ -73,14 +97,22 @@ export function DarkAmbient({ greenOffset = GREEN_OFFSET }: DarkAmbientProps = {
     >
       {/* Laranja — lado direito. A caixa de 520px segue sendo a referência
           de posição do GSAP; o gradiente transborda 480px (3σ do blur antigo). */}
-      <div ref={orangeRef} className="absolute right-0 top-0 size-[520px]">
+      <div
+        ref={orangeRef}
+        className="absolute right-0 top-0 size-[520px]"
+        style={{ transform: "translate(25%, 0px)" }}
+      >
         <div
           className="absolute -inset-[480px]"
           style={{ backgroundImage: glowGradient("--color-primary-500") }}
         />
       </div>
       {/* Verde — lado esquerdo, um pouco abaixo */}
-      <div ref={greenRef} className="absolute left-0 top-0 size-[520px]">
+      <div
+        ref={greenRef}
+        className="absolute left-0 top-0 size-[520px]"
+        style={{ transform: `translate(-25%, ${greenOffset}px)` }}
+      >
         <div
           className="absolute -inset-[480px]"
           style={{ backgroundImage: glowGradient("--color-secondary-600") }}

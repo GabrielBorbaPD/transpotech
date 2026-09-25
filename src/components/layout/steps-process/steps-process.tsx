@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useNearViewport } from "@/hooks/use-near-viewport";
 
 export type ProcessStep = {
   title: ReactNode;
@@ -123,7 +124,8 @@ export function StepsProcess({
         })
       );
     };
-    measure();
+    // Sem measure() síncrono: o ResizeObserver entrega a primeira medida após o
+    // layout do frame, sem forçar layout durante a hidratação.
     const ro = new ResizeObserver(measure);
     ro.observe(wrap);
     return () => ro.disconnect();
@@ -131,7 +133,9 @@ export function StepsProcess({
 
   // A linha laranja começa apagada e "carrega" uma única vez quando a seção
   // entra na viewport (desktop: esquerda → direita; mobile: cima → baixo).
-  useEffect(() => {
+  // Tween e ScrollTrigger só são criados quando a seção se aproxima — até lá o
+  // clip-path inicial do JSX já é o estado apagado.
+  useNearViewport(listWrapRef, () => {
     const wrap = listWrapRef.current;
     if (!wrap) return;
     const set = (p: number) => {
@@ -160,12 +164,11 @@ export function StepsProcess({
       once: true,
       onEnter: () => tween.play(),
     });
-    ScrollTrigger.refresh();
     return () => {
       st.kill();
       tween.kill();
     };
-  }, []);
+  });
 
   return (
     <Section id={id} data-header-dark className="flex flex-col gap-10 lg:gap-14">

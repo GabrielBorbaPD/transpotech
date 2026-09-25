@@ -92,7 +92,6 @@ export function ModelExperienceSection({
           src={detail.media.hero.src}
           alt={detail.media.hero.alt}
           fill
-          priority
           sizes="100vw"
           className={
             detail.media.hero.fit === "contain"

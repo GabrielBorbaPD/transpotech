@@ -74,6 +74,10 @@ export function BrandsSection({
               key={b.alt}
               src={b.src}
               alt={b.alt}
+              // Sem `sizes`, o srcset 1x/2x parte da largura original do
+              // arquivo (logos raster de até 3315px viravam w=3840). O logo
+              // tem no máximo 83px de altura (lg).
+              sizes={`${Math.ceil((83 * b.src.width) / b.src.height)}px`}
               className={`h-10 w-auto sm:h-12 lg:h-[83px] ${
                 isLight && b.mono !== false
                   ? "[filter:brightness(0)_invert(0.35)]"

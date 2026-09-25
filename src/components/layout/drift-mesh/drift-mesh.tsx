@@ -50,36 +50,49 @@ export function DriftMesh({
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // Sem valor inicial explícito o GSAP parte de 0 (canto superior esquerdo),
-    // ignorando o fallback do var() — então os blobs começam nas posições
-    // definidas em BLOBS.
-    BLOBS.forEach((b, i) => {
-      el.style.setProperty(`--bx${i}`, `${b.x}%`);
-      el.style.setProperty(`--by${i}`, `${b.y}%`);
-    });
-
     // Fora da viewport os tweens ficam pausados: animar as variáveis da mask
     // repinta a área inteira a cada frame, e o footer monta uma instância em
     // toda página. Pausado, o tween não completa e não sorteia o próximo.
-    let visible = true;
+    // Trocar a mask por camadas movidas por transform não dá o mesmo pixel: as
+    // camadas de mask compõem por união (1 − Π(1 − aᵢ)) antes de multiplicar a
+    // malha, e camadas de conteúdo empilhadas somariam a malha várias vezes.
+    let visible = false;
+    let started = false;
 
-    // Cada blob vagueia para um alvo aleatório e re-sorteia ao chegar.
-    BLOBS.forEach((_, i) => {
-      const move = () => {
-        gsap.to(el, {
-          paused: !visible,
-          [`--bx${i}`]: `${gsap.utils.random(5, 95, 1)}%`,
-          [`--by${i}`]: `${gsap.utils.random(8, 92, 1)}%`,
-          duration: gsap.utils.random(3, 6) / speed,
-          ease: "sine.inOut",
-          onComplete: move,
-        });
-      };
-      move();
-    });
+    // Os tweens só nascem na primeira entrada na viewport (o do footer, na
+    // maioria das visitas, nunca). Até lá valem os fallbacks do var().
+    const start = () => {
+      started = true;
+      // Sem valor inicial explícito o GSAP parte de 0 (canto superior
+      // esquerdo), ignorando o fallback do var() — então os blobs começam nas
+      // posições definidas em BLOBS.
+      BLOBS.forEach((b, i) => {
+        el.style.setProperty(`--bx${i}`, `${b.x}%`);
+        el.style.setProperty(`--by${i}`, `${b.y}%`);
+      });
+
+      // Cada blob vagueia para um alvo aleatório e re-sorteia ao chegar.
+      BLOBS.forEach((_, i) => {
+        const move = () => {
+          gsap.to(el, {
+            paused: !visible,
+            [`--bx${i}`]: `${gsap.utils.random(5, 95, 1)}%`,
+            [`--by${i}`]: `${gsap.utils.random(8, 92, 1)}%`,
+            duration: gsap.utils.random(3, 6) / speed,
+            ease: "sine.inOut",
+            onComplete: move,
+          });
+        };
+        move();
+      });
+    };
 
     const observer = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
+      if (visible && !started) {
+        start();
+        return;
+      }
       gsap.getTweensOf(el).forEach((t) => (visible ? t.resume() : t.pause()));
     });
     observer.observe(el);

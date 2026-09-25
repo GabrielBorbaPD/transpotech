@@ -18,8 +18,16 @@ type FaqSectionProps = {
 export function FaqSection({ titleRegular, titleAccent, items }: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const isFirstRun = useRef(true);
 
   useEffect(() => {
+    // Na montagem o HTML do servidor já está no estado de openIndex (primeiro
+    // painel "auto", os outros h-0): pular evita ler scrollHeight e criar um
+    // tween por painel durante a hidratação.
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     panelRefs.current.forEach((panel, i) => {
       if (!panel) return;

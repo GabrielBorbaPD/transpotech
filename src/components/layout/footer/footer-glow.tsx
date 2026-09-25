@@ -28,16 +28,32 @@ export function FooterGlow() {
     let width = footer.clientWidth;
     const apply = () => xSet(((current.current - 50) / 100) * width);
 
-    const ticker = () => {
+    // O ticker só fica registrado enquanto o glow está a caminho do alvo; ao
+    // chegar, sai e volta no próximo mousemove.
+    let ticking = false;
+    const stopTicking = () => {
+      if (!ticking) return;
+      gsap.ticker.remove(ticker);
+      ticking = false;
+    };
+    function ticker() {
       const diff = target.current - current.current;
-      if (Math.abs(diff) < 0.05) return;
+      if (Math.abs(diff) < 0.05) {
+        stopTicking();
+        return;
+      }
       current.current += diff * 0.12;
       apply();
-    };
+    }
 
-    // O mousemove só grava o alvo; o ticker roda apenas com o footer na tela.
+    let visible = false;
+    // O mousemove sempre grava o alvo; o ticker roda apenas com o footer na tela.
     const onMove = (event: MouseEvent) => {
       target.current = (event.clientX / window.innerWidth) * 100;
+      if (visible && !ticking) {
+        gsap.ticker.add(ticker);
+        ticking = true;
+      }
     };
 
     const resize = new ResizeObserver(() => {
@@ -45,18 +61,16 @@ export function FooterGlow() {
       apply();
     });
 
-    let running = false;
     const visibility = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !running) {
+      if (entry.isIntersecting && !visible) {
         // Fora da tela o glow não seguiu o cursor: entra já na posição atual,
         // como se o ticker tivesse rodado o tempo todo.
         current.current = target.current;
         apply();
-        gsap.ticker.add(ticker);
-        running = true;
-      } else if (!entry.isIntersecting && running) {
-        gsap.ticker.remove(ticker);
-        running = false;
+        visible = true;
+      } else if (!entry.isIntersecting && visible) {
+        stopTicking();
+        visible = false;
       }
     });
 
@@ -65,7 +79,7 @@ export function FooterGlow() {
     visibility.observe(footer);
 
     return () => {
-      gsap.ticker.remove(ticker);
+      stopTicking();
       window.removeEventListener("mousemove", onMove);
       resize.disconnect();
       visibility.disconnect();

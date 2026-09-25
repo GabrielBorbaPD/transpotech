@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useNearViewport } from "@/hooks/use-near-viewport";
 
 export type Stat = { value: string; label: string };
 
@@ -56,7 +57,10 @@ export function StatsGrid({
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
+  // Zera os números e cria o ScrollTrigger só quando a grade se aproxima da
+  // viewport, fora da hidratação. Uma tela de margem: a troca para 0 acontece
+  // antes de o card ficar visível.
+  useNearViewport(gridRef, () => {
     const el = gridRef.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -95,7 +99,7 @@ export function StatsGrid({
       trigger.kill();
       tweens.forEach((t) => t.kill());
     };
-  }, [stats]);
+  });
 
   return (
     <div ref={gridRef} className={className}>

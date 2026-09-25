@@ -398,7 +398,7 @@ export function SolutionsSection({ content }: { content: SolutionsContent }) {
               onClick={() => handleSelect(i)}
               aria-label={solutions[i].title}
               aria-pressed={active === i}
-              className={`h-[3px] rounded-full transition-all duration-300 ${
+              className={`h-[3px] rounded-full transition-[width,background-color] duration-300 ${
                 i === active
                   ? "w-6 bg-primary-400"
                   : "w-[6px] bg-white/20 hover:bg-white/40"

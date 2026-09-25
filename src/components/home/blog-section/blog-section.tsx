@@ -45,12 +45,15 @@ export function BlogSection({
         </TextLink>
       </div>
 
-      {/* Grade: artigo principal grande à esquerda + cards menores à direita */}
+      {/* Grade: artigo principal grande à esquerda + cards menores à direita.
+          Os cards transicionam só scale/box-shadow (o hover): opacity e
+          transform são do ScrollReveal (GSAP), e `transition` genérico fazia
+          cada quadro dele abrir e cancelar uma transição CSS. */}
       <div className="flex w-full flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-6">
         {/* Artigo em destaque */}
         <Link
           href={articleHref(featured.id)}
-          className="group/card relative flex min-h-[360px] flex-col justify-end overflow-hidden rounded-2xl bg-neutral-900 transition duration-300 hover:z-10 hover:scale-[1.01] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)] lg:min-h-[560px] lg:flex-[1.35]"
+          className="group/card relative flex min-h-[360px] flex-col justify-end overflow-hidden rounded-2xl bg-neutral-900 transition-[scale,box-shadow] duration-300 hover:z-10 hover:scale-[1.01] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)] lg:min-h-[560px] lg:flex-[1.35]"
         >
           <Image
             src={featured.image}
@@ -97,7 +100,7 @@ export function BlogSection({
             <Link
               key={article.id}
               href={articleHref(article.id)}
-              className="group/card relative flex min-h-[140px] flex-1 gap-4 overflow-hidden rounded-xl bg-white p-3 transition duration-300 hover:z-10 hover:scale-[1.02] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)]"
+              className="group/card relative flex min-h-[140px] flex-1 gap-4 overflow-hidden rounded-xl bg-white p-3 transition-[scale,box-shadow] duration-300 hover:z-10 hover:scale-[1.02] hover:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.18)]"
             >
               {/* Thumbnail */}
               <div className="relative aspect-[4/3] w-28 shrink-0 overflow-hidden rounded-lg sm:w-36 lg:h-full lg:w-auto">
