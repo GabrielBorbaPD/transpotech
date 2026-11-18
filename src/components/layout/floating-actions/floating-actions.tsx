@@ -112,7 +112,9 @@ export function FloatingActions() {
   }, [open]);
 
   return (
-    <div ref={ref} className="fixed bottom-6 right-6 z-40 lg:bottom-8 lg:right-16">
+    // bottom-36: fica acima do balão do chat (Hi Platform), que o widget fixa a
+    // 60 px da borda e que ocupa até ~135 px de altura.
+    <div ref={ref} className="fixed bottom-36 right-6 z-40 lg:right-16">
       {/* Opções — flutuam acima do botão. pointer-events-none no wrapper: a
           caixa (e os gaps entre as opções) cobre o canto da página mesmo com
           o menu fechado e bloqueava cliques por baixo (ex.: links da base do
