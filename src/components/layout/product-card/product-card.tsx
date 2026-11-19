@@ -2,7 +2,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MadeInBrazilBadge } from "@/components/ui/made-in-brazil-badge";
 import { ROUTES } from "@/lib/routes";
-import { preloadQuoteModal } from "@/components/layout/quote-modal/lazy-quote-modal";
+import type { QuoteSection } from "@/lib/whatsapp";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import { useSharedTexts, type SharedTexts } from "@/components/layout/shared-texts";
 import type { Forklift, ForkliftBrand } from "@/types/forklift.types";
 
@@ -55,14 +56,14 @@ function catalogSpecs(
 
 export function ProductCard({
   forklift,
-  onRequestQuote,
+  section,
   specs,
   detailsHref,
   priority = false,
 }: {
   forklift: Forklift;
-  /** "Solicitar orçamento" abre o modal de orçamento com este equipamento. */
-  onRequestQuote: (forklift: Forklift) => void;
+  /** Define o WhatsApp e a mensagem de "Solicitar orçamento". */
+  section: QuoteSection;
   /**
    * Substitui as características exibidas. Os classificados de seminovas
    * mostram ano e horas trabalhadas no lugar de energia e corredor.
@@ -146,16 +147,13 @@ export function ProductCard({
       {/* Botões — pinados na base do card (mt-auto) para alinhar em todos os
           cards; 32px do bloco de textos (gap-8 do article) quando não há folga. */}
       <div className="mt-auto flex flex-col gap-2">
-        <Button
-          variant="primary"
-          size="lg"
-          onClick={() => onRequestQuote(forklift)}
-          onPointerEnter={preloadQuoteModal}
-          onFocus={preloadQuoteModal}
+        <WhatsappQuoteButton
+          section={section}
+          equipment={forklift.name}
           className="w-full justify-center"
         >
           {texts.quoteLabel}
-        </Button>
+        </WhatsappQuoteButton>
         <Button
           variant="gray"
           size="lg"

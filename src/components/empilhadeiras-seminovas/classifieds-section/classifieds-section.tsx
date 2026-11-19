@@ -1,17 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { Section } from "@/components/ui/section";
 import { ProductCard } from "@/components/layout/product-card/product-card";
-import { LazyQuoteModal } from "@/components/layout/quote-modal/lazy-quote-modal";
 import { ROUTES } from "@/lib/routes";
 import type { Forklift } from "@/types/forklift.types";
 
 type ClassifiedsSectionProps = {
   /** Equipamentos exibidos. */
   items: Forklift[];
-  /** Opções do modal de orçamento. Default: `items`. */
-  quoteOptions?: Forklift[];
   eyebrow: string;
   title: string;
   labelYear: string;
@@ -27,7 +23,6 @@ type ClassifiedsSectionProps = {
 // conforme o estoque cresce, sem rolagem horizontal.
 export function ClassifiedsSection({
   items,
-  quoteOptions = items,
   eyebrow,
   title,
   labelYear,
@@ -36,8 +31,6 @@ export function ClassifiedsSection({
   labelLocation,
   id,
 }: ClassifiedsSectionProps) {
-  const [quoteForId, setQuoteForId] = useState<string | null>(null);
-
   if (items.length === 0) return null;
 
   return (
@@ -56,7 +49,7 @@ export function ClassifiedsSection({
           <ProductCard
             key={forklift.id}
             forklift={forklift}
-            onRequestQuote={(f) => setQuoteForId(f.id)}
+            section="seminovas"
             detailsHref={`${ROUTES.EMPILHADEIRAS_SEMINOVAS}/${forklift.id}`}
             specs={[
               { label: labelYear, value: forklift.year ?? "—" },
@@ -67,14 +60,6 @@ export function ClassifiedsSection({
           />
         ))}
       </div>
-
-      {quoteForId && (
-        <LazyQuoteModal
-          onClose={() => setQuoteForId(null)}
-          forklifts={quoteOptions}
-          initialSelectedId={quoteForId}
-        />
-      )}
     </Section>
   );
 }

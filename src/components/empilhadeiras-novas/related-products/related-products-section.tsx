@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Section } from "@/components/ui/section";
 import { TextLink } from "@/components/ui/text-link";
 import { ProductCard } from "@/components/layout/product-card/product-card";
-import { LazyQuoteModal } from "@/components/layout/quote-modal/lazy-quote-modal";
 import { ROUTES } from "@/lib/routes";
 import type { Forklift } from "@/types/forklift.types";
 import type { SectionContent } from "@/sanity/content/fields";
@@ -14,18 +12,13 @@ type DetailContent = SectionContent<typeof empilhadeirasNovasPage.sections.detai
 
 type RelatedProductsSectionProps = {
   items: Forklift[];
-  /** Catálogo completo, oferecido no modal de orçamento. */
-  forklifts: Forklift[];
   content: Pick<DetailContent, "relatedEyebrow" | "relatedTitle" | "relatedLinkLabel">;
 };
 
 export function RelatedProductsSection({
   items,
-  forklifts,
   content,
 }: RelatedProductsSectionProps) {
-  const [quoteForId, setQuoteForId] = useState<string | null>(null);
-
   if (items.length === 0) return null;
 
   return (
@@ -50,18 +43,10 @@ export function RelatedProductsSection({
           <ProductCard
             key={forklift.id}
             forklift={forklift}
-            onRequestQuote={(f) => setQuoteForId(f.id)}
+            section="maquinas_novas"
           />
         ))}
       </div>
-
-      {quoteForId && (
-        <LazyQuoteModal
-          onClose={() => setQuoteForId(null)}
-          forklifts={forklifts}
-          initialSelectedId={quoteForId}
-        />
-      )}
     </Section>
   );
 }

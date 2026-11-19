@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 type TextLinkProps = {
   /** Se informado, renderiza um link (next/link); senão, um <button>. */
   href?: string;
+  /** Com `href`, roda no clique do link (ex.: evento de analytics). */
   onClick?: () => void;
   type?: "button" | "submit";
   children: ReactNode;
@@ -46,6 +47,7 @@ export function TextLink({
         href={href}
         target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
+        onClick={onClick}
         className={classes}
       >
         {content}

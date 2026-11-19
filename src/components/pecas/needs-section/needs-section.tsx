@@ -1,4 +1,4 @@
-import { TextLink } from "@/components/ui/text-link";
+import { WhatsappQuoteLink } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-link";
 import { Recycle, Zap, Droplet, HelpCircle, type LucideIcon } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { LineBreaks } from "@/components/ui/line-breaks";
@@ -43,12 +43,12 @@ export function NeedsSection({ content }: { content: NeedsContent }) {
                 </p>
               </div>
             </div>
-            <TextLink
-              href="#solicitar-pecas"
+            <WhatsappQuoteLink
+              section="pecas_acessorios_pneus"
               className="w-full px-6 py-4 text-left"
             >
               {need.cta}
-            </TextLink>
+            </WhatsappQuoteLink>
           </div>
           );
         })}

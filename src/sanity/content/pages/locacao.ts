@@ -28,19 +28,6 @@ export const locacaoPage = definePage({
     brands: defineSection("Marcas", {
       eyebrow: field.string("Texto acima dos logos", "Dealer oficial"),
     }),
-    leadForm: defineSection("Formulário de proposta", {
-      titleTop: field.string("Título — primeira linha", "Proposta de locação"),
-      titleBottom: field.string("Título — segunda linha (laranja)", "sob medida"),
-      description: field.text(
-        "Texto de apoio",
-        "Conte sobre sua operação e a TranspoTech monta um plano de locação com manutenção preventiva inclusa e disponibilidade garantida.",
-      ),
-      messagePlaceholder: field.string(
-        "Exemplo no campo de mensagem",
-        "Quantidade de equipamentos, aplicação, prazo e cidade da operação.",
-      ),
-      submitLabel: field.string("Texto do botão de envio", "Solicitar proposta de locação"),
-    }),
     fleetTech: defineSection("Frota e tecnologia", {
       eyebrow: field.string("Texto acima do título", "Frota e tecnologia"),
       titleRegular: field.string("Título — início", "Frota pronta para qualquer "),

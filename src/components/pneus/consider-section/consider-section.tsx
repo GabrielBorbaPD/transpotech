@@ -12,7 +12,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { Button } from "@/components/ui/button";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { pneusPage } from "@/sanity/content/pages/pneus";
 
@@ -53,9 +53,9 @@ export function ConsiderSection({ content }: { content: ConsiderContent }) {
 
         {/* Desktop: botão na coluna do texto */}
         <div className="hidden lg:block">
-          <Button variant="primary" size="lg" href="#solicitar-pneus">
+          <WhatsappQuoteButton section="pecas_acessorios_pneus">
             {content.buttonLabel}
-          </Button>
+          </WhatsappQuoteButton>
         </div>
       </div>
 
@@ -76,9 +76,9 @@ export function ConsiderSection({ content }: { content: ConsiderContent }) {
 
       {/* Mobile: botão abaixo dos cards de tópicos */}
       <div className="lg:hidden">
-        <Button variant="primary" size="lg" href="#solicitar-pneus">
+        <WhatsappQuoteButton section="pecas_acessorios_pneus">
           {content.buttonLabel}
-        </Button>
+        </WhatsappQuoteButton>
       </div>
     </Section>
   );

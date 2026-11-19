@@ -16,6 +16,7 @@ import {
   loadContactValidation,
 } from "@/lib/contact-request.resolver";
 import { useSubmitLead } from "@/hooks/use-submit-lead";
+import { GTM_EVENTS, pushDataLayerEvent } from "@/lib/gtm";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { contatoPage } from "@/sanity/content/pages/contato";
 
@@ -41,6 +42,7 @@ export function ContatoHeroSection({ content }: { content: ContatoHeroContent })
       content.successMessage,
     );
     if (!ok) return;
+    pushDataLayerEvent(GTM_EVENTS.FORM_SENT, { formulario: "contato" });
     reset();
     setSent(true);
   };

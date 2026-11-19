@@ -147,21 +147,6 @@ export const sharedPage = definePage({
       emailLabel: field.string("E-mail — rótulo", "E-mail *"),
       emailPlaceholder: field.string("E-mail — exemplo no campo", "nome@empresa.com.br"),
       cityLabel: field.string("Cidade/UF — rótulo", "Cidade/UF *"),
-      rentalPeriodLabel: field.string(
-        "Período de locação — rótulo",
-        "Período de locação (meses)",
-        "Aparece só na página de locação.",
-      ),
-      rentalPeriodPlaceholder: field.string(
-        "Período de locação — texto antes de escolher",
-        "Selecione o período",
-      ),
-      rentalPeriodSearchPlaceholder: field.string(
-        "Período de locação — exemplo na busca",
-        "Buscar meses…",
-      ),
-      monthSingular: field.string("Período de locação — “mês” (1 mês)", "mês"),
-      monthPlural: field.string("Período de locação — “meses” (2 a 60 meses)", "meses"),
       messageLabel: field.string("Mensagem — rótulo", "Mensagem *"),
       messagePlaceholder: field.text(
         "Mensagem — exemplo no campo (padrão)",

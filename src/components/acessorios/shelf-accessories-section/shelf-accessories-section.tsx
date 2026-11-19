@@ -5,8 +5,6 @@ import { LineBreaks } from "@/components/ui/line-breaks";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { acessoriosPage } from "@/sanity/content/pages/acessorios";
 
-const CTA_HREF = "#solicitar-acessorios";
-
 // Ícone de cada card, na ordem dos acessórios da definição.
 const icons = [Camera, Spotlight, ScanLine, MoveVertical, Flashlight];
 
@@ -27,7 +25,7 @@ export function ShelfAccessoriesSection({ content }: { content: ShelfAccessories
 
       <div className="flex w-full flex-wrap justify-center gap-4">
         {content.items.map((item, i) => (
-          <IconCard key={item.title} {...item} Icon={icons[i]} ctaHref={CTA_HREF} />
+          <IconCard key={item.title} {...item} Icon={icons[i]} ctaWhatsappSection="pecas_acessorios_pneus" />
         ))}
       </div>
     </Section>

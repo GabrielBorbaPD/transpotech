@@ -2,6 +2,8 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { TextLink } from "@/components/ui/text-link";
 import { ROUTES } from "@/lib/routes";
+import { WhatsappQuoteLink } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-link";
+import { BATERIAS_MESSAGE } from "@/lib/whatsapp";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { bateriasPage } from "@/sanity/content/pages/baterias";
 
@@ -9,9 +11,10 @@ type BatteryTypesContent = SectionContent<typeof bateriasPage.sections.batteryTy
 type BatteryType = BatteryTypesContent["types"][number];
 
 // Destino do link de cada card, na ordem dos cards editados no Studio.
-const hrefs = [ROUTES.SIMULADOR, ROUTES.SIMULADOR, ROUTES.CONTATO];
+// `null` = card de orçamento: abre o WhatsApp em vez de navegar.
+const hrefs = [ROUTES.SIMULADOR, ROUTES.SIMULADOR, null];
 
-function BatteryCard({ title, description, fits, cta, href }: BatteryType & { href: string }) {
+function BatteryCard({ title, description, fits, cta, href }: BatteryType & { href: string | null }) {
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-3xl">
       {/* Zona do título — glow laranja bem suave que acende no hover */}
@@ -42,9 +45,19 @@ function BatteryCard({ title, description, fits, cta, href }: BatteryType & { hr
           ))}
         </ul>
 
-        <TextLink href={href} className="w-full border-t border-white/10 pt-6">
-          {cta}
-        </TextLink>
+        {href ? (
+          <TextLink href={href} className="w-full border-t border-white/10 pt-6">
+            {cta}
+          </TextLink>
+        ) : (
+          <WhatsappQuoteLink
+            section="pecas_acessorios_pneus"
+            message={BATERIAS_MESSAGE}
+            className="w-full border-t border-white/10 pt-6"
+          >
+            {cta}
+          </WhatsappQuoteLink>
+        )}
       </div>
     </div>
   );

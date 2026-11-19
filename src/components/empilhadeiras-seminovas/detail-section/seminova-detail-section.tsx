@@ -15,15 +15,12 @@ import type { seminovasPage } from "@/sanity/content/pages/seminovas";
 // equipamento em estoque, não sobre a linha do fabricante.
 type SeminovaDetailSectionProps = {
   forklift: Forklift;
-  /** Estoque completo, oferecido no modal de orçamento. */
-  forklifts: Forklift[];
   /** Textos comuns a todas as páginas de equipamento. */
   content: SectionContent<typeof seminovasPage.sections.detail>;
 };
 
 export function SeminovaDetailSection({
   forklift,
-  forklifts,
   content,
 }: SeminovaDetailSectionProps) {
   const [firstWord, ...restWords] = forklift.name.split(" ");
@@ -98,10 +95,7 @@ export function SeminovaDetailSection({
 
           {/* Ação — orçamento deste equipamento */}
           <div className="flex flex-col gap-3 sm:flex-row">
-            <ProductQuoteButton
-              forklift={forklift}
-              forklifts={forklifts}
-            />
+            <ProductQuoteButton forklift={forklift} section="seminovas" />
           </div>
         </div>
       </div>

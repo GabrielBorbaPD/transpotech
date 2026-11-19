@@ -1,7 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 import type { StaticImageData } from "next/image";
 import { CardImageIcon } from "@/components/ui/card-image-icon";
-import { TextLink } from "@/components/ui/text-link";
+import { WhatsappQuoteLink } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-link";
+import type { QuoteSection } from "@/lib/whatsapp";
 
 // Geometria padrão das ilustrações 3D nos cards claros, igual à usada em
 // "Por que solicitar peças com a TranspoTech?" e nas seções equivalentes.
@@ -24,7 +25,8 @@ export type IconCardProps = {
   art?: StaticImageData;
   /** CTA opcional no rodapé do card (faixa laranja-clara). */
   ctaLabel?: string;
-  ctaHref?: string;
+  /** Faz o CTA abrir o WhatsApp da seção. */
+  ctaWhatsappSection?: QuoteSection;
 };
 
 // Mesmo card de "O que sua operação precisa?" (Peças/Baterias): ícone em
@@ -36,7 +38,7 @@ export function IconCard({
   Icon,
   art,
   ctaLabel,
-  ctaHref,
+  ctaWhatsappSection,
 }: IconCardProps) {
   return (
     <div className="flex w-full flex-col overflow-hidden rounded-xl bg-primary-50 transition-shadow duration-300 hover:z-10 hover:shadow-[0_16px_48px_0_rgba(245,130,32,0.3)] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)]">
@@ -69,10 +71,13 @@ export function IconCard({
           </p>
         </div>
       </div>
-      {ctaLabel && ctaHref && (
-        <TextLink href={ctaHref} className="w-full px-6 py-4 text-left">
+      {ctaLabel && ctaWhatsappSection && (
+        <WhatsappQuoteLink
+          section={ctaWhatsappSection}
+          className="w-full px-6 py-4 text-left"
+        >
           {ctaLabel}
-        </TextLink>
+        </WhatsappQuoteLink>
       )}
     </div>
   );

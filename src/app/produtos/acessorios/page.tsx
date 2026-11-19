@@ -7,7 +7,6 @@ import { ComparisonSection } from "@/components/acessorios/comparison-section/co
 import { AdasSection } from "@/components/acessorios/adas-section/adas-section";
 import { ShelfAccessoriesSection } from "@/components/acessorios/shelf-accessories-section/shelf-accessories-section";
 import { BrandsSection } from "@/components/layout/brands-section/brands-section";
-import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
 import { FaqSection } from "@/components/layout/faq/faq-section";
 import { getPage } from "@/sanity/queries/pages";
 import { acessoriosPage } from "@/sanity/content/pages/acessorios";
@@ -69,20 +68,15 @@ export default async function AcessoriosPage() {
         <ShelfAccessoriesSection content={content.shelfAccessories} />
       </div>
 
-      {/* Grupo claro 3 — Captação + FAQ */}
+      {/* Grupo claro 3 — FAQ */}
       <div className="relative isolate bg-[#fdfdfd]">
-        <LeadFormSection
-          form="acessorios"
-          id="solicitar-acessorios"
-          {...content.leadForm}
-        />
         <FaqSection {...content.faq} />
       </div>
 
       <CtaSection
         {...content.cta}
         descriptionWidth="560px"
-        ctaHref="#solicitar-acessorios"
+        ctaWhatsappSection="pecas_acessorios_pneus"
       />
     </main>
   );

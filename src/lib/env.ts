@@ -7,6 +7,7 @@ const envSchema = z.object({
   apiUrl: z.union([z.literal(""), z.string().url()]),
   rdStationToken: z.string(),
   gaId: z.string(),
+  gtmId: z.string(),
 });
 
 // Cada NEXT_PUBLIC_* é lida por nome literal: o Next só embute no bundle do
@@ -16,6 +17,8 @@ export const env = envSchema.parse({
   apiUrl: process.env.NEXT_PUBLIC_API_URL ?? "",
   rdStationToken: process.env.NEXT_PUBLIC_RD_STATION_TOKEN ?? "",
   gaId: process.env.NEXT_PUBLIC_GA_ID ?? "",
+  // ID público do container www.transpotech.com.br; a variável só sobrescreve.
+  gtmId: process.env.NEXT_PUBLIC_GTM_ID || "GTM-WH26KTQ",
 });
 
 // Segredo do servidor: sem NEXT_PUBLIC, o Next não o embute no client (lá vira

@@ -3,8 +3,6 @@ import { TopicCard } from "@/components/layout/topic-card";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { acessoriosPage } from "@/sanity/content/pages/acessorios";
 
-const CTA_HREF = "#solicitar-acessorios";
-
 type SolutionsContent = SectionContent<typeof acessoriosPage.sections.solutions>;
 
 export function SolutionsSection({ content }: { content: SolutionsContent }) {
@@ -29,7 +27,7 @@ export function SolutionsSection({ content }: { content: SolutionsContent }) {
             key={solution.title}
             {...solution}
             items={solution.items.map((item) => item.text)}
-            ctaHref={CTA_HREF}
+            ctaWhatsappSection="pecas_acessorios_pneus"
           />
         ))}
       </div>

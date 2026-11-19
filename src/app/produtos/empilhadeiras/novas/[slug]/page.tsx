@@ -87,7 +87,6 @@ export default async function EmpilhadeiraNovaDetalhePage({
         />
         <ProductDetailSection
           forklift={forklift}
-          forklifts={forklifts}
           content={content}
         />
       </div>
@@ -108,7 +107,6 @@ export default async function EmpilhadeiraNovaDetalhePage({
       <div className="relative isolate bg-neutral-50">
         <RelatedProductsSection
           items={related}
-          forklifts={forklifts}
           content={content}
         />
       </div>

@@ -1,6 +1,6 @@
 import { CircleCheck } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { Button } from "@/components/ui/button";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { automacaoPage } from "@/sanity/content/pages/automacao";
 
@@ -23,9 +23,9 @@ export function SegmentsSection({ content }: { content: SegmentsContent }) {
 
         {/* Desktop: botão na coluna do texto */}
         <div className="hidden lg:block">
-          <Button variant="primary" size="lg" href="#avaliar-automacao">
+          <WhatsappQuoteButton section="automacao">
             {content.buttonLabel}
-          </Button>
+          </WhatsappQuoteButton>
         </div>
       </div>
 
@@ -45,9 +45,9 @@ export function SegmentsSection({ content }: { content: SegmentsContent }) {
 
       {/* Mobile: botão abaixo dos segmentos */}
       <div className="lg:hidden">
-        <Button variant="primary" size="lg" href="#avaliar-automacao">
+        <WhatsappQuoteButton section="automacao">
           {content.buttonLabel}
-        </Button>
+        </WhatsappQuoteButton>
       </div>
     </Section>
   );

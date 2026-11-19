@@ -1,4 +1,5 @@
-import { TextLink } from "@/components/ui/text-link";
+import { WhatsappQuoteLink } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-link";
+import { BATERIAS_MESSAGE } from "@/lib/whatsapp";
 import {
   Battery,
   PlugZap,
@@ -44,12 +45,13 @@ export function NeedsSection({ content }: { content: NeedsContent }) {
                 </p>
               </div>
             </div>
-            <TextLink
-              href="#solicitar-baterias"
+            <WhatsappQuoteLink
+              section="pecas_acessorios_pneus"
+              message={BATERIAS_MESSAGE}
               className="w-full px-6 py-4 text-left"
             >
               {need.cta}
-            </TextLink>
+            </WhatsappQuoteLink>
           </div>
           );
         })}

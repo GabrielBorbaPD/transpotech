@@ -323,19 +323,6 @@ export const acessoriosPage = definePage({
         { fixed: true },
       ),
     }),
-    leadForm: defineSection("Formulário de avaliação", {
-      titleTop: field.string("Título — primeira linha", "Encontre a solução"),
-      titleBottom: field.string("Título — segunda linha (laranja)", "ideal para a sua frota"),
-      description: field.text(
-        "Texto de apoio",
-        "Conte quantas máquinas tem a sua frota e o que você precisa controlar. A TranspoTech indica a solução e apresenta a proposta.",
-      ),
-      messagePlaceholder: field.string(
-        "Exemplo no campo de mensagem",
-        "Tamanho da frota, marcas e modelos, turnos e o que você quer controlar (acesso, impactos, check list, pedestres).",
-      ),
-      submitLabel: field.string("Texto do botão de envio", "Solicitar avaliação"),
-    }),
     faq: defineSection("Perguntas frequentes", {
       titleRegular: field.string("Título", "Dúvidas frequentes sobre "),
       titleAccent: field.string("Título — final em destaque (laranja)", "acessórios e telemetria"),

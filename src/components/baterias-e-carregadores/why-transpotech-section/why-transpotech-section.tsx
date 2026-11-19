@@ -1,8 +1,8 @@
 import { type StaticImageData } from "next/image";
 import { Section } from "@/components/ui/section";
-import { Button } from "@/components/ui/button";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
+import { BATERIAS_MESSAGE } from "@/lib/whatsapp";
 import { CardImageIcon } from "@/components/ui/card-image-icon";
-import { ROUTES } from "@/lib/routes";
 import iconBateria from "@/assets/images/stats/card-bateria.webp";
 import iconLupa from "@/assets/images/stats/card-magnifier.webp";
 import iconRaio from "@/assets/images/stats/baterias-icon-raio.webp";
@@ -116,9 +116,9 @@ export function WhyTranspotechSection({ content }: { content: WhyTranspotechCont
         })}
       </div>
 
-      <Button variant="primary" size="lg" href={ROUTES.CONTATO}>
+      <WhatsappQuoteButton section="pecas_acessorios_pneus" message={BATERIAS_MESSAGE}>
         {content.buttonLabel}
-      </Button>
+      </WhatsappQuoteButton>
     </Section>
   );
 }

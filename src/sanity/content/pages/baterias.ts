@@ -44,19 +44,6 @@ export const bateriasPage = definePage({
         { fixed: true },
       ),
     }),
-    leadForm: defineSection("Formulário de cotação", {
-      titleTop: field.string("Título — primeira linha", "Energia para a frota"),
-      titleBottom: field.string("Título — segunda linha (laranja)", "trabalhar sem parar"),
-      description: field.text(
-        "Texto de apoio",
-        "Baterias de lítio e carregadores para manter sua frota operando em todos os turnos. Conte sobre a sua operação e a TranspoTech recomenda a solução ideal, com cotação.",
-      ),
-      messagePlaceholder: field.string(
-        "Exemplo no campo de mensagem",
-        "Modelo do equipamento, turnos de trabalho e tipo de bateria/carregador.",
-      ),
-      submitLabel: field.string("Texto do botão de envio", "Solicitar cotação"),
-    }),
     needs: defineSection("O que sua operação precisa", {
       title: field.string("Título", "O que sua operação precisa?"),
       items: field.list(

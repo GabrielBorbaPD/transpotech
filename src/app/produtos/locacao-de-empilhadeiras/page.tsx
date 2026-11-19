@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { baseOpenGraph } from "@/lib/metadata";
 
 import { LocacaoHeroSection } from "@/components/locacao-de-empilhadeiras/hero-section/hero-section";
-import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
 import { FleetTechSection } from "@/components/locacao-de-empilhadeiras/fleet-tech-section/fleet-tech-section";
 import { ForkliftTypesSection } from "@/components/locacao-de-empilhadeiras/forklift-types-section/forklift-types-section";
 import { ElectricFleetSection } from "@/components/locacao-de-empilhadeiras/electric-fleet-section/electric-fleet-section";
@@ -49,7 +48,7 @@ export default async function LocacaoPage() {
     <main>
       <LocacaoHeroSection content={content.hero} />
 
-      {/* Grupo claro 1 — Marcas (Dealer oficial) + Captação + Frota & Tecnologia.
+      {/* Grupo claro 1 — Marcas (Dealer oficial) + Frota & Tecnologia.
           Uma única malha cobre tudo, sem cortes. */}
       <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
@@ -57,12 +56,6 @@ export default async function LocacaoPage() {
           tone="light"
           eyebrow={content.brands.eyebrow}
           brands={dealerBrands}
-        />
-        <LeadFormSection
-          form="locacao-de-empilhadeiras"
-          id="solicitar-locacao"
-          {...content.leadForm}
-          withRentalPeriod
         />
         <FleetTechSection content={content.fleetTech} />
         <CompareSection />
@@ -100,7 +93,7 @@ export default async function LocacaoPage() {
         <FaqSection {...content.faq} />
       </div>
 
-      <CtaSection {...content.cta} ctaHref="#solicitar-locacao" />
+      <CtaSection {...content.cta} ctaWhatsappSection="locacao" />
     </main>
   );
 }

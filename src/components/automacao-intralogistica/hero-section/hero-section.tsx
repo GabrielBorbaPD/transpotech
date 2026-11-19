@@ -1,5 +1,5 @@
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import { HeroPicture } from "@/components/layout/photo-hero/hero-picture";
-import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { automacaoPage } from "@/sanity/content/pages/automacao";
@@ -53,14 +53,9 @@ export function AutomacaoHeroSection({ content }: { content: AutomacaoHeroConten
             </p>
           </div>
 
-          <Button
-            variant="primary"
-            size="lg"
-            href="#avaliar-automacao"
-            className="w-full lg:w-auto"
-          >
+          <WhatsappQuoteButton section="automacao" className="w-full lg:w-auto">
             {content.buttonLabel}
-          </Button>
+          </WhatsappQuoteButton>
         </div>
       </div>
     </section>

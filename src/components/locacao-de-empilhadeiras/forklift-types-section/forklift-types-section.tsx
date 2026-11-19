@@ -1,4 +1,4 @@
-import { TextLink } from "@/components/ui/text-link";
+import { WhatsappQuoteLink } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-link";
 import {
   Zap,
   Flame,
@@ -9,7 +9,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { ROUTES } from "@/lib/routes";
 import { LineBreaks } from "@/components/ui/line-breaks";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { locacaoPage } from "@/sanity/content/pages/locacao";
@@ -57,12 +56,12 @@ export function ForkliftTypesSection({ content }: { content: ForkliftTypesConten
                   </p>
                 </div>
               </div>
-              <TextLink
-                href={ROUTES.CONTATO}
+              <WhatsappQuoteLink
+                section="locacao"
                 className="w-full px-6 py-4 text-left"
               >
                 {type.cta}
-              </TextLink>
+              </WhatsappQuoteLink>
             </div>
           );
         })}

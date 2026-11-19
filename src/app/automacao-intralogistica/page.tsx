@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { baseOpenGraph } from "@/lib/metadata";
 
 import { AutomacaoHeroSection } from "@/components/automacao-intralogistica/hero-section/hero-section";
-import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
 import { PartnershipSection } from "@/components/automacao-intralogistica/partnership-section/partnership-section";
 import { BenefitsSection } from "@/components/automacao-intralogistica/benefits-section/benefits-section";
 import { SolutionsSection } from "@/components/automacao-intralogistica/solutions-section/solutions-section";
@@ -16,7 +15,6 @@ import { automacaoPage } from "@/sanity/content/pages/automacao";
 import { CtaSection } from "@/components/layout/cta/cta-section";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
-import { ROUTES } from "@/lib/routes";
 
 export const metadata: Metadata = {
   title: "Automação Intralogística",
@@ -37,7 +35,7 @@ export default async function AutomacaoPage() {
     <main>
       <AutomacaoHeroSection content={content.hero} />
 
-      {/* Grupo claro 1 — Parceria TranspoTech + Dematic + Captação.
+      {/* Grupo claro 1 — Parceria TranspoTech + Dematic.
           Uma única malha cobre tudo, sem cortes (fundo surface-subtle). */}
       <div className="relative isolate bg-surface-subtle">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
@@ -45,7 +43,6 @@ export default async function AutomacaoPage() {
           content={content.partnership}
           hotspots={content.hotspots}
         />
-        <LeadFormSection form="automacao-intralogistica" id="avaliar-automacao" {...content.leadForm} />
       </div>
 
       {/* Bloco dark — Números */}
@@ -82,8 +79,8 @@ export default async function AutomacaoPage() {
 
       <CtaSection
         {...content.cta}
-        ctaHref="#avaliar-automacao"
-        secondaryHref={ROUTES.CONTATO}
+        ctaWhatsappSection="automacao"
+        secondaryWhatsappSection="automacao"
       />
     </main>
   );

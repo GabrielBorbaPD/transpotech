@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { pneusPage } from "@/sanity/content/pages/pneus";
@@ -56,14 +56,9 @@ export function PneusHeroSection({ content }: { content: PneusHeroContent }) {
           </div>
 
           {/* Leva ao formulário de lead logo abaixo, na própria página. */}
-          <Button
-            variant="primary"
-            size="lg"
-            href="#solicitar-pneus"
-            className="w-full lg:w-auto"
-          >
+          <WhatsappQuoteButton section="pecas_acessorios_pneus" className="w-full lg:w-auto">
             {content.buttonLabel}
-          </Button>
+          </WhatsappQuoteButton>
         </div>
       </div>
     </section>

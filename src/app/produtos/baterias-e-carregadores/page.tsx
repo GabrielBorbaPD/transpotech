@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { baseOpenGraph } from "@/lib/metadata";
 
 import { BateriasHeroSection } from "@/components/baterias-e-carregadores/hero-section/hero-section";
-import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
 import { TechSection } from "@/components/baterias-e-carregadores/tech-section/tech-section";
 import { NeedsSection } from "@/components/baterias-e-carregadores/needs-section/needs-section";
 import { BatteryTypesSection } from "@/components/baterias-e-carregadores/battery-types-section/battery-types-section";
@@ -12,6 +11,7 @@ import { FaqSection } from "@/components/layout/faq/faq-section";
 import { getPage } from "@/sanity/queries/pages";
 import { bateriasPage } from "@/sanity/content/pages/baterias";
 import { CtaSection } from "@/components/layout/cta/cta-section";
+import { BATERIAS_MESSAGE } from "@/lib/whatsapp";
 import { HoverMesh } from "@/components/layout/hover-mesh";
 import { DarkAmbient } from "@/components/layout/dark-ambient";
 
@@ -34,16 +34,11 @@ export default async function BateriasPage() {
     <main>
       <BateriasHeroSection content={content.hero} />
 
-      {/* Grupo claro 1 — Especialistas em baterias (Tecnologia) + Captação +
+      {/* Grupo claro 1 — Especialistas em baterias (Tecnologia) +
           O que sua operação precisa. Uma única malha cobre tudo, sem cortes. */}
       <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <TechSection content={content.tech} />
-        <LeadFormSection
-          form="baterias-e-carregadores"
-          id="solicitar-baterias"
-          {...content.leadForm}
-        />
         <NeedsSection content={content.needs} />
       </div>
 
@@ -67,7 +62,8 @@ export default async function BateriasPage() {
       <CtaSection
         {...content.cta}
         descriptionWidth="560px"
-        ctaHref="#solicitar-baterias"
+        ctaWhatsappSection="pecas_acessorios_pneus"
+        ctaMessage={BATERIAS_MESSAGE}
       />
     </main>
   );

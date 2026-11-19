@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { baseOpenGraph } from "@/lib/metadata";
 
 import { PneusHeroSection } from "@/components/pneus/hero-section/hero-section";
-import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
 import { CategoriesSection } from "@/components/pneus/categories-section/categories-section";
 import { ConsiderSection } from "@/components/pneus/consider-section/consider-section";
 import { QuotationStepsSection } from "@/components/pneus/quotation-steps-section/quotation-steps-section";
@@ -50,18 +49,13 @@ export default async function PneusPage() {
     <main>
       <PneusHeroSection content={content.hero} />
 
-      {/* Grupo claro — Marcas parceiras + Captação. Malha única, sem cortes. */}
+      {/* Grupo claro — Marcas parceiras. Malha única, sem cortes. */}
       <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
         <BrandsSection
           tone="light"
           eyebrow={content.brands.eyebrow}
           brands={partnerBrands}
-        />
-        <LeadFormSection
-          form="pneus"
-          id="solicitar-pneus"
-          {...content.leadForm}
         />
       </div>
 
@@ -92,7 +86,7 @@ export default async function PneusPage() {
 
       <CtaSection
         {...content.cta}
-        ctaHref="#solicitar-pneus"
+        ctaWhatsappSection="pecas_acessorios_pneus"
       />
     </main>
   );

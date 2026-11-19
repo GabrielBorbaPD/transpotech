@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { StateMesh } from "@/components/layout/state-mesh";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import { ROUTES } from "@/lib/routes";
+import type { QuoteSection } from "@/lib/whatsapp";
 
 type CtaSectionProps = {
   /** Primeira parte do título (peso normal). */
@@ -14,9 +16,15 @@ type CtaSectionProps = {
   descriptionWidth?: string;
   ctaLabel?: string;
   ctaHref?: string;
+  /** Botão principal de orçamento: abre o WhatsApp da seção (ignora `ctaHref`). */
+  ctaWhatsappSection?: QuoteSection;
+  /** Troca a mensagem padrão do botão principal de WhatsApp. */
+  ctaMessage?: string;
   /** Botão secundário opcional (quando definido, renderiza ao lado do primário). */
   secondaryLabel?: string;
   secondaryHref?: string;
+  /** Botão secundário de orçamento: abre o WhatsApp da seção (ignora `secondaryHref`). */
+  secondaryWhatsappSection?: QuoteSection;
 };
 
 export function CtaSection({
@@ -27,8 +35,11 @@ export function CtaSection({
   descriptionWidth = "420px",
   ctaLabel = "Falar com especialistas",
   ctaHref = ROUTES.CONTATO,
+  ctaWhatsappSection,
+  ctaMessage,
   secondaryLabel,
   secondaryHref,
+  secondaryWhatsappSection,
 }: CtaSectionProps = {}) {
   // Link para fora do site abre em nova aba (mesmo padrão do header e footer).
   const isExternal = (href?: string) => href?.startsWith("http") ?? false;
@@ -67,15 +78,32 @@ export function CtaSection({
           </p>
         </div>
         <div className="relative flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
-          <Button
-            variant="primary"
-            size="lg"
-            href={ctaHref}
-            {...externalProps(ctaHref)}
-          >
-            {ctaLabel}
-          </Button>
-          {secondaryLabel && (
+          {ctaWhatsappSection ? (
+            <WhatsappQuoteButton
+              section={ctaWhatsappSection}
+              message={ctaMessage}
+            >
+              {ctaLabel}
+            </WhatsappQuoteButton>
+          ) : (
+            <Button
+              variant="primary"
+              size="lg"
+              href={ctaHref}
+              {...externalProps(ctaHref)}
+            >
+              {ctaLabel}
+            </Button>
+          )}
+          {secondaryLabel && secondaryWhatsappSection ? (
+            <WhatsappQuoteButton
+              section={secondaryWhatsappSection}
+              variant="gray"
+            >
+              {secondaryLabel}
+            </WhatsappQuoteButton>
+          ) : (
+            secondaryLabel && (
             <Button
               variant="gray"
               size="lg"
@@ -84,6 +112,7 @@ export function CtaSection({
             >
               {secondaryLabel}
             </Button>
+            )
           )}
         </div>
       </div>
