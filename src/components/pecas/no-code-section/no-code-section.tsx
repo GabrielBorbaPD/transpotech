@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { Section } from "@/components/ui/section";
-import { Button } from "@/components/ui/button";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import { ease, onScrollPast, tween } from "@/lib/motion";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { pecasPage } from "@/sanity/content/pages/pecas";
@@ -104,9 +104,9 @@ export function NoCodeSection({ content }: { content: NoCodeContent }) {
         ))}
       </ol>
 
-      <Button variant="primary" size="lg" href="#solicitar-pecas">
+      <WhatsappQuoteButton section="pecas_acessorios_pneus">
         {content.buttonLabel}
-      </Button>
+      </WhatsappQuoteButton>
     </Section>
   );
 }

@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import Image, { type StaticImageData } from "next/image";
-import { TextLink } from "@/components/ui/text-link";
+import { WhatsappQuoteLink } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-link";
 import { Section } from "@/components/ui/section";
 import { LineBreaks } from "@/components/ui/line-breaks";
 import type { SectionContent } from "@/sanity/content/fields";
@@ -220,13 +220,12 @@ export function CategoriesSection({ content }: { content: CategoriesContent }) {
                       {description}
                     </p>
                   </div>
-                  {/* Todos os CTAs levam ao formulário de lead da própria página. */}
-                  <TextLink
-                    href="#solicitar-pneus"
+                  <WhatsappQuoteLink
+                    section="pecas_acessorios_pneus"
                     className="w-full px-6 py-4 text-left"
                   >
                     {cta}
-                  </TextLink>
+                  </WhatsappQuoteLink>
                 </div>
               </div>
 

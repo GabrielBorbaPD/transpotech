@@ -18,19 +18,6 @@ export const pecasPage = definePage({
       image: field.image("Imagem de fundo", heroImage),
       buttonLabel: field.string("Texto do botão", "Solicitar cotação de peças"),
     }),
-    leadForm: defineSection("Formulário de cotação", {
-      titleTop: field.string("Título — primeira linha", "As peças que a"),
-      titleBottom: field.string("Título — segunda linha (laranja)", "sua frota precisa"),
-      description: field.text(
-        "Texto de apoio",
-        "Informe o modelo e o item e a TranspoTech localiza a peça original ou multimarcas com o melhor prazo de entrega.",
-      ),
-      messagePlaceholder: field.string(
-        "Exemplo no campo de mensagem",
-        "Modelo do equipamento, código ou descrição da peça e quantidade.",
-      ),
-      submitLabel: field.string("Texto do botão de envio", "Solicitar cotação de peças"),
-    }),
     needs: defineSection("Qual é a sua necessidade", {
       title: field.string("Título", "Qual é a sua necessidade?"),
       description: field.text(

@@ -9,6 +9,8 @@ import { Footer } from "@/components/layout/footer";
 import { FloatingActions } from "@/components/layout/floating-actions";
 import { ScrollReveal } from "@/components/layout/scroll-reveal";
 import { ChatWidget } from "@/components/layout/chat-widget/chat-widget";
+import { GtmNoscript, GtmScript } from "@/components/layout/gtm/gtm";
+import { env } from "@/lib/env";
 import { getSiteSettings } from "@/sanity/queries/site-settings";
 import { getUnits } from "@/sanity/queries/units";
 import { getSharedTexts } from "@/sanity/queries/shared";
@@ -102,6 +104,8 @@ export default async function RootLayout({
       className={`${stackSans.variable} ${muktaVaani.variable} ${muktaVaaniBold.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-body text-neutral-900">
+        <GtmNoscript id={env.gtmId} />
+        <GtmScript id={env.gtmId} />
         <ChatWidget />
         <Providers>
           <SharedTextsProvider

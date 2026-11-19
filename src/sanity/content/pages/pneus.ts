@@ -21,19 +21,6 @@ export const pneusPage = definePage({
     brands: defineSection("Marcas parceiras", {
       eyebrow: field.string("Texto acima dos logos", "Marcas parceiras"),
     }),
-    leadForm: defineSection("Formulário de cotação", {
-      titleTop: field.string("Título — primeira linha", "O pneu certo para"),
-      titleBottom: field.string("Título — segunda linha (laranja)", "cada operação"),
-      description: field.text(
-        "Texto de apoio",
-        "Do uso interno ao mais severo, indicamos o pneu ideal para o seu equipamento e aplicação. Envie os dados e receba a melhor condição.",
-      ),
-      messagePlaceholder: field.string(
-        "Exemplo no campo de mensagem",
-        "Modelo do equipamento, medida do pneu e aplicação (interna, externa, etc.).",
-      ),
-      submitLabel: field.string("Texto do botão de envio", "Solicitar cotação de pneus"),
-    }),
     categories: defineSection("Categorias", {
       title: field.text("Título", "Escolha a categoria mais \npróxima da", BREAK_HINT),
       titleAccent: field.string("Título — final em destaque (laranja)", "sua necessidade"),

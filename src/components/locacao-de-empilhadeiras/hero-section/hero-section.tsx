@@ -1,5 +1,5 @@
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import { HeroPicture } from "@/components/layout/photo-hero/hero-picture";
-import { Button } from "@/components/ui/button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { locacaoPage } from "@/sanity/content/pages/locacao";
@@ -55,14 +55,9 @@ export function LocacaoHeroSection({ content }: { content: LocacaoHeroContent })
           </div>
 
           {/* Leva ao formulário de lead logo abaixo, na própria página. */}
-          <Button
-            variant="primary"
-            size="lg"
-            href="#solicitar-locacao"
-            className="w-full lg:w-auto"
-          >
+          <WhatsappQuoteButton section="locacao" className="w-full lg:w-auto">
             {content.buttonLabel}
-          </Button>
+          </WhatsappQuoteButton>
         </div>
       </div>
     </section>

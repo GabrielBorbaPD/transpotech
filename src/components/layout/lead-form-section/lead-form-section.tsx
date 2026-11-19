@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { CityAutocomplete } from "@/components/ui/city-autocomplete";
-import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
 import { HoverMesh } from "@/components/layout/hover-mesh";
@@ -23,14 +22,6 @@ import type { LeadFormId } from "@/lib/lead-forms";
 import { useSubmitLead } from "@/hooks/use-submit-lead";
 
 const labelBase = "text-body font-semibold text-neutral-700";
-
-// Opções de período de locação (1 a 60 meses) — campo com busca na locação.
-function rentalPeriodOptions(singular: string, plural: string) {
-  return Array.from({ length: 60 }, (_, i) => {
-    const n = i + 1;
-    return { value: String(n), label: `${n} ${n === 1 ? singular : plural}` };
-  });
-}
 
 type LeadFormSectionProps = {
   /** Formulário que enviou — define a conversão no RD Station. */
@@ -47,8 +38,6 @@ type LeadFormSectionProps = {
   submitLabel?: string;
   /** id de âncora da seção. */
   id?: string;
-  /** Mostra o campo "Período de locação (meses)" (só na locação). */
-  withRentalPeriod?: boolean;
 };
 
 // Seção de captação (form à esquerda, título/CTA à direita) — mesmo padrão da
@@ -62,7 +51,6 @@ export function LeadFormSection({
   messagePlaceholder,
   submitLabel,
   id = "solicitar",
-  withRentalPeriod = false,
 }: LeadFormSectionProps) {
   const uid = useId();
   const { leadForm: texts } = useSharedTexts();
@@ -294,36 +282,6 @@ export function LeadFormSection({
               </p>
             )}
           </div>
-
-          {withRentalPeriod && (
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor={`${uid}-period`} className={labelBase}>
-                {texts.rentalPeriodLabel}
-              </label>
-              <Controller
-                control={control}
-                name="periodMonths"
-                render={({ field }) => (
-                  <Select
-                    id={`${uid}-period`}
-                    options={rentalPeriodOptions(
-                      texts.monthSingular,
-                      texts.monthPlural,
-                    )}
-                    value={field.value ?? ""}
-                    onChange={(v) => {
-                      field.onChange(v);
-                      setEngaged(true);
-                    }}
-                    onBlur={field.onBlur}
-                    placeholder={texts.rentalPeriodPlaceholder}
-                    searchable
-                    searchPlaceholder={texts.rentalPeriodSearchPlaceholder}
-                  />
-                )}
-              />
-            </div>
-          )}
 
           <div className="flex flex-col gap-1.5">
             <label htmlFor={`${uid}-message`} className={labelBase}>

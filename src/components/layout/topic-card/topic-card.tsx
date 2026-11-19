@@ -1,4 +1,5 @@
-import { TextLink } from "@/components/ui/text-link";
+import { WhatsappQuoteLink } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-link";
+import type { QuoteSection } from "@/lib/whatsapp";
 
 export type TopicCardProps = {
   title: string;
@@ -6,7 +7,8 @@ export type TopicCardProps = {
   /** Tópicos com bullet de acento. */
   items: string[];
   ctaLabel: string;
-  ctaHref: string;
+  /** O CTA abre o WhatsApp desta seção. */
+  ctaWhatsappSection: QuoteSection;
   /** Rótulo curto acima do título (ex.: "Mais aplicada"). */
   tag?: string;
   /** Cor do glow e dos bullets: laranja (padrão) ou verde. */
@@ -25,7 +27,7 @@ export function TopicCard({
   description,
   items,
   ctaLabel,
-  ctaHref,
+  ctaWhatsappSection,
   tag,
   accent = "primary",
 }: TopicCardProps) {
@@ -68,9 +70,12 @@ export function TopicCard({
           ))}
         </ul>
 
-        <TextLink href={ctaHref} className="w-full border-t border-white/10 pt-6">
+        <WhatsappQuoteLink
+          section={ctaWhatsappSection}
+          className="w-full border-t border-white/10 pt-6"
+        >
           {ctaLabel}
-        </TextLink>
+        </WhatsappQuoteLink>
       </div>
     </div>
   );

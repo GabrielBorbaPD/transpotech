@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { baseOpenGraph } from "@/lib/metadata";
 
 import { PecasHeroSection } from "@/components/pecas/hero-section/hero-section";
-import { LeadFormSection } from "@/components/layout/lead-form-section/lead-form-section";
 import { NeedsSection } from "@/components/pecas/needs-section/needs-section";
 import { NoCodeSection } from "@/components/pecas/no-code-section/no-code-section";
 import { RequestStepsSection } from "@/components/pecas/request-steps-section/request-steps-section";
@@ -35,15 +34,10 @@ export default async function PecasPage() {
     <main>
       <PecasHeroSection content={content.hero} />
 
-      {/* Grupo claro 1 — Captação (logo após a hero) + Qual é a sua necessidade.
+      {/* Grupo claro 1 — Qual é a sua necessidade.
           Uma única malha cobre tudo, sem cortes. */}
       <div className="relative isolate bg-background">
         <HoverMesh className="pointer-events-none absolute inset-0 -z-10" />
-        <LeadFormSection
-          form="pecas"
-          id="solicitar-pecas"
-          {...content.leadForm}
-        />
         <NeedsSection content={content.needs} />
       </div>
 
@@ -66,7 +60,7 @@ export default async function PecasPage() {
 
       <CtaSection
         {...content.cta}
-        ctaHref="#solicitar-pecas"
+        ctaWhatsappSection="pecas_acessorios_pneus"
         secondaryHref={ROUTES.ACESSORIOS}
       />
     </main>

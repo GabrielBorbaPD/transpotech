@@ -87,7 +87,7 @@ export default async function QuemSomosPage() {
       <CtaSection
         {...content.cta}
         ctaHref={ROUTES.CONTATO}
-        secondaryHref={`${ROUTES.CONTATO}#solicitacao`}
+        secondaryWhatsappSection="geral"
       />
     </main>
   );

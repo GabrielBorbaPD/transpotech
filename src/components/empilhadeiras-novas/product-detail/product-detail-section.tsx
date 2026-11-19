@@ -14,15 +14,12 @@ type DetailContent = SectionContent<typeof empilhadeirasNovasPage.sections.detai
 
 type ProductDetailSectionProps = {
   forklift: Forklift;
-  /** Catálogo completo, oferecido no modal de orçamento. */
-  forklifts: Forklift[];
   /** Textos comuns a todas as páginas de modelo. */
   content: DetailContent;
 };
 
 export function ProductDetailSection({
   forklift,
-  forklifts,
   content,
 }: ProductDetailSectionProps) {
   const [firstWord, ...restWords] = forklift.name.split(" ");
@@ -98,7 +95,7 @@ export function ProductDetailSection({
 
           {/* Ações */}
           <div className="flex flex-col gap-3 sm:flex-row">
-            <ProductQuoteButton forklift={forklift} forklifts={forklifts} />
+            <ProductQuoteButton forklift={forklift} section="maquinas_novas" />
             <Button
               variant="gray"
               size="lg"

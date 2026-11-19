@@ -12,7 +12,6 @@ import { SlidersHorizontal, SearchX, X } from "lucide-react";
 import type { Forklift, ForkliftBrand } from "@/types/forklift.types";
 import { brandOrder } from "@/data/forklifts-novas";
 import { ProductCard } from "@/components/layout/product-card/product-card";
-import { LazyQuoteModal } from "@/components/layout/quote-modal/lazy-quote-modal";
 import { useModalFocus } from "@/hooks/use-modal-focus";
 import { CatalogToolbar } from "./catalog-toolbar/catalog-toolbar";
 import { CatalogFilters } from "./catalog-filters/catalog-filters";
@@ -145,15 +144,6 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
   const filtersDialogRef = useRef<HTMLDivElement>(null);
   const filtersCloseRef = useRef<HTMLButtonElement>(null);
   useModalFocus(showFilters, filtersDialogRef, filtersCloseRef);
-
-  // Modal de orçamento: dados de contato, com o equipamento clicado já
-  // selecionado (e botão "+" para incluir outros).
-  const [quoteOpen, setQuoteOpen] = useState(false);
-  const [quoteForId, setQuoteForId] = useState<string | null>(null);
-  const openQuote = (forklift: Forklift) => {
-    setQuoteForId(forklift.id);
-    setQuoteOpen(true);
-  };
 
   // A marca mora na URL (?marca=still) e só lá — é a mesma fonte que os logos
   // do cabeçalho escrevem, então logo, checkbox e link nunca divergem.
@@ -412,7 +402,7 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
                       <ProductCard
                         key={forklift.id}
                         forklift={forklift}
-                        onRequestQuote={openQuote}
+                        section="maquinas_novas"
                         // Primeiro card = LCP do catálogo no mobile.
                         priority={groupIndex === 0 && i === 0}
                       />
@@ -481,14 +471,6 @@ export function Catalog({ forklifts }: { forklifts: Forklift[] }) {
           </div>,
           document.body
         )}
-
-      {quoteOpen && (
-        <LazyQuoteModal
-          onClose={() => setQuoteOpen(false)}
-          forklifts={forklifts}
-          initialSelectedId={quoteForId}
-        />
-      )}
     </div>
   );
 }

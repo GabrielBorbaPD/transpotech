@@ -1,5 +1,5 @@
 import { ZigzagProcess, type ZigzagStep } from "@/components/layout/zigzag-process";
-import { Button } from "@/components/ui/button";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import illoDocument from "@/assets/images/stats/illustration-document.webp";
 import illoLamp from "@/assets/images/stats/illustration-lamp.webp";
 import illoFolder from "@/assets/images/stats/illustration-folder.webp";
@@ -46,9 +46,9 @@ export function ProcessSection({ content }: { content: ProcessContent }) {
         </div>
       }
       cta={
-        <Button variant="primary" size="lg" href="#avaliar-automacao">
+        <WhatsappQuoteButton section="automacao">
           {content.buttonLabel}
-        </Button>
+        </WhatsappQuoteButton>
       }
     />
   );

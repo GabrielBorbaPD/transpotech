@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import { BlurRevealTitle } from "@/components/ui/blur-reveal-title";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { acessoriosPage } from "@/sanity/content/pages/acessorios";
@@ -52,14 +52,9 @@ export function AcessoriosHeroSection({ content }: { content: AcessoriosHeroCont
             </p>
           </div>
 
-          <Button
-            variant="primary"
-            size="lg"
-            href="#solicitar-acessorios"
-            className="w-full lg:w-auto"
-          >
+          <WhatsappQuoteButton section="pecas_acessorios_pneus" className="w-full lg:w-auto">
             {content.buttonLabel}
-          </Button>
+          </WhatsappQuoteButton>
         </div>
       </div>
     </section>

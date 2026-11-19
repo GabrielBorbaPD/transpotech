@@ -124,25 +124,6 @@ export const automacaoPage = definePage({
         },
       ),
     }),
-    leadForm: defineSection("Formulário de avaliação", {
-      titleTop: field.string("Título — primeira linha", "Avalie automatizar"),
-      titleBottom: field.string(
-        "Título — segunda linha (laranja)",
-        "a sua operação",
-      ),
-      description: field.text(
-        "Texto de apoio",
-        "Conte sobre sua operação intralogística e avaliamos o melhor caminho de automação para o seu negócio.",
-      ),
-      messagePlaceholder: field.string(
-        "Exemplo no campo de mensagem",
-        "Tipo de operação (indústria, CD, e-commerce), volume e principais gargalos.",
-      ),
-      submitLabel: field.string(
-        "Texto do botão de envio",
-        "Avaliar minha operação",
-      ),
-    }),
     benefits: defineSection("Benefícios (números)", {
       eyebrow: field.string("Texto acima do título", "Benefícios"),
       title: field.string("Título — primeira linha", "O que muda quando a"),

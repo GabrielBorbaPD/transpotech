@@ -1,6 +1,6 @@
 import { Minus } from "lucide-react";
 import { Section } from "@/components/ui/section";
-import { Button } from "@/components/ui/button";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import { ScrollHintBox } from "@/components/ui/scroll-hint-box";
 import { LineBreaks } from "@/components/ui/line-breaks";
 import type { SectionContent } from "@/sanity/content/fields";
@@ -90,9 +90,9 @@ export function ComparisonSection({ content }: { content: ComparisonContent }) {
         </table>
       </ScrollHintBox>
 
-      <Button variant="primary" size="lg" href="#solicitar-acessorios">
+      <WhatsappQuoteButton section="pecas_acessorios_pneus">
         {content.buttonLabel}
-      </Button>
+      </WhatsappQuoteButton>
     </Section>
   );
 }

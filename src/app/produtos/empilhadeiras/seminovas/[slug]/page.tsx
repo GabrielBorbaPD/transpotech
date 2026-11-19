@@ -79,7 +79,6 @@ export default async function EmpilhadeiraSeminovaDetalhePage({
         />
         <SeminovaDetailSection
           forklift={forklift}
-          forklifts={forklifts}
           content={content}
         />
       </div>
@@ -88,7 +87,6 @@ export default async function EmpilhadeiraSeminovaDetalhePage({
       <div className="relative isolate bg-neutral-50">
         <ClassifiedsSection
           items={others}
-          quoteOptions={forklifts}
           eyebrow={content.othersEyebrow}
           title={content.othersTitle}
           labelYear={classifieds.labelYear}

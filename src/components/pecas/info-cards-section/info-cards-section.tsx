@@ -1,5 +1,5 @@
 import { Section } from "@/components/ui/section";
-import { Button } from "@/components/ui/button";
+import { WhatsappQuoteButton } from "@/components/layout/whatsapp-quote-button/whatsapp-quote-button";
 import type { SectionContent } from "@/sanity/content/fields";
 import type { pecasPage } from "@/sanity/content/pages/pecas";
 
@@ -50,9 +50,9 @@ export function InfoCardsSection({ content }: { content: InfoCardsContent }) {
         </ul>
       </div>
 
-      <Button variant="primary" size="lg" href="#solicitar-pecas">
+      <WhatsappQuoteButton section="pecas_acessorios_pneus">
         {content.buttonLabel}
-      </Button>
+      </WhatsappQuoteButton>
     </Section>
   );
 }
